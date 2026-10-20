@@ -13,7 +13,7 @@ Note=BatCon "C:\Reports\*.pdf" /to md /output C:\Reports\Markdown
 
 [step]
 Say=Each file's result prints as it is made, then the summary and where the log is.
-Hear=Converted Budget.pdf to Budget.md.
+Hear=Converted Budget dot p d f to Budget dot m d.
 
 [step]
 Say=Slash list shows the formats without converting anything, and slash help shows every switch.

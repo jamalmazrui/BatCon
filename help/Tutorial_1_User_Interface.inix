@@ -20,10 +20,10 @@ Say=Focus starts in Source files, where you name what to convert: files, folders
 Say=Every control has an Alt key: the first letter of its name. Alt plus T, Tango, goes to Target format.
 Key=Alt+T
 Hear=Target format: list box
-Hear=Markdown (md)
+Hear=Markdown document (md)
 
 [step]
-Say=The list shows only the formats every source converts to, each by name, with its extension.
+Say=The list holds every format BatCon can make, by name, with its extension, in alphabetical order.
 
 [step]
 Say=Alt plus O, Oscar, is Output directory. Left blank, each result goes beside its source.

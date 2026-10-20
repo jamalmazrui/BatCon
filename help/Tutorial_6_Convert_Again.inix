@@ -10,7 +10,7 @@ Homework=Convert the same batch twice, once with Force replacements.
 [step]
 Say=Run the same batch again, and BatCon keeps the results already there.
 Key=Enter
-Hear=0 files converted, 3 skipped, 0 failed.
+Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
 Say=To replace them, press Alt plus F, Foxtrot, for Force replacements.
@@ -20,7 +20,7 @@ Hear=Force replacements, check box, checked
 [step]
 Say=Even then, an earlier result is replaced only once its new conversion works, so a failure never loses it.
 Key=Enter
-Hear=3 files converted, 0 skipped, 0 failed.
+Hear=3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
 Say=What this walk taught: results are kept by default, and Alt plus F replaces them safely.

@@ -20,7 +20,7 @@ Hear=BatCon dialog
 Hear=Source files: edit
 
 [step]
-Say=Every choice you make is saved as soon as you make it, so BatCon opens next time as you left it.
+Say=Check Use configuration, Alt plus U, before you press OK, and BatCon opens next time as you left it.
 
 [step]
 Say=What this walk taught: where to get BatCon, and Alt plus Control plus B.

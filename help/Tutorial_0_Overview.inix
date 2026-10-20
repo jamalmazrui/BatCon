@@ -24,13 +24,19 @@ Say=The walks: one, the dialog; two, installing and opening it; three to eight, 
 Say=Two voices take these walks. I am the host; the other voice plays the screen reader. It is a simulation, so your own reader's words may differ a little.
 
 [step]
-Say=Three screen reader keys help whenever you are unsure. Insert plus Tab says what has the focus.
+Say=Three screen reader keys help whenever you are unsure, and Caps Lock serves in place of Insert where your reader is set up that way. Insert plus Tab says what has the focus.
+Key=Insert+Tab
+Hear=Source files: edit
 
 [step]
 Say=Insert plus T says the title of the window.
+Key=Insert+T
+Hear=BatCon
 
 [step]
 Say=And Insert plus Up Arrow says again the line you are on.
+Key=Insert+Up Arrow
+Hear=C colon backslash Reports backslash star dot p d f
 
 [step]
 Say=What this walk taught: what BatCon is for, and the order of the walks.

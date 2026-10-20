@@ -1,9 +1,9 @@
 ﻿// Batch.cs -- BatCon's batch work: finding the source files, the formats they all
 // convert to, a safe name for each result, and one conversion at a time.
 //
-// Everything about formats comes from the kit's Conversion class: which files it can
-// convert (hasAnyRoute), what each converts to and its readable name
-// (targetLabelsFor), and the conversion itself (convert, the one technique every Homer app uses). Nothing here reads
+// Everything about formats comes from the kit's Conversion class: every target it can make
+// (allTargets), whether a file converts to the chosen one (hasRoute), and the conversion
+// itself (convert, the one technique every Homer app uses). Nothing here reads
 // conversions.inix, so BatCon offers exactly what the kit does.
 //
 // The path parsing, folder scan, naming and safe replacement are from ChatGPT's
@@ -61,11 +61,7 @@ public static class Batch
                     if (!Directory.Exists(sFolder)) { lsProblems.Add("No folder " + sFolder); continue; }
                     scan(sFolder, Path.GetFileName(sExpanded), bRecursive, hsFiles, lsProblems);
                 }
-                else if (File.Exists(sExpanded))
-                {
-                    if (Conversion.hasAnyRoute(sExpanded)) hsFiles.Add(Path.GetFullPath(sExpanded));
-                    else lsProblems.Add("BatCon cannot convert " + Path.GetFileName(sExpanded));
-                }
+                else if (File.Exists(sExpanded)) hsFiles.Add(Path.GetFullPath(sExpanded));
                 else if (Directory.Exists(sExpanded)) scan(Path.GetFullPath(sExpanded), "*", bRecursive, hsFiles, lsProblems);
                 else lsProblems.Add("Not found: " + sExpanded);
             }
@@ -76,14 +72,20 @@ public static class Batch
         return lsFiles;
     }
 
-    // scan: the convertible files in one folder, and below it when asked, never
-    // following a folder link, which can loop.
+    // scan: the files in one folder, and below it when asked, never following a folder
+    // link, which can loop. Every visible file is taken, whether or not it converts to the
+    // target, so a file of another type is reported as skipped rather than passed over in
+    // silence; hidden and system files, such as desktop.ini, are not the user's documents.
     private static bool scan(string sFolder, string sPattern, bool bRecursive, HashSet<string> hsFiles, List<string> lsProblems)
     {
         try
         {
             foreach (string sFile in Directory.GetFiles(sFolder, sPattern))
-                if (Conversion.hasAnyRoute(sFile)) hsFiles.Add(Path.GetFullPath(sFile));
+            {
+                FileAttributes iAttr = File.GetAttributes(sFile);
+                if ((iAttr & (FileAttributes.Hidden | FileAttributes.System)) != 0) continue;
+                hsFiles.Add(Path.GetFullPath(sFile));
+            }
             if (bRecursive)
                 foreach (string sChild in Directory.GetDirectories(sFolder))
                     if ((File.GetAttributes(sChild) & FileAttributes.ReparsePoint) == 0) scan(sChild, sPattern, true, hsFiles, lsProblems);
@@ -92,35 +94,26 @@ public static class Batch
         return true;
     }
 
-    // targets: the formats every source converts to, as extensions, with the kit's
-    // readable label for each, in the kit's order for the first file.
-    public static List<string> targets(List<string> lsFiles, out List<string> lsLabels)
+    // deriveOutput: the Output directory a source implies, 2htm's rule: one folder gives
+    // itself, one pattern or one file gives its folder, anything else gives nothing,
+    // which means each result goes beside its source.
+    public static string deriveOutput(string sSourceField)
     {
-        lsLabels = new List<string>();
-        List<string> lsTargets = new List<string>();
-        if (lsFiles.Count == 0) return lsTargets;
-        HashSet<string> hsCommon = null;
-        Dictionary<string, string> dLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        HashSet<string> hsTypesSeen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        string[] aFirstExtensions = null;
-        foreach (string sFile in lsFiles)
+        List<string> lsPaths = tokens(sSourceField);
+        if (lsPaths.Count != 1) return "";
+        string sOne = Environment.ExpandEnvironmentVariables(lsPaths[0]);
+        try
         {
-            // One file of each source type is enough: the targets depend on the type.
-            if (!hsTypesSeen.Add(Conversion.typeOf(sFile))) continue;
-            string[] aExtensions;
-            string[] aLabels = Conversion.targetLabelsFor(sFile, out aExtensions);
-            for (int i = 0; i < aExtensions.Length; i++) if (!dLabels.ContainsKey(aExtensions[i])) dLabels[aExtensions[i]] = aLabels[i];
-            if (hsCommon == null) { hsCommon = new HashSet<string>(aExtensions, StringComparer.OrdinalIgnoreCase); aFirstExtensions = aExtensions; }
-            else hsCommon.IntersectWith(aExtensions);
+            if (Directory.Exists(sOne)) return Path.GetFullPath(sOne);
+            if (sOne.IndexOfAny(new char[] { '*', '?' }) >= 0)
+            {
+                string sDir = Path.GetDirectoryName(sOne);
+                return !string.IsNullOrEmpty(sDir) && Directory.Exists(sDir) ? Path.GetFullPath(sDir) : "";
+            }
+            if (File.Exists(sOne)) return Path.GetDirectoryName(Path.GetFullPath(sOne)) ?? "";
         }
-        if (hsCommon == null) return lsTargets;
-        foreach (string sExtension in aFirstExtensions)
-        {
-            if (!hsCommon.Contains(sExtension) || lsTargets.Contains(sExtension)) continue;
-            lsTargets.Add(sExtension);
-            lsLabels.Add(dLabels[sExtension]);
-        }
-        return lsTargets;
+        catch (Exception) { }
+        return "";
     }
 
     // destination: the result's path, never a source and never a name already given

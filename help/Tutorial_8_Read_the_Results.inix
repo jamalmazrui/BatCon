@@ -14,7 +14,7 @@ Hear=BatCon results
 [step]
 Say=The first line is the summary. Down Arrow reads each file in turn.
 Key=Down Arrow
-Hear=Failed Notes.pdf: the conversion made an empty file
+Hear=Failed Notes dot p d f: the conversion made an empty file
 
 [step]
 Say=A failure says why. The last line names the log, which has every detail, one file for each run.
@@ -22,8 +22,9 @@ Key=Control+End
 Hear=The log: C:\Users\you\AppData\Local\BatCon\logs\BatCon-20261019-120000.log
 
 [step]
-Say=Escape closes the window.
+Say=Escape closes the window, and the reader says nothing more until you move.
 Key=Escape
+Note=The reader says nothing as the window closes.
 
 [step]
 Say=What this walk taught: the summary first, a reason for each failure, and the log at the end.

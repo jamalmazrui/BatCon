@@ -216,42 +216,64 @@ rich text and plain text.</li>
 with recognition of scanned pages when Tesseract is installed.</li>
 <li><strong>Presentations:</strong> Markdown to PowerPoint, and
 PowerPoint to Markdown or text.</li>
+<li><strong>Recordings to transcripts:</strong> an audio or video file
+becomes a transcript – plain text, Markdown, a web page, Word or PDF,
+among others – written by Whisper on your own computer.</li>
+<li><strong>Documents to speech:</strong> a document becomes an MP3 or
+other audio file in Windows’ own voice, or an MP4 or other video, the
+speech over a plain black picture.</li>
+<li><strong>Audio, video and pictures:</strong> each to the other
+formats of its kind, such as WAV to MP3 or PNG to JPEG.</li>
 </ul>
-<p>The Target format list shows only what every source file converts to,
-so you can never pick a format one of them cannot reach.</p>
+<p>The Target format list shows every format BatCon can make. A source
+that cannot become the one you pick is skipped, and BatCon says why.</p>
 <h2 id="the-dialog">The dialog</h2>
-<p>The controls, in the order Tab moves through them:</p>
+<p>BatCon’s dialog has the same shape as 2htm’s and extCheck’s. The
+controls, in the order Tab moves through them:</p>
 <ul>
-<li><strong>Source files (Alt+S):</strong> the files to convert. Type
-one or more files, folders or patterns such as <code>*.docx</code>,
-putting quotes around any with a space.</li>
-<li><strong>Browse source (Alt+B):</strong> picks files with a standard
-Open dialog.</li>
-<li><strong>Add folder (Alt+A):</strong> adds a folder; its files are
-converted.</li>
-<li><strong>Target format (Alt+T):</strong> the format to convert to, by
-name, such as “Markdown (md)”.</li>
-<li><strong>Output directory (Alt+O):</strong> where the results go.
-Left blank, each result goes beside its source.</li>
+<li><strong>Source files (Alt+S):</strong> the files to convert. It
+starts at your Documents folder. Type one or more files, folders or
+patterns such as <code>*.docx</code>, putting quotes around any with a
+space.</li>
+<li><strong>Browse source (Alt+B):</strong> picks a folder of files with
+a standard Browse for Folder dialog.</li>
+<li><strong>Output directory (Alt+O):</strong> where the results go. It
+follows Source files – the folder itself, or the folder of a single file
+or pattern – until you choose another. Blank means each result goes
+beside its source.</li>
 <li><strong>Choose output (Alt+C):</strong> picks the output
 folder.</li>
-<li><strong>Include subfolders (Alt+I):</strong> looks inside folders
-within each source folder too.</li>
-<li><strong>Force replacements (Alt+F):</strong> replaces a result that
-is already there, once its new conversion succeeds.</li>
+<li><strong>Target format (Alt+T):</strong> the format to convert to,
+from every format BatCon can make, in alphabetical order by name, such
+as “Markdown document (md)”.</li>
+<li><strong>Include subfolders (Alt+I):</strong> looks inside the
+folders within each source folder too.</li>
+<li><strong>Force replacements (Alt+F):</strong> replaces a result
+already there, once its new conversion succeeds, instead of keeping
+it.</li>
 <li><strong>View output (Alt+V):</strong> opens the output folder when
 the batch finishes.</li>
-<li><strong>Default settings, OK and Cancel:</strong> Default settings
-puts every choice back as it was first; OK, or Enter, starts the
-batch.</li>
+<li><strong>Log session (Alt+L):</strong> also writes BatCon.log, the
+run’s log, in the output folder.</li>
+<li><strong>Use configuration (Alt+U):</strong> when checked as you
+press OK, saves every field and starts from them next time. Unchecked,
+BatCon starts from its defaults.</li>
+<li><strong>OK, Guide, Default settings, Cancel and Help:</strong> OK,
+or Enter, starts the batch, and offers to make an output folder that
+does not exist. Guide opens this guide. Default settings puts every
+field back to its default and forgets the saved configuration. Help, or
+F1, lists each field and checks for a newer BatCon; F11 checks at
+once.</li>
 </ul>
-<p>Every answer is saved as soon as you give it, so BatCon opens next
-time as you left it.</p>
 <h2 id="while-it-works">While it works</h2>
-<p>BatCon says how many files it is converting, then names each file as
-it goes, no more often than every two seconds. At the end, a window
-lists every file: converted, skipped because its result was already
-there, or failed, with the reason. The last line names the log, which
+<p>A file whose type does not convert to the target is skipped, and
+BatCon says so once for each type, with the reason, such as “Skipping 3
+files of type wav: the Homer kit has no conversion from wav to xlsx.”
+BatCon then says how many files it is converting, and names each as it
+goes, no more often than every two seconds. At the end, a window gives
+the counts – converted, kept because a result was already there, skipped
+for want of a conversion, and failed – then each skipping message and
+each file’s outcome with its reason. The last line names the log, which
 has every detail.</p>
 <p>Your files are safe. Each result is written to a temporary file first
 and put in place only when its conversion works, so a failure never
@@ -260,7 +282,7 @@ the same name get name_2, name_3 and so on.</p>
 <h2 id="from-a-command-line">From a command line</h2>
 <pre><code>BatCon &quot;C:\Reports\*.pdf&quot; /to md /output C:\Reports\Markdown
 BatCon C:\Data /recursive /to xlsx
-BatCon C:\Reports /list</code></pre>
+BatCon /list</code></pre>
 <ul>
 <li><strong>/to format:</strong> the format to convert to, by its
 extension.</li>
@@ -268,8 +290,10 @@ extension.</li>
 <li><strong>/recursive:</strong> includes subfolders.</li>
 <li><strong>/force:</strong> replaces results already there.</li>
 <li><strong>/view:</strong> opens the output folder at the end.</li>
-<li><strong>/list:</strong> prints the formats the sources convert to,
+<li><strong>/list:</strong> prints every format BatCon can convert to,
 and converts nothing.</li>
+<li><strong>/log:</strong> also writes BatCon.log in the output
+folder.</li>
 <li><strong>/defaults:</strong> puts the settings back as they were
 first.</li>
 <li><strong>/help:</strong> prints the usage.</li>
@@ -280,7 +304,8 @@ a switch was unknown, and 3 when some files failed.</p>
 <h2 id="where-things-are">Where things are</h2>
 <ul>
 <li><strong>The program:</strong> C:Files.</li>
-<li><strong>Your settings:</strong> %LOCALAPPDATA%.inix.</li>
+<li><strong>Your settings, when Use configuration is checked:</strong>
+%LOCALAPPDATA%.inix.</li>
 <li><strong>The logs:</strong> %LOCALAPPDATA%, one for each run.</li>
 </ul>
 </main>

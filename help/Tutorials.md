@@ -54,17 +54,29 @@ The walks: one, the dialog; two, installing and opening it; three to eight, a ta
 
 Two voices take these walks. I am the host; the other voice plays the screen reader. It is a simulation, so your own reader's words may differ a little.
 
-### Step 4
+### Step 4: Insert+Tab
 
-Three screen reader keys help whenever you are unsure. Insert plus Tab says what has the focus.
+Three screen reader keys help whenever you are unsure, and Caps Lock serves in place of Insert where your reader is set up that way. Insert plus Tab says what has the focus.
 
-### Step 5
+Screen reader:
+
+- Source files: edit
+
+### Step 5: Insert+T
 
 Insert plus T says the title of the window.
 
-### Step 6
+Screen reader:
+
+- BatCon
+
+### Step 6: Insert+Up Arrow
 
 And Insert plus Up Arrow says again the line you are on.
+
+Screen reader:
+
+- C colon backslash Reports backslash star dot p d f
 
 ### Step 7
 
@@ -98,11 +110,11 @@ Every control has an Alt key: the first letter of its name. Alt plus T, Tango, g
 Screen reader:
 
 - Target format: list box
-- Markdown (md)
+- Markdown document (md)
 
 ### Step 4
 
-The list shows only the formats every source converts to, each by name, with its extension.
+The list holds every format BatCon can make, by name, with its extension, in alphabetical order.
 
 ### Step 5: Alt+O
 
@@ -155,7 +167,7 @@ Screen reader:
 
 ### Step 4
 
-Every choice you make is saved as soon as you make it, so BatCon opens next time as you left it.
+Check Use configuration, Alt plus U, before you press OK, and BatCon opens next time as you left it.
 
 ### Step 5
 
@@ -179,7 +191,7 @@ Screen reader:
 
 ### Step 2: Tab
 
-Tab away, and BatCon finds the files and lists what they convert to.
+Tab away from the field; the files are found when you press OK.
 
 Screen reader:
 
@@ -192,7 +204,7 @@ Alt plus T, Tango, for Target format, and Markdown is already first.
 Screen reader:
 
 - Target format: list box
-- Markdown (md)
+- Markdown document (md)
 
 ### Step 4: Enter
 
@@ -201,7 +213,7 @@ Enter starts the batch. BatCon says how many files, then names each as it goes.
 Screen reader:
 
 - Converting 3 files to md
-- 2 of 3: Budget.pdf
+- 2 of 3: Budget dot p d f
 
 ### Step 5
 
@@ -209,7 +221,7 @@ At the end, a window lists each file. Scanned pages are read with Tesseract, whe
 
 Screen reader:
 
-- 3 files converted, 0 skipped, 0 failed.
+- 3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 ### Step 6
 
@@ -223,26 +235,25 @@ A table in CSV, inix or Markdown made an Excel workbook.
 
 **Before you start:** BatCon is open, and a CSV file is at hand.
 
-### Step 1: Alt+B
+### Step 1: Alt+S
 
-Press Alt plus B, Bravo, to browse for the file.
-
-Screen reader:
-
-- Browse source dialog
-- File name: edit combo
-
-### Step 2: Enter
-
-Choose the file and press Enter. BatCon puts it in Source files and refreshes the list.
+Source files starts at your Documents folder. Type the file you want, here C colon backslash Data backslash Members dot c s v.
 
 Screen reader:
 
-- Source files: edit, quote C colon backslash Data backslash Members dot csv quote
+- Source files: edit
+
+### Step 2: Alt+O
+
+Output directory follows, the folder of that one file, so the workbook goes beside it.
+
+Screen reader:
+
+- Output directory: edit, C colon backslash Data
 
 ### Step 3: Alt+T
 
-Alt plus T, then the letter E for Excel, moves to it.
+Alt plus T, Tango, goes to Target format. The list is in alphabetical order, so the letter E lands first on EPUB book, and E again on Excel workbook.
 
 Screen reader:
 
@@ -258,7 +269,7 @@ Enter converts it.
 
 Screen reader:
 
-- 1 file converted, 0 skipped, 0 failed.
+- 1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 ### Step 6
 
@@ -322,7 +333,7 @@ Run the same batch again, and BatCon keeps the results already there.
 
 Screen reader:
 
-- 0 files converted, 3 skipped, 0 failed.
+- 0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 ### Step 2: Alt+F
 
@@ -338,7 +349,7 @@ Even then, an earlier result is replaced only once its new conversion works, so 
 
 Screen reader:
 
-- 3 files converted, 0 skipped, 0 failed.
+- 3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 ### Step 4
 
@@ -364,7 +375,7 @@ Each file's result prints as it is made, then the summary and where the log is.
 
 Screen reader:
 
-- Converted Budget.pdf to Budget.md.
+- Converted Budget dot p d f to Budget dot m d.
 
 ### Step 3
 
@@ -400,7 +411,7 @@ The first line is the summary. Down Arrow reads each file in turn.
 
 Screen reader:
 
-- Failed Notes.pdf: the conversion made an empty file
+- Failed Notes dot p d f: the conversion made an empty file
 
 ### Step 3: Control+End
 
@@ -412,7 +423,9 @@ Screen reader:
 
 ### Step 4: Escape
 
-Escape closes the window.
+Escape closes the window, and the reader says nothing more until you move.
+
+The reader says nothing as the window closes.
 
 ### Step 5
 
@@ -426,13 +439,23 @@ What to carry away, and where to begin.
 
 **Before you start:** BatCon is installed and your reader is running.
 
-### Step 1
+### Step 1: Alt+Control+B
 
 Four things to carry away. One: Alt plus Control plus B opens BatCon.
 
-### Step 2
+Screen reader:
 
-Two: the formats listed are the ones every source converts to.
+- BatCon dialog
+- Source files: edit
+
+### Step 2: Alt+T
+
+Two: every format BatCon can make is listed, and a source that cannot become it is skipped, with the reason.
+
+Screen reader:
+
+- Target format: list box
+- Markdown document (md)
 
 ### Step 3
 

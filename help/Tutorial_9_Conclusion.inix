@@ -9,9 +9,15 @@ Homework=Begin with a folder you convert often.
 
 [step]
 Say=Four things to carry away. One: Alt plus Control plus B opens BatCon.
+Key=Alt+Control+B
+Hear=BatCon dialog
+Hear=Source files: edit
 
 [step]
-Say=Two: the formats listed are the ones every source converts to.
+Say=Two: every format BatCon can make is listed, and a source that cannot become it is skipped, with the reason.
+Key=Alt+T
+Hear=Target format: list box
+Hear=Markdown document (md)
 
 [step]
 Say=Three: your files are safe. A result appears only when its conversion works, and a source is never overwritten.

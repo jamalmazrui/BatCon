@@ -59,7 +59,7 @@ set "progFiles=%ProgramFiles%"
 
 rem ---- SETTINGS: the part an app edits -------------------------------
 rem The oldest kit with everything this build uses.
-set "kitNeeded=1.82.0"
+set "kitNeeded=1.84.0"
 rem The number to start from when version.txt is missing. A newer release
 rem tag, if the repository has one, wins. It is also a floor: a version.txt
 rem holding less is raised to it.
@@ -70,7 +70,8 @@ set "cscTarget=winexe"
 rem The kit classes the program uses, alphabetical. Lbc needs Elevate (its
 rem Help box offers the update), Log, Paths, Say and Util; Log needs Paths and
 rem Say; Mdi needs KeyMap. Each is compiled from the kit's exec\CSharp.
-set "homerModules=Conversion Elevate Inix KeyName Lbc Log Paths Say Table Util Web"
+rem The whole conversion bundle (kit 1.84.0): media, speech to text and text to speech too.
+set "homerModules=Conversion ConversionMedia Elevate Inix KeyName Lbc Log Media Paths Say Table Util Voice Web"
 rem The app's own sources beside BatCon.cs, if any, space separated.
 set "appSources=Batch.cs"
 rem Files embedded in the program as resources, space separated: a sound, a
@@ -90,7 +91,7 @@ rem The kit tools this app uses, refreshed into scripts\ on every build.
 rem Name each; add one the day it is used (installCommon.cmd for install
 rem scripts written in cmd, buildTutorials and its fellows once a walk exists,
 rem post.cmd and post.ps1 once the app publishes a page).
-set "kitTools=buildTutorials.cmd buildTutorials.ps1 check.cmd check.py checkTutorial.cmd checkTutorial.py createRepo.cmd fixEncoding.cmd fixEncoding.py installCommon.cmd installPandoc.cmd installPdfTools.cmd installScreenReaderSupport.cmd kind.cmd kind.py makeTutorials.cmd makeTutorials.py push.cmd release.cmd release.ps1 tidy.cmd tidy.py unpushed.cmd unpushed.py"
+set "kitTools=buildTutorials.cmd buildTutorials.ps1 check.cmd check.py checkTutorial.cmd checkTutorial.py createRepo.cmd fixEncoding.cmd fixEncoding.py installCommon.cmd installFfmpeg.cmd installPandoc.cmd installPdfTools.cmd installScreenReaderSupport.cmd installWhisper.cmd kind.cmd kind.py makeTutorials.cmd makeTutorials.py push.cmd release.cmd release.ps1 tidy.cmd tidy.py unpushed.cmd unpushed.py"
 set "useDocs=1"
 set "useInstaller=1"
 set "useVersionSteps=1"
@@ -569,7 +570,15 @@ if exist "help\Tutorial_*.inix" (
     if exist "scripts\buildTutorials.cmd" (
       echo Making sure the spoken tutorials are current
       call "scripts\buildTutorials.cmd" -build
-      if errorlevel 1 echo Not every tutorial could be spoken. The tutorials log in logs\ says why.
+      rem A WALK THAT CANNOT BE SPOKEN STOPS THE BUILD (kit 1.82.2), as DbDo's does: the checker
+      rem found something wrong and spoke nothing, and BatCon's first release went out without its
+      rem tutorials while the cycle said every step had passed.
+      if errorlevel 1 (
+        echo The tutorials were not built, so the installer is not made. The checker listed what is wrong with the walks:
+        echo   logs\%app%-tutorials-check-*.log
+        >> "%log%" echo ERROR: the tutorials were not built; see logs\%app%-tutorials-check-*.log
+        goto :failed
+      )
     ) else (
       echo This app has walks but its kitTools do not name buildTutorials.
     )
@@ -578,6 +587,9 @@ if exist "help\Tutorial_*.inix" (
 
 rem ---- installer ----------------------------------------------------------
 if not defined useInstaller goto :done
+rem THE TUTORIAL FINGERPRINTS STAY HOME (kit 1.84.1): buildTutorials writes <walk>.sha256 beside each
+rem mp3, to know next time whether the walk changed; it is build state, never installed, so the
+rem check leaves it out. BatCon's first build that spoke its walks stopped on all ten.
 rem EVERY FILE IN help\ AND EVERY scripts\install*.cmd MUST BE SHIPPED. The
 rem Source: lines are read, {#Name} tokens resolved from #define lines, and
 rem each file matched against them; recursesubdirs lets a line reach into
@@ -592,7 +604,7 @@ powershell -NoProfile -Command ^
   "  $sAny = '[^\\]*'; if ($s -match 'recursesubdirs') { $sAny = '.*' };" ^
   "  $lPat += ('^' + [regex]::Escape($p).Replace('\*', $sAny).Replace('\?', '.') + '$') } };" ^
   "$iRoot = (Get-Location).Path.Length + 1;" ^
-  "$lFiles = @(Get-ChildItem -LiteralPath 'help' -Recurse -File -ErrorAction SilentlyContinue) + @(Get-ChildItem -LiteralPath 'scripts' -Filter 'install*.cmd' -File -ErrorAction SilentlyContinue);" ^
+  "$lFiles = @(Get-ChildItem -LiteralPath 'help' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Extension -ne '.sha256' }) + @(Get-ChildItem -LiteralPath 'scripts' -Filter 'install*.cmd' -File -ErrorAction SilentlyContinue);" ^
   "$iMissing = 0; foreach ($f in $lFiles) { $r = $f.FullName.Substring($iRoot); $bHit = $false; foreach ($p in $lPat) { if ($r -match $p) { $bHit = $true; break } };" ^
   "  if (-not $bHit) { 'NOT IN THE INSTALLER: ' + $r; $iMissing++ } };" ^
   "'Files checked against the installer: ' + $lFiles.Count + ', missing: ' + $iMissing;" ^

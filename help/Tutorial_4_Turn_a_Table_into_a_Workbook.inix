@@ -8,19 +8,19 @@ Setup=BatCon is open, and a CSV file is at hand.
 Homework=Make a workbook from a table of your own.
 
 [step]
-Say=Press Alt plus B, Bravo, to browse for the file.
-Key=Alt+B
-Hear=Browse source dialog
-Hear=File name: edit combo
+Say=Source files starts at your Documents folder. Type the file you want, here C colon backslash Data backslash Members dot c s v.
+Key=Alt+S
+Hear=Source files: edit
 
 [step]
-Say=Choose the file and press Enter. BatCon puts it in Source files and refreshes the list.
-Key=Enter
-Hear=Source files: edit, quote C colon backslash Data backslash Members dot csv quote
+Say=Output directory follows, the folder of that one file, so the workbook goes beside it.
+Key=Alt+O
+Hear=Output directory: edit, C colon backslash Data
 
 [step]
-Say=Alt plus T, then the letter E for Excel, moves to it.
+Say=Alt plus T, Tango, goes to Target format. The list is in alphabetical order, so the letter E lands first on EPUB book, and E again on Excel workbook.
 Key=Alt+T
+Key=E
 Key=E
 Hear=Excel workbook (xlsx)
 
@@ -30,7 +30,7 @@ Say=Every value goes into the workbook as text, so leading zeros stay, and nothi
 [step]
 Say=Enter converts it.
 Key=Enter
-Hear=1 file converted, 0 skipped, 0 failed.
+Hear=1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
 Say=What this walk taught: Alt plus B to browse, and a table made a workbook.

@@ -219,6 +219,9 @@ Source: "scripts\installCommon.cmd"; DestDir: "{app}\scripts"; Flags: ignorevers
 ; as in FileDir, whose entries these are.
 Source: "scripts\installPandoc.cmd"; DestDir: "{app}\scripts"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "scripts\installPdfTools.cmd"; DestDir: "{app}\scripts"; Flags: ignoreversion skipifsourcedoesntexist
+; ffmpeg and Whisper (kit 1.84.0): sound for transcription and speech, and Whisper to transcribe.
+Source: "scripts\installFfmpeg.cmd"; DestDir: "{app}\scripts"; Flags: ignoreversion skipifsourcedoesntexist
+Source: "scripts\installWhisper.cmd"; DestDir: "{app}\scripts"; Flags: ignoreversion skipifsourcedoesntexist
 ; SCREEN READER support: the JAWS scripts and the NVDA add-on, when the app has
 ; them, plus the script that puts them where each reader looks.
 Source: "scripts\installScreenReaderSupport.cmd"; DestDir: "{app}\scripts"; Flags: ignoreversion skipifsourcedoesntexist
@@ -272,6 +275,20 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   Check: homerFinishRuns and isInstallPdfTools; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isInstallFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
+FileName: "{app}\scripts\installWhisper.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelWhisper}"; \
+  Check: homerFinishRuns and isInstallWhisper; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
 ; ---- 2. Update, ticked ---------------------------------------------------------
 FileName: "{app}\scripts\installScreenReaderSupport.cmd"; \
   Parameters: "noPause jaws"; \
@@ -299,6 +316,20 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   WorkingDir: "{app}\scripts"; \
   Description: "{code:labelPdfTools}"; \
   Check: homerFinishRuns and isUpdatePdfTools; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isUpdateFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
+FileName: "{app}\scripts\installWhisper.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelWhisper}"; \
+  Check: homerFinishRuns and isUpdateWhisper; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
 ; ---- 3. Reinstall, unticked ----------------------------------------------------
@@ -329,6 +360,20 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   Description: "{code:labelPdfTools}"; \
   Check: homerFinishRuns and isReinstallPdfTools; \
   Flags: postinstall runascurrentuser waituntilterminated unchecked skipifdoesntexist
+
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isReinstallFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist unchecked
+
+FileName: "{app}\scripts\installWhisper.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelWhisper}"; \
+  Check: homerFinishRuns and isReinstallWhisper; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist unchecked
 
 ; ---- 4. Launch, ticked --------------------------------------------------------
 ; The entry only leaves a marker. The program starts from CurStepChanged(ssDone),
@@ -380,7 +425,7 @@ Type: files; Name: "{localappdata}\BatCon\*.inix"
 #include HomerDev + "\Templates\HomerComponents.iss"
 
 var
-  iPandoc, iPdfTools: Integer;
+  iFfmpeg, iPandoc, iPdfTools, iWhisper: Integer;
   sActions: String;
   sPriorVersion: String;
 
@@ -408,6 +453,10 @@ begin
     '{pf}\Pandoc\pandoc.exe', 'converts documents between formats', 'Pandoc');
   iPdfTools := homerAdd('PDF tools', 'Python.Python.3.13', 'python',
     '', 'reads PDF files as text, through Python', 'Python 3.13');
+  iFfmpeg := homerAdd('ffmpeg', 'Gyan.FFmpeg', 'ffmpeg',
+    '', 'converts audio and video, with ffprobe', '');
+  iWhisper := homerAdd('Whisper', '', '"{pf}\Whisper\whisper-cli.exe"',
+    '{pf}\Whisper\whisper-cli.exe', 'transcribes speech', '');
   //  THE PREVIOUS INSTALL IS READ ONCE, HERE, before anything is installed
   //  (1.43.0). It used to be read lazily, and a fresh install has no version
   //  to cache: the finish page's Check: functions then read the uninstall key
@@ -488,6 +537,14 @@ function labelPdfTools(sParam: String): String;  begin Result := homerLabel(iPdf
 function isInstallPdfTools(): Boolean;           begin Result := homerIs(iPdfTools, 0); end;
 function isUpdatePdfTools(): Boolean;            begin Result := homerIs(iPdfTools, 1); end;
 function isReinstallPdfTools(): Boolean;         begin Result := homerIs(iPdfTools, 2); end;
+function labelFfmpeg(sParam: String): String;  begin Result := homerLabel(iFfmpeg); end;
+function isInstallFfmpeg(): Boolean;           begin Result := homerIs(iFfmpeg, 0); end;
+function isUpdateFfmpeg(): Boolean;            begin Result := homerIs(iFfmpeg, 1); end;
+function isReinstallFfmpeg(): Boolean;         begin Result := homerIs(iFfmpeg, 2); end;
+function labelWhisper(sParam: String): String;  begin Result := homerLabel(iWhisper); end;
+function isInstallWhisper(): Boolean;           begin Result := homerIs(iWhisper, 0); end;
+function isUpdateWhisper(): Boolean;            begin Result := homerIs(iWhisper, 1); end;
+function isReinstallWhisper(): Boolean;         begin Result := homerIs(iWhisper, 2); end;
 
 //  ---- the Results box: one line per ticked box, probed after the scripts ran
 procedure addAction(sText: String);
@@ -530,6 +587,8 @@ begin
   addAction(homerScreenReaderOutcome());
   addAction(homerOutcomeLine(iPandoc));
   addAction(homerOutcomeLine(iPdfTools));
+  addAction(homerOutcomeLine(iFfmpeg));
+  addAction(homerOutcomeLine(iWhisper));
   sBody := '{#AppName} {#AppVersion} is installed.';
   if sActions <> '' then sBody := sBody + #13#10 + #13#10 + sActions;
   sBody := sBody + #13#10 + #13#10

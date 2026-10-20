@@ -13,7 +13,7 @@ Key=Alt+S
 Hear=Source files: edit
 
 [step]
-Say=Tab away, and BatCon finds the files and lists what they convert to.
+Say=Tab away from the field; the files are found when you press OK.
 Key=Tab
 Hear=Browse source... button
 
@@ -21,17 +21,17 @@ Hear=Browse source... button
 Say=Alt plus T, Tango, for Target format, and Markdown is already first.
 Key=Alt+T
 Hear=Target format: list box
-Hear=Markdown (md)
+Hear=Markdown document (md)
 
 [step]
 Say=Enter starts the batch. BatCon says how many files, then names each as it goes.
 Key=Enter
 Hear=Converting 3 files to md
-Hear=2 of 3: Budget.pdf
+Hear=2 of 3: Budget dot p d f
 
 [step]
 Say=At the end, a window lists each file. Scanned pages are read with Tesseract, when it is installed.
-Hear=3 files converted, 0 skipped, 0 failed.
+Hear=3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
 Say=What this walk taught: a pattern in Source files, Markdown in Target format, and Enter.

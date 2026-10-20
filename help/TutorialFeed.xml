@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>BatCon Walkthroughs</title>
+    <link>Tutorials.htm</link>
+    <description>Spoken walks through BatCon, which converts many files at once between formats. Ten walks, each a few minutes, in the order a new person meets them.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 20 Oct 2026 05:47:25 +0000</lastBuildDate>
+    <itunes:author>Jamal Mazrui</itunes:author>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:category text="Technology"/>
+    <itunes:owner><itunes:name>Jamal Mazrui</itunes:name><itunes:email>jamal.mazrui@outlook.com</itunes:email></itunes:owner>
+    <item>
+      <title>0 - Overview</title>
+      <description>Nothing yet. This one is two minutes of what to expect. Full transcript: Tutorials.htm#0-0-overview</description>
+      <link>Tutorials.htm#0-0-overview</link>
+      <guid isPermaLink="false">homer-tutorial_0_overview</guid>
+      <enclosure url="tutorials/0_Overview.mp3" length="466110" type="audio/mpeg"/>
+      <itunes:duration>00:01:07</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>1 - User Interface</title>
+      <description>BatCon is installed and your reader is running. Full transcript: Tutorials.htm#0a-1-user-interface</description>
+      <link>Tutorials.htm#0a-1-user-interface</link>
+      <guid isPermaLink="false">homer-tutorial_1_user_interface</guid>
+      <enclosure url="tutorials/1_User_Interface.mp3" length="515297" type="audio/mpeg"/>
+      <itunes:duration>00:01:14</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>2 - Install and Launch</title>
+      <description>A web browser, and your reader running. Full transcript: Tutorials.htm#0b-2-install-and-launch</description>
+      <link>Tutorials.htm#0b-2-install-and-launch</link>
+      <guid isPermaLink="false">homer-tutorial_2_install_and_launch</guid>
+      <enclosure url="tutorials/2_Install_and_Launch.mp3" length="270031" type="audio/mpeg"/>
+      <itunes:duration>00:00:39</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>3 - Convert PDFs to Markdown</title>
+      <description>BatCon is open, and a folder holds a few PDF files. Full transcript: Tutorials.htm#0c-3-convert-pdfs-to-markdown</description>
+      <link>Tutorials.htm#0c-3-convert-pdfs-to-markdown</link>
+      <guid isPermaLink="false">homer-tutorial_3_convert_pdfs_to_markdown</guid>
+      <enclosure url="tutorials/3_Convert_PDFs_to_Markdown.mp3" length="381470" type="audio/mpeg"/>
+      <itunes:duration>00:00:58</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>4 - Turn a Table into a Workbook</title>
+      <description>BatCon is open, and a CSV file is at hand. Full transcript: Tutorials.htm#0d-4-turn-a-table-into-a-workbook</description>
+      <link>Tutorials.htm#0d-4-turn-a-table-into-a-workbook</link>
+      <guid isPermaLink="false">homer-tutorial_4_turn_a_table_into_a_workbook</guid>
+      <enclosure url="tutorials/4_Turn_a_Table_into_a_Workbook.mp3" length="389975" type="audio/mpeg"/>
+      <itunes:duration>00:00:57</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>5 - Choose Where Results Go</title>
+      <description>BatCon is open with some source files named. Full transcript: Tutorials.htm#0e-5-choose-where-results-go</description>
+      <link>Tutorials.htm#0e-5-choose-where-results-go</link>
+      <guid isPermaLink="false">homer-tutorial_5_choose_where_results_go</guid>
+      <enclosure url="tutorials/5_Choose_Where_Results_Go.mp3" length="318178" type="audio/mpeg"/>
+      <itunes:duration>00:00:47</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>6 - Convert Again</title>
+      <description>BatCon is open, and a batch has been converted once. Full transcript: Tutorials.htm#0f-6-convert-again</description>
+      <link>Tutorials.htm#0f-6-convert-again</link>
+      <guid isPermaLink="false">homer-tutorial_6_convert_again</guid>
+      <enclosure url="tutorials/6_Convert_Again.mp3" length="299283" type="audio/mpeg"/>
+      <itunes:duration>00:00:44</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>7 - Use the Command Line</title>
+      <description>A command prompt is open. Full transcript: Tutorials.htm#0g-7-use-the-command-line</description>
+      <link>Tutorials.htm#0g-7-use-the-command-line</link>
+      <guid isPermaLink="false">homer-tutorial_7_use_the_command_line</guid>
+      <enclosure url="tutorials/7_Use_the_Command_Line.mp3" length="236282" type="audio/mpeg"/>
+      <itunes:duration>00:00:34</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>8 - Read the Results</title>
+      <description>BatCon has just finished a batch. Full transcript: Tutorials.htm#0h-8-read-the-results</description>
+      <link>Tutorials.htm#0h-8-read-the-results</link>
+      <guid isPermaLink="false">homer-tutorial_8_read_the_results</guid>
+      <enclosure url="tutorials/8_Read_the_Results.mp3" length="345432" type="audio/mpeg"/>
+      <itunes:duration>00:00:50</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+    <item>
+      <title>9 - Conclusion</title>
+      <description>BatCon is installed and your reader is running. Full transcript: Tutorials.htm#0i-9-conclusion</description>
+      <link>Tutorials.htm#0i-9-conclusion</link>
+      <guid isPermaLink="false">homer-tutorial_9_conclusion</guid>
+      <enclosure url="tutorials/9_Conclusion.mp3" length="308892" type="audio/mpeg"/>
+      <itunes:duration>00:00:46</itunes:duration>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>
