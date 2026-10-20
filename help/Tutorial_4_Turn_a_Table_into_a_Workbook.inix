@@ -1,0 +1,36 @@
+﻿; Tutorial_4_Turn_a_Table_into_a_Workbook.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=4 - Turn a Table into a Workbook
+Intro=A table in CSV, inix or Markdown made an Excel workbook.
+Setup=BatCon is open, and a CSV file is at hand.
+Homework=Make a workbook from a table of your own.
+
+[step]
+Say=Press Alt plus B, Bravo, to browse for the file.
+Key=Alt+B
+Hear=Browse source dialog
+Hear=File name: edit combo
+
+[step]
+Say=Choose the file and press Enter. BatCon puts it in Source files and refreshes the list.
+Key=Enter
+Hear=Source files: edit, quote C colon backslash Data backslash Members dot csv quote
+
+[step]
+Say=Alt plus T, then the letter E for Excel, moves to it.
+Key=Alt+T
+Key=E
+Hear=Excel workbook (xlsx)
+
+[step]
+Say=Every value goes into the workbook as text, so leading zeros stay, and nothing turns into a formula.
+
+[step]
+Say=Enter converts it.
+Key=Enter
+Hear=1 file converted, 0 skipped, 0 failed.
+
+[step]
+Say=What this walk taught: Alt plus B to browse, and a table made a workbook.

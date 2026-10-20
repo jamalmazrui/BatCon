@@ -1,0 +1,25 @@
+﻿; Tutorial_7_Use_the_Command_Line.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=7 - Use the Command Line
+Intro=BatCon without its dialog, from a command prompt or a script.
+Setup=A command prompt is open.
+Homework=Convert a folder from the command line.
+
+[step]
+Say=Type BatCon, the files, slash to and a format. Here, every PDF in Reports to Markdown.
+Note=BatCon "C:\Reports\*.pdf" /to md /output C:\Reports\Markdown
+
+[step]
+Say=Each file's result prints as it is made, then the summary and where the log is.
+Hear=Converted Budget.pdf to Budget.md.
+
+[step]
+Say=Slash list shows the formats without converting anything, and slash help shows every switch.
+
+[step]
+Say=A switch may be typed with a slash, a dash or two dashes, in any case.
+
+[step]
+Say=What this walk taught: slash to, slash output, slash list and slash help.

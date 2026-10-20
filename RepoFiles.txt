@@ -1,0 +1,16 @@
+﻿# RepoFiles.txt -- what the BatCon repository carries. tidy writes the
+# .gitignore whitelist from this list alone.
+
+.gitattributes
+LocalFiles.txt
+License.htm
+License.md
+ReadMe.htm
+ReadMe.md
+RepoFiles.txt
+accept.inix
+build.cmd
+help/
+BatCon_setup.iss
+BatCon.cs
+scripts/

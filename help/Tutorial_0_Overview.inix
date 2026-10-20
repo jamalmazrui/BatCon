@@ -1,0 +1,36 @@
+﻿; Tutorial_0_Overview.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[feed]
+Title=BatCon Walkthroughs
+Description=Spoken walks through BatCon, which converts many files at once between formats. Ten walks, each a few minutes, in the order a new person meets them.
+Author=Jamal Mazrui
+Email=jamal.mazrui@outlook.com
+Base=
+
+[about]
+Title=0 - Overview
+Intro=What BatCon does, and what each walk covers.
+Setup=Nothing yet. This one is two minutes of what to expect.
+Homework=Pick the walk that matches what you want to do today.
+
+[step]
+Say=BatCon converts many files at once, from one format to another: PDF to Markdown, Word to a web page, a table to Excel. It is one small dialog, made for the keyboard and the screen reader.
+
+[step]
+Say=The walks: one, the dialog; two, installing and opening it; three to eight, a task each, from PDFs to the command line; nine, what to carry away. Take one and two first; the rest in any order.
+
+[step]
+Say=Two voices take these walks. I am the host; the other voice plays the screen reader. It is a simulation, so your own reader's words may differ a little.
+
+[step]
+Say=Three screen reader keys help whenever you are unsure. Insert plus Tab says what has the focus.
+
+[step]
+Say=Insert plus T says the title of the window.
+
+[step]
+Say=And Insert plus Up Arrow says again the line you are on.
+
+[step]
+Say=What this walk taught: what BatCon is for, and the order of the walks.

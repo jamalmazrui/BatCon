@@ -1,0 +1,566 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>BatCon walkthroughs</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      color: light-dark(#1a1a1a, #fdfdfd);
+      background-color: #fdfdfd;
+      background-color: light-dark(#fdfdfd, #1a1a1a);
+      color-scheme: light dark;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        color-scheme: light only;
+      }
+      html, body, pre, code {
+        background-color: transparent;
+      }
+      body, a, a:visited, blockquote {
+        color: black;
+      }
+      pre, code {
+        padding: 0;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a, a:visited {
+      color: inherit;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid;
+      border-color: #e6e6e6;
+      border-color: light-dark(#e6e6e6, #4c4c4c);
+      color: #606060;
+      color: light-dark(#606060, #b6b6b6);
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid currentColor;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+    }
+    th {
+      border-top: 1px solid currentColor;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<main>
+<h1 id="batcon-walkthroughs">BatCon walkthroughs</h1>
+<p>These are written walkthroughs for this development build. Spoken
+tutorials and recorded screen-reader responses are not included.</p>
+<h2 id="convert-a-document">Convert a document</h2>
+<ol type="1">
+<li>Run BatCon.cmd.</li>
+<li>In Source, type the full path of a PDF, or press Browse source and
+choose it.</li>
+<li>Tab to Target format. Use the arrow keys to choose md.</li>
+<li>In Output, type a directory for the result, or use Choose
+output.</li>
+<li>Press Control+Enter. The conversion window shows progress.</li>
+<li>Read Results. The converted Markdown file is in the Output
+directory. The log gives the conversion route.</li>
+</ol>
+<h2 id="convert-a-table">Convert a table</h2>
+<ol type="1">
+<li>Run BatCon.cmd.</li>
+<li>In Source, enter an INIX file containing record sections.</li>
+<li>In Target format, choose xlsx.</li>
+<li>Choose an Output directory and press OK.</li>
+<li>Open the workbook. The Data sheet has one column for each field.
+Leading zeros remain text, and values beginning with an equals sign
+remain literal values.</li>
+</ol>
+<h2 id="convert-a-folder">Convert a folder</h2>
+<ol type="1">
+<li>Use Add folder to append a directory.</li>
+<li>Check Include subfolders if needed.</li>
+<li>Press Refresh files. The status gives the source count and number of
+common target formats.</li>
+<li>Choose a Target format and Output directory, then press OK.</li>
+<li>Use Stop after current file if you need to end the batch. Read the
+unprocessed count in Results.</li>
+</ol>
+<h2 id="repeat-safely">Repeat safely</h2>
+<ol type="1">
+<li>Run a completed batch again with Force replacements unchecked.</li>
+<li>Results report existing outputs as skipped.</li>
+<li>Check Force replacements only when you intend to replace those
+outputs.</li>
+<li>Run again. A failed conversion preserves the existing output.</li>
+</ol>
+<!-- walkthrough: written by makeTutorials.py, do not edit between the markers -->
+<h2 id="overview">0 - Overview</h2>
+<p>What BatCon does, and what each walk covers.</p>
+<p><strong>Before you start:</strong> Nothing yet. This one is two
+minutes of what to expect.</p>
+<h3 id="step-1">Step 1</h3>
+<p>BatCon converts many files at once, from one format to another: PDF
+to Markdown, Word to a web page, a table to Excel. It is one small
+dialog, made for the keyboard and the screen reader.</p>
+<h3 id="step-2">Step 2</h3>
+<p>The walks: one, the dialog; two, installing and opening it; three to
+eight, a task each, from PDFs to the command line; nine, what to carry
+away. Take one and two first; the rest in any order.</p>
+<h3 id="step-3">Step 3</h3>
+<p>Two voices take these walks. I am the host; the other voice plays the
+screen reader. It is a simulation, so your own reader’s words may differ
+a little.</p>
+<h3 id="step-4">Step 4</h3>
+<p>Three screen reader keys help whenever you are unsure. Insert plus
+Tab says what has the focus.</p>
+<h3 id="step-5">Step 5</h3>
+<p>Insert plus T says the title of the window.</p>
+<h3 id="step-6">Step 6</h3>
+<p>And Insert plus Up Arrow says again the line you are on.</p>
+<h3 id="step-7">Step 7</h3>
+<p>What this walk taught: what BatCon is for, and the order of the
+walks.</p>
+<p><strong>Something to try:</strong> Pick the walk that matches what
+you want to do today.</p>
+<h2 id="user-interface">1 - User Interface</h2>
+<p>The one dialog, control by control, and the keys that reach each
+one.</p>
+<p><strong>Before you start:</strong> BatCon is installed and your
+reader is running.</p>
+<h3 id="step-1-altcontrolb">Step 1: Alt+Control+B</h3>
+<p>BatCon is one dialog. Alt plus Control plus B, B for BatCon, opens it
+from anywhere in Windows.</p>
+<p>Screen reader:</p>
+<ul>
+<li>BatCon dialog</li>
+<li>Source files: edit</li>
+</ul>
+<h3 id="step-2-1">Step 2</h3>
+<p>Focus starts in Source files, where you name what to convert: files,
+folders, or patterns such as star dot P D F.</p>
+<h3 id="step-3-altt">Step 3: Alt+T</h3>
+<p>Every control has an Alt key: the first letter of its name. Alt plus
+T, Tango, goes to Target format.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Target format: list box</li>
+<li>Markdown (md)</li>
+</ul>
+<h3 id="step-4-1">Step 4</h3>
+<p>The list shows only the formats every source converts to, each by
+name, with its extension.</p>
+<h3 id="step-5-alto">Step 5: Alt+O</h3>
+<p>Alt plus O, Oscar, is Output directory. Left blank, each result goes
+beside its source.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Output directory: edit, blank</li>
+</ul>
+<h3 id="step-6-altv">Step 6: Alt+V</h3>
+<p>Three check boxes follow: Include subfolders, Alt plus I; Force
+replacements, Alt plus F; View output, Alt plus V.</p>
+<p>Screen reader:</p>
+<ul>
+<li>View output, check box, checked</li>
+</ul>
+<h3 id="step-7-1">Step 7</h3>
+<p>Enter, or Control plus Enter from anywhere, presses OK and starts the
+batch. Escape cancels.</p>
+<h3 id="step-8">Step 8</h3>
+<p>What this walk taught: Alt plus Control plus B to open BatCon, and
+Alt with each control’s first letter.</p>
+<p><strong>Something to try:</strong> Open BatCon and visit each control
+with its Alt key.</p>
+<h2 id="install-and-launch">2 - Install and Launch</h2>
+<p>Installing BatCon, and opening it the two ways.</p>
+<p><strong>Before you start:</strong> A web browser, and your reader
+running.</p>
+<h3 id="step-1-1">Step 1</h3>
+<p>BatCon installs from its page on GitHub: the file named BatCon
+underscore setup dot E X E.</p>
+<h3 id="step-2-2">Step 2</h3>
+<p>The installer asks a few questions, each with Enter for the usual
+answer, and ends with a list of what it did.</p>
+<h3 id="step-3-altcontrolb">Step 3: Alt+Control+B</h3>
+<p>Open BatCon with Alt plus Control plus B, or from the Start menu.</p>
+<p>Screen reader:</p>
+<ul>
+<li>BatCon dialog</li>
+<li>Source files: edit</li>
+</ul>
+<h3 id="step-4-2">Step 4</h3>
+<p>Every choice you make is saved as soon as you make it, so BatCon
+opens next time as you left it.</p>
+<h3 id="step-5-1">Step 5</h3>
+<p>What this walk taught: where to get BatCon, and Alt plus Control plus
+B.</p>
+<p><strong>Something to try:</strong> Install BatCon, then open it with
+its desktop key.</p>
+<h2 id="convert-pdfs-to-markdown">3 - Convert PDFs to Markdown</h2>
+<p>A folder of PDF files, each made a Markdown file you can read line by
+line.</p>
+<p><strong>Before you start:</strong> BatCon is open, and a folder holds
+a few PDF files.</p>
+<h3 id="step-1-alts">Step 1: Alt+S</h3>
+<p>In Source files, type the folder and a pattern, here C colon
+backslash Reports backslash star dot P D F.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Source files: edit</li>
+</ul>
+<h3 id="step-2-tab">Step 2: Tab</h3>
+<p>Tab away, and BatCon finds the files and lists what they convert
+to.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Browse source… button</li>
+</ul>
+<h3 id="step-3-altt-1">Step 3: Alt+T</h3>
+<p>Alt plus T, Tango, for Target format, and Markdown is already
+first.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Target format: list box</li>
+<li>Markdown (md)</li>
+</ul>
+<h3 id="step-4-enter">Step 4: Enter</h3>
+<p>Enter starts the batch. BatCon says how many files, then names each
+as it goes.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Converting 3 files to md</li>
+<li>2 of 3: Budget.pdf</li>
+</ul>
+<h3 id="step-5-2">Step 5</h3>
+<p>At the end, a window lists each file. Scanned pages are read with
+Tesseract, when it is installed.</p>
+<p>Screen reader:</p>
+<ul>
+<li>3 files converted, 0 skipped, 0 failed.</li>
+</ul>
+<h3 id="step-6-1">Step 6</h3>
+<p>What this walk taught: a pattern in Source files, Markdown in Target
+format, and Enter.</p>
+<p><strong>Something to try:</strong> Convert a folder of your own
+PDFs.</p>
+<h2 id="turn-a-table-into-a-workbook">4 - Turn a Table into a
+Workbook</h2>
+<p>A table in CSV, inix or Markdown made an Excel workbook.</p>
+<p><strong>Before you start:</strong> BatCon is open, and a CSV file is
+at hand.</p>
+<h3 id="step-1-altb">Step 1: Alt+B</h3>
+<p>Press Alt plus B, Bravo, to browse for the file.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Browse source dialog</li>
+<li>File name: edit combo</li>
+</ul>
+<h3 id="step-2-enter">Step 2: Enter</h3>
+<p>Choose the file and press Enter. BatCon puts it in Source files and
+refreshes the list.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Source files: edit, quote C colon backslash Data backslash Members
+dot csv quote</li>
+</ul>
+<h3 id="step-3-altt-2">Step 3: Alt+T</h3>
+<p>Alt plus T, then the letter E for Excel, moves to it.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Excel workbook (xlsx)</li>
+</ul>
+<h3 id="step-4-3">Step 4</h3>
+<p>Every value goes into the workbook as text, so leading zeros stay,
+and nothing turns into a formula.</p>
+<h3 id="step-5-enter">Step 5: Enter</h3>
+<p>Enter converts it.</p>
+<p>Screen reader:</p>
+<ul>
+<li>1 file converted, 0 skipped, 0 failed.</li>
+</ul>
+<h3 id="step-6-2">Step 6</h3>
+<p>What this walk taught: Alt plus B to browse, and a table made a
+workbook.</p>
+<p><strong>Something to try:</strong> Make a workbook from a table of
+your own.</p>
+<h2 id="choose-where-results-go">5 - Choose Where Results Go</h2>
+<p>Results in a folder of their own, opened when the batch ends.</p>
+<p><strong>Before you start:</strong> BatCon is open with some source
+files named.</p>
+<h3 id="step-1-alto">Step 1: Alt+O</h3>
+<p>Alt plus O, Oscar, is Output directory. Blank means beside each
+source.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Output directory: edit, blank</li>
+</ul>
+<h3 id="step-2-altc">Step 2: Alt+C</h3>
+<p>Alt plus C, Charlie, chooses a folder with the standard Browse for
+Folder dialog.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Choose the output folder dialog</li>
+</ul>
+<h3 id="step-3-1">Step 3</h3>
+<p>Or type a folder that does not exist yet; BatCon makes it.</p>
+<h3 id="step-4-altv">Step 4: Alt+V</h3>
+<p>Alt plus V, Victor, checks View output, which opens the folder at the
+end.</p>
+<p>Screen reader:</p>
+<ul>
+<li>View output, check box, checked</li>
+</ul>
+<h3 id="step-5-3">Step 5</h3>
+<p>Two sources with one name never clash: the second becomes name
+underscore 2.</p>
+<h3 id="step-6-3">Step 6</h3>
+<p>What this walk taught: Alt plus O and Alt plus C for the output, and
+Alt plus V to view it.</p>
+<p><strong>Something to try:</strong> Send a batch to a new folder and
+let View output open it.</p>
+<h2 id="convert-again">6 - Convert Again</h2>
+<p>Running a batch a second time: what is skipped, and how to replace
+it.</p>
+<p><strong>Before you start:</strong> BatCon is open, and a batch has
+been converted once.</p>
+<h3 id="step-1-enter">Step 1: Enter</h3>
+<p>Run the same batch again, and BatCon keeps the results already
+there.</p>
+<p>Screen reader:</p>
+<ul>
+<li>0 files converted, 3 skipped, 0 failed.</li>
+</ul>
+<h3 id="step-2-altf">Step 2: Alt+F</h3>
+<p>To replace them, press Alt plus F, Foxtrot, for Force
+replacements.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Force replacements, check box, checked</li>
+</ul>
+<h3 id="step-3-enter">Step 3: Enter</h3>
+<p>Even then, an earlier result is replaced only once its new conversion
+works, so a failure never loses it.</p>
+<p>Screen reader:</p>
+<ul>
+<li>3 files converted, 0 skipped, 0 failed.</li>
+</ul>
+<h3 id="step-4-4">Step 4</h3>
+<p>What this walk taught: results are kept by default, and Alt plus F
+replaces them safely.</p>
+<p><strong>Something to try:</strong> Convert the same batch twice, once
+with Force replacements.</p>
+<h2 id="use-the-command-line">7 - Use the Command Line</h2>
+<p>BatCon without its dialog, from a command prompt or a script.</p>
+<p><strong>Before you start:</strong> A command prompt is open.</p>
+<h3 id="step-1-2">Step 1</h3>
+<p>Type BatCon, the files, slash to and a format. Here, every PDF in
+Reports to Markdown.</p>
+<p>BatCon “C:*.pdf” /to md /output C:</p>
+<h3 id="step-2-3">Step 2</h3>
+<p>Each file’s result prints as it is made, then the summary and where
+the log is.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Converted Budget.pdf to Budget.md.</li>
+</ul>
+<h3 id="step-3-2">Step 3</h3>
+<p>Slash list shows the formats without converting anything, and slash
+help shows every switch.</p>
+<h3 id="step-4-5">Step 4</h3>
+<p>A switch may be typed with a slash, a dash or two dashes, in any
+case.</p>
+<h3 id="step-5-4">Step 5</h3>
+<p>What this walk taught: slash to, slash output, slash list and slash
+help.</p>
+<p><strong>Something to try:</strong> Convert a folder from the command
+line.</p>
+<h2 id="read-the-results">8 - Read the Results</h2>
+<p>The results window, the log, and what a failure says.</p>
+<p><strong>Before you start:</strong> BatCon has just finished a
+batch.</p>
+<h3 id="step-1-3">Step 1</h3>
+<p>When a batch ends, a window lists every file: converted, skipped or
+failed.</p>
+<p>Screen reader:</p>
+<ul>
+<li>BatCon results</li>
+</ul>
+<h3 id="step-2-down-arrow">Step 2: Down Arrow</h3>
+<p>The first line is the summary. Down Arrow reads each file in
+turn.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Failed Notes.pdf: the conversion made an empty file</li>
+</ul>
+<h3 id="step-3-controlend">Step 3: Control+End</h3>
+<p>A failure says why. The last line names the log, which has every
+detail, one file for each run.</p>
+<p>Screen reader:</p>
+<ul>
+<li>The log: C:-120000.log</li>
+</ul>
+<h3 id="step-4-escape">Step 4: Escape</h3>
+<p>Escape closes the window.</p>
+<h3 id="step-5-5">Step 5</h3>
+<p>What this walk taught: the summary first, a reason for each failure,
+and the log at the end.</p>
+<p><strong>Something to try:</strong> After a batch, read its results
+and open its log.</p>
+<h2 id="conclusion">9 - Conclusion</h2>
+<p>What to carry away, and where to begin.</p>
+<p><strong>Before you start:</strong> BatCon is installed and your
+reader is running.</p>
+<h3 id="step-1-4">Step 1</h3>
+<p>Four things to carry away. One: Alt plus Control plus B opens
+BatCon.</p>
+<h3 id="step-2-4">Step 2</h3>
+<p>Two: the formats listed are the ones every source converts to.</p>
+<h3 id="step-3-3">Step 3</h3>
+<p>Three: your files are safe. A result appears only when its conversion
+works, and a source is never overwritten.</p>
+<h3 id="step-4-6">Step 4</h3>
+<p>Four: every run writes a log, named at the end of the results.</p>
+<h3 id="step-5-6">Step 5</h3>
+<p>The guide and the hotkeys are in the help folder and on the project
+page. BatCon is one of the Homer Tools.</p>
+<h3 id="step-6-4">Step 6</h3>
+<p>What this walk taught: the four things, and where help lives.</p>
+<p><strong>Something to try:</strong> Begin with a folder you convert
+often.</p>
+<!-- walkthrough ends -->
+</main>
+</body>
+</html>

@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Developer</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      color: light-dark(#1a1a1a, #fdfdfd);
+      background-color: #fdfdfd;
+      background-color: light-dark(#fdfdfd, #1a1a1a);
+      color-scheme: light dark;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        color-scheme: light only;
+      }
+      html, body, pre, code {
+        background-color: transparent;
+      }
+      body, a, a:visited, blockquote {
+        color: black;
+      }
+      pre, code {
+        padding: 0;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a, a:visited {
+      color: inherit;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid;
+      border-color: #e6e6e6;
+      border-color: light-dark(#e6e6e6, #4c4c4c);
+      color: #606060;
+      color: light-dark(#606060, #b6b6b6);
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid currentColor;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+    }
+    th {
+      border-top: 1px solid currentColor;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<nav id="TOC" role="doc-toc" aria-label="Contents">
+<ul>
+<li><a href="#batcon-for-developers"
+id="toc-batcon-for-developers">BatCon for Developers</a>
+<ul>
+<li><a href="#the-sources" id="toc-the-sources">The sources</a></li>
+<li><a href="#what-the-kit-does" id="toc-what-the-kit-does">What the kit
+does</a></li>
+<li><a href="#history-of-the-design"
+id="toc-history-of-the-design">History of the design</a></li>
+<li><a href="#next" id="toc-next">Next</a></li>
+<li><a href="#building" id="toc-building">Building</a></li>
+</ul></li>
+</ul>
+</nav>
+<main>
+<h1 id="batcon-for-developers">BatCon for Developers</h1>
+<p>BatCon is a Homer launchpad app: one dialog, one job, one result. It
+was made with newHomerApp from the HomerDev templates and builds against
+the installed kit, never a copy of it.</p>
+<h2 id="the-sources">The sources</h2>
+<ul>
+<li><strong>BatCon.cs:</strong> the program: the dialog, the command
+line, the settings and the batch loop. It starts the kit’s log, Paths
+and Elevate first in Main.</li>
+<li><strong>Batch.cs:</strong> the batch work: finding the source files,
+the formats they all convert to, a safe name for each result, and one
+conversion at a time.</li>
+</ul>
+<h2 id="what-the-kit-does">What the kit does</h2>
+<p>Every format question goes to the kit’s Conversion class: hasAnyRoute
+says whether a file converts at all, targetLabelsFor lists what it
+converts to with readable names, and convert does the work, the one
+conversion technique every Homer app uses, through the routes in
+exec.inix. BatCon never reads that file itself, so it offers exactly
+what the kit does, and gains each new route the day the kit does.</p>
+<p>The build compiles these kit modules: Conversion, Elevate, Inix,
+KeyName, Lbc, Log, Paths, Say, Table, Util and Web. It copies
+conversions.inix into exec, and the installer ships it.</p>
+<h2 id="history-of-the-design">History of the design</h2>
+<p>The first BatCon was written by ChatGPT from the kit’s documents
+alone. It worked, but it carried a copy of the kit, read
+conversions.inix with its own code, and lacked tutorials and Elevate.
+This version keeps its sound batch logic and file safety, and builds the
+rest the Homer way; what that first version taught the kit is in
+HomerDev’s History for 1.80.0 and 1.80.1.</p>
+<h2 id="next">Next</h2>
+<p>PDF to Markdown goes through the kit’s usual Python route here.
+Compiling the kit’s PdfReader, as HomerScribe does, would add its
+tagged-PDF and layout reading; that needs PdfPig and its binding
+redirects, the next step for BatCon.</p>
+<h2 id="building">Building</h2>
+<p>Unzip BatCon.zip into C:and run build_release.bat there; the build
+finds the kit wherever it is and stops if it is older than the kitNeeded
+in build.cmd.</p>
+</main>
+</body>
+</html>

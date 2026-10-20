@@ -1,0 +1,29 @@
+﻿; Tutorial_8_Read_the_Results.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=8 - Read the Results
+Intro=The results window, the log, and what a failure says.
+Setup=BatCon has just finished a batch.
+Homework=After a batch, read its results and open its log.
+
+[step]
+Say=When a batch ends, a window lists every file: converted, skipped or failed.
+Hear=BatCon results
+
+[step]
+Say=The first line is the summary. Down Arrow reads each file in turn.
+Key=Down Arrow
+Hear=Failed Notes.pdf: the conversion made an empty file
+
+[step]
+Say=A failure says why. The last line names the log, which has every detail, one file for each run.
+Key=Control+End
+Hear=The log: C:\Users\you\AppData\Local\BatCon\logs\BatCon-20261019-120000.log
+
+[step]
+Say=Escape closes the window.
+Key=Escape
+
+[step]
+Say=What this walk taught: the summary first, a reason for each failure, and the log at the end.

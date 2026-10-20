@@ -1,0 +1,32 @@
+﻿; Tutorial_5_Choose_Where_Results_Go.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=5 - Choose Where Results Go
+Intro=Results in a folder of their own, opened when the batch ends.
+Setup=BatCon is open with some source files named.
+Homework=Send a batch to a new folder and let View output open it.
+
+[step]
+Say=Alt plus O, Oscar, is Output directory. Blank means beside each source.
+Key=Alt+O
+Hear=Output directory: edit, blank
+
+[step]
+Say=Alt plus C, Charlie, chooses a folder with the standard Browse for Folder dialog.
+Key=Alt+C
+Hear=Choose the output folder dialog
+
+[step]
+Say=Or type a folder that does not exist yet; BatCon makes it.
+
+[step]
+Say=Alt plus V, Victor, checks View output, which opens the folder at the end.
+Key=Alt+V
+Hear=View output, check box, checked
+
+[step]
+Say=Two sources with one name never clash: the second becomes name underscore 2.
+
+[step]
+Say=What this walk taught: Alt plus O and Alt plus C for the output, and Alt plus V to view it.

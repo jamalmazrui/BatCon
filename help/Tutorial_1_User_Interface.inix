@@ -1,0 +1,42 @@
+﻿; Tutorial_1_User_Interface.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=1 - User Interface
+Intro=The one dialog, control by control, and the keys that reach each one.
+Setup=BatCon is installed and your reader is running.
+Homework=Open BatCon and visit each control with its Alt key.
+
+[step]
+Say=BatCon is one dialog. Alt plus Control plus B, B for BatCon, opens it from anywhere in Windows.
+Key=Alt+Control+B
+Hear=BatCon dialog
+Hear=Source files: edit
+
+[step]
+Say=Focus starts in Source files, where you name what to convert: files, folders, or patterns such as star dot P D F.
+
+[step]
+Say=Every control has an Alt key: the first letter of its name. Alt plus T, Tango, goes to Target format.
+Key=Alt+T
+Hear=Target format: list box
+Hear=Markdown (md)
+
+[step]
+Say=The list shows only the formats every source converts to, each by name, with its extension.
+
+[step]
+Say=Alt plus O, Oscar, is Output directory. Left blank, each result goes beside its source.
+Key=Alt+O
+Hear=Output directory: edit, blank
+
+[step]
+Say=Three check boxes follow: Include subfolders, Alt plus I; Force replacements, Alt plus F; View output, Alt plus V.
+Key=Alt+V
+Hear=View output, check box, checked
+
+[step]
+Say=Enter, or Control plus Enter from anywhere, presses OK and starts the batch. Escape cancels.
+
+[step]
+Say=What this walk taught: Alt plus Control plus B to open BatCon, and Alt with each control's first letter.

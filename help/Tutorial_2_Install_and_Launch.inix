@@ -1,0 +1,26 @@
+﻿; Tutorial_2_Install_and_Launch.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=2 - Install and Launch
+Intro=Installing BatCon, and opening it the two ways.
+Setup=A web browser, and your reader running.
+Homework=Install BatCon, then open it with its desktop key.
+
+[step]
+Say=BatCon installs from its page on GitHub: the file named BatCon underscore setup dot E X E.
+
+[step]
+Say=The installer asks a few questions, each with Enter for the usual answer, and ends with a list of what it did.
+
+[step]
+Say=Open BatCon with Alt plus Control plus B, or from the Start menu.
+Key=Alt+Control+B
+Hear=BatCon dialog
+Hear=Source files: edit
+
+[step]
+Say=Every choice you make is saved as soon as you make it, so BatCon opens next time as you left it.
+
+[step]
+Say=What this walk taught: where to get BatCon, and Alt plus Control plus B.

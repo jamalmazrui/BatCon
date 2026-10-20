@@ -1,0 +1,597 @@
+﻿"""makeTutorials.py -- write the walkthrough section of Tutorials.md.
+
+WHAT IT DOES
+
+Reads Tutorial.inix, which holds one step to a section: the narration, the key
+to press, what a screen reader says in answer, and a note for the reader. Writes
+that out as Markdown, into Tutorials.md, between two markers.
+
+WHY A GENERATED SECTION RATHER THAN A NEW DOCUMENT
+
+Tutorials.md already ships, is already converted to HTML by the build, and is
+already where somebody looks for a tutorial. A new document would need a line in
+the installer script, a line in the repository list, and a place in every list of
+documents. The walkthrough is a section of the tutorials, so it lives in the
+tutorials.
+
+Everything between the markers is replaced each time. Everything outside them is
+left exactly as it was, so the hand-written tutorials and this one share a file
+without either disturbing the other.
+
+RUN IT WITH NO ARGUMENTS. The log is written beside this script.
+"""
+
+import datetime
+import os
+import subprocess
+import platform
+import re
+import sys
+import traceback
+
+sScript = os.path.abspath(__file__)
+sTool = os.path.dirname(sScript)
+# THE SCRIPTS LIVE IN help, THE TOOLING IN scripts. FileDir keeps both in one
+# folder; the Homer layout does not, and this file was copied from there. So
+# sHereFolder is where the tutorials and their audio are, and the log stays with the
+# tool that writes it.
+sHereFolder = os.path.join(os.path.dirname(sTool), "help")
+if not os.path.isdir(sHereFolder):
+    sHereFolder = sTool
+import datetime as _dt
+sLogDir = os.path.join(os.path.dirname(sTool), "logs")
+os.makedirs(sLogDir, exist_ok=True)
+sLog = os.path.join(sLogDir, os.path.basename(os.path.dirname(sTool)) + "-tutorials-text-%s.log" % _dt.datetime.now().strftime("%Y%m%d-%H%M%S"))
+import glob
+
+# EVERY SCRIPT IN THE FOLDER, in name order. Tutorial.inix is the first walk;
+# Tutorial_Tagging.inix, Tutorial_Zipping.inix and the rest are one task each.
+# Adding a tutorial means adding a file, and nothing else.
+sPattern = os.path.join(sHereFolder, "Tutorial*.inix")
+sTarget = os.path.join(sHereFolder, "Tutorials.md")
+
+sFeed = os.path.join(sHereFolder, "TutorialFeed.xml")
+
+
+def findPandoc():
+    """The NEWEST Pandoc on this computer, as the kit's other tools choose it (9 October 2026): the first one on the
+    PATH was an old 2.19.2 in c:\\bin on the author's machine, ahead of 3.12 in Program Files. Each copy is asked its
+    version; "" when there is none."""
+    import shutil
+    lsCandidates = []
+    sOnPath = shutil.which("pandoc")
+    if sOnPath: lsCandidates.append(sOnPath)
+    for sBase in (os.environ.get("ProgramFiles", ""), os.environ.get("LOCALAPPDATA", "")):
+        sPath = os.path.join(sBase, "Pandoc", "pandoc.exe") if sBase else ""
+        if sPath and os.path.isfile(sPath) and sPath.lower() not in [s.lower() for s in lsCandidates]: lsCandidates.append(sPath)
+    tBest, sBest = (), ""
+    for sPath in lsCandidates:
+        try:
+            sFirst = subprocess.run([sPath, "--version"], capture_output=True, text=True, timeout=30).stdout.splitlines()[0]
+            tVersion = tuple(int(s) for s in re.findall(r"\d+", sFirst.split()[-1]))
+        except Exception:
+            continue
+        note("pandoc candidate %s, version %s" % (sPath, ".".join(str(i) for i in tVersion)))
+        if tVersion > tBest: tBest, sBest = tVersion, sPath
+    return sBest
+
+
+def writeTutorialsHtm(sMarkdown):
+    """TUTORIALS.HTM BESIDE TUTORIALS.MD (9 October 2026). This script assumed the build converted Tutorials.md to
+    HTML afterward, but HomerView's build converts its documents before the tutorial step, so the guide was
+    rewritten after its HTML and check failed: "no .htm for: Tutorials". The page is now written here, with
+    Pandoc, in the Homer encoding (UTF-8 with a BOM, CRLF); a build that converts documents later writes the same
+    page again. Returns True when written."""
+    sPandoc = findPandoc()
+    if not sPandoc:
+        note("Tutorials.htm not written: Pandoc was not found; the build's document step converts it")
+        return False
+    sHtm = os.path.splitext(sMarkdown)[0] + ".htm"
+    # A PAGE TITLE FROM THE GUIDE'S OWN HEADING (9 October 2026): Pandoc warned "requires a nonempty <title>" on
+    # every app. pagetitle sets the window title only; title would add a second heading above the guide's own.
+    with open(sMarkdown, encoding="utf-8-sig") as f: oHeading = re.search(r"(?m)^#\s+(.+?)\s*(\{[^}]*\})?\s*$", f.read())
+    sTitle = oHeading.group(1).strip() if oHeading else "Tutorials"
+    lsCommand = [sPandoc, "-f", "markdown", "-t", "html5", "--standalone", "--metadata", "pagetitle=" + sTitle, "-o", sHtm, sMarkdown]
+    note("run: " + subprocess.list2cmdline(lsCommand))
+    oRun = subprocess.run(lsCommand, capture_output=True, text=True, timeout=120)
+    note("pandoc exit code: %d%s" % (oRun.returncode, ("; " + oRun.stderr.strip()[:400]) if oRun.stderr.strip() else ""))
+    if oRun.returncode != 0 or not os.path.isfile(sHtm): return False
+    with open(sHtm, "rb") as f: bData = f.read()
+    sText = bData.decode("utf-8-sig").replace("\r\n", "\n")
+    try:
+        # One level-one heading, by fixEncoding's rule; fixEncoding sits beside this script, in the kit and in every app.
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import fixEncoding
+        sText = fixEncoding.oneTitleHeading(sText)
+    except Exception as oError:
+        note("headings not checked: " + str(oError))
+    sText = sText.replace("\n", "\r\n")
+    with open(sHtm + ".writing", "wb") as f: f.write(b"\xef\xbb\xbf" + sText.encode("utf-8"))
+    os.replace(sHtm + ".writing", sHtm)
+    return True
+
+# The least a document can be and still take a spliced walkthrough: a title, a
+# contents list, and a section 1 to splice in front of.
+sSkeleton = """# Tutorials
+
+## Contents
+
+- [1. Where to Go Next](#1-where-to-go-next)
+
+## 1. Where to Go Next
+
+Press F1 for the guide, Alt+Shift+H for the hotkey list, and Alt+F10 for every
+command in one window.
+"""
+sStartMark = "<!-- walkthrough: written by makeTutorials.py, do not edit between the markers -->"
+sEndMark = "<!-- walkthrough ends -->"
+
+
+def note(sText):
+    """One line to the log, and nothing to the screen unless it matters."""
+    try:
+        with open(sLog, "a", encoding="utf-8") as oFile:
+            oFile.write(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S  ") + sText + "\n")
+    except Exception:
+        pass
+
+
+def say(sText):
+    """A short plain sentence on the screen, and the same line in the log."""
+    print(sText)
+    note(sText)
+
+
+def startLog():
+    try:
+        if os.path.isfile(sLog):
+            os.remove(sLog)
+    except Exception:
+        pass
+    note("makeTutorial " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    note("script: " + sScript)
+    note("Python: " + platform.python_version())
+    note("platform: " + sys.platform)
+    note("working directory: " + os.getcwd())
+    note("command line: " + " ".join(sys.argv))
+    note("scripts: " + sPattern)
+    note("target: " + sTarget)
+
+
+def readFile(sPath):
+    """Text of a file, whatever byte order mark it carries."""
+    with open(sPath, "r", encoding="utf-8-sig") as oFile:
+        return oFile.read().replace("\r\n", "\n")
+
+
+def writeFile(sPath, sText):
+    """Homer standard: UTF-8 with a byte order mark, and CRLF line endings."""
+    with open(sPath, "wb") as oFile:
+        oFile.write(b"\xef\xbb\xbf" + sText.replace("\n", "\r\n").encode("utf-8"))
+
+
+def readSteps(sText):
+    """The sections of Tutorial.inix, in order.
+
+    A tolerant reader rather than a strict one: a key may repeat, and repeats
+    are collected in order, which is how a step holds several lines of speech.
+    """
+    lsSections = []
+    dNow = None
+    for sRaw in sText.split("\n"):
+        sLine = sRaw.strip()
+        if len(sLine) == 0 or sLine.startswith(";") or sLine.startswith("#"):
+            continue
+        if sLine.startswith("[") and sLine.endswith("]"):
+            dNow = {"_name": sLine[1:-1].strip().lower()}
+            lsSections.append(dNow)
+            continue
+        if dNow is None or "=" not in sLine:
+            continue
+        sField, sValue = sLine.split("=", 1)
+        sField = sField.strip()
+        sValue = sValue.strip()
+        if len(sValue) == 0:
+            continue
+        dNow.setdefault(sField, []).append(sValue)
+    return lsSections
+
+
+def firstOf(dSection, sField):
+    lsValues = dSection.get(sField, [])
+    return lsValues[0] if lsValues else ""
+
+
+def buildMarkdown(lsSections, sNumber):
+    """One tutorial, as Markdown, numbered as the caller says."""
+    dAbout = {}
+    lsSteps = []
+    for dSection in lsSections:
+        if dSection["_name"] == "about":
+            dAbout = dSection
+        elif dSection["_name"] == "step":
+            lsSteps.append(dSection)
+
+    lsOut = []
+    sTitle = firstOf(dAbout, "Title") or "A Walk Through This Program"
+    # A TITLE THAT ALREADY CARRIES ITS NUMBER KEEPS IT ALONE. The generated
+    # counter -- 0, 0a, 0b -- existed because titles had no numbers of their own;
+    # with "01 - Installing DbDo" it produced "0a. 01 - Installing DbDo", which
+    # reads as two numbering schemes arguing.
+    if re.match(r"^\d", sTitle):
+        lsOut.append("## " + sTitle)
+    else:
+        lsOut.append("## " + sNumber + ". " + sTitle)
+    lsOut.append("")
+    sIntro = firstOf(dAbout, "Intro")
+    if sIntro:
+        lsOut.append(sIntro)
+        lsOut.append("")
+    sSetup = firstOf(dAbout, "Setup")
+    if sSetup:
+        lsOut.append("**Before you start:** " + sSetup)
+        lsOut.append("")
+
+    iNumber = 0
+    for dStep in lsSteps:
+        iNumber += 1
+        sSay = firstOf(dStep, "Say")
+        sKey = firstOf(dStep, "Key")
+        lsHear = dStep.get("Hear", [])
+        sNote = firstOf(dStep, "Note")
+
+        lsOut.append("### Step " + str(iNumber) + (": " + sKey if sKey else ""))
+        lsOut.append("")
+        if sSay:
+            lsOut.append(sSay)
+            lsOut.append("")
+        if lsHear:
+            # THE SPEAKER IS LABELLED, NOT NAMED.
+            #
+            # Podcast tutorials in this field label their speakers -- Jonathan
+            # Mosen's transcripts read "Jonathan:" then "VoiceOver:" or "JAWS:"
+            # -- so a reader always knows which voice said what. A person
+            # demonstrating needs no name here, and the reader is whichever one
+            # you use, so the label says what it is rather than who.
+            lsOut.append("Screen reader:")
+            lsOut.append("")
+            for sHeard in lsHear:
+                lsOut.append("- " + sHeard)
+            lsOut.append("")
+        if sNote:
+            lsOut.append(sNote)
+            lsOut.append("")
+
+    sHomework = firstOf(dAbout, "Homework")
+    if sHomework:
+        lsOut.append("**Something to try:** " + sHomework)
+        lsOut.append("")
+
+    return "\n".join(lsOut).rstrip()
+
+
+def spliceIntoTutorials(sDocument, sSection):
+    """The walkthrough put back into Tutorials.md.
+
+    Between the markers if they are there; after the contents list if they are
+    not, which is where a first tutorial belongs.
+    """
+    # EVERY MARKED SECTION GOES, AND EXACTLY ONE IS WRITTEN (14 October 2026, from an audit by another AI). Only the
+    # first start and the first end marker were looked at, so one stray end marker ahead of the start made the markers
+    # look absent, and each build inserted a whole new walkthrough above the old ones: DbDo's Tutorials.md reached 80
+    # copies, 3.7 MB. Now every marked section and every stray marker is removed, and one walkthrough is written where the
+    # first one was, so a document that has grown is repaired by its next build.
+    iFirst = -1
+    iCopies = 0
+    while True:
+        iStart = sDocument.find(sStartMark)
+        if iStart < 0: break
+        iEnd = sDocument.find(sEndMark, iStart)
+        if iEnd < 0: break
+        if iFirst < 0: iFirst = iStart
+        sDocument = sDocument[:iStart] + sDocument[iEnd + len(sEndMark):]
+        iCopies += 1
+    for sMark in (sStartMark, sEndMark):
+        iStray = sDocument.count(sMark)
+        if iStray:
+            note("removed %d stray marker%s: %s" % (iStray, "" if iStray == 1 else "s", sMark))
+            if iFirst < 0: iFirst = sDocument.find(sMark)
+            sDocument = sDocument.replace(sMark, "")
+    if iCopies > 1: note("removed %d copies of the walkthrough; one is written" % iCopies)
+    if iFirst >= 0:
+        sBefore, sAfter = sDocument[:iFirst].rstrip("\n"), sDocument[iFirst:].lstrip("\n")
+        return sBefore + "\n\n" + sSection + "\n\n" + sAfter
+
+    sAnchor = "\n## 1. "
+    iAnchor = sDocument.find(sAnchor)
+    if iAnchor < 0:
+        note("no place found for the walkthrough; appending it")
+        return sDocument.rstrip() + "\n\n" + sSection + "\n"
+    return sDocument[:iAnchor] + "\n" + sSection + "\n" + sDocument[iAnchor:]
+
+
+def addToContents(sDocument, sSection):
+    """Contents lines for the generated tutorials, in front of the first one.
+
+    Taken from the headings just written, so the list and the sections cannot
+    disagree, and a tutorial added as a file needs nothing else done to it.
+    """
+    lsEntries = []
+    for sLine in sSection.split("\n"):
+        if not sLine.startswith("## "):
+            continue
+        sTitle = sLine[3:].strip()
+        sAnchor = "#" + "".join(
+            (ch.lower() if ch.isalnum() else ("-" if ch in " ." else ""))
+            for ch in sTitle).strip("-")
+        while "--" in sAnchor:
+            sAnchor = sAnchor.replace("--", "-")
+        lsEntries.append("- [" + sTitle + "](" + sAnchor + ")")
+    if not lsEntries:
+        return sDocument
+
+    # Old generated lines go, so nothing accumulates across runs.
+    # EVERY GENERATED ENTRY GOES BEFORE THE CURRENT ONES ARE ADDED (14 October 2026, from an audit by another AI). Only
+    # an entry for tutorial 0 was removed, so the entries for 1 to 9 were added again at every build: 16 to 78 copies of
+    # each in every app's contents list. A generated entry is "- [N - Title](#n-title)"; a hand-written one is
+    # "- [1. Title]", with a full stop, and is kept.
+    reGenerated = re.compile(r"^- \[\d+ - .*\]\(#\d+-[^)]*\)\s*$")
+    lsKept = [sLine for sLine in sDocument.split("\n") if not reGenerated.match(sLine)]
+    sDocument = "\n".join(lsKept)
+
+    # THE FIRST HAND-WRITTEN CONTENTS LINE, whatever it is called. This was
+    # FileDir's own section title, which meant the contents list silently did
+    # not update in any other app: the sections appeared and nothing pointed at
+    # them. Any line starting "- [1. " does the job.
+    iAt = -1
+    for sLine in sDocument.split("\n"):
+        if sLine.startswith("- [1. "):
+            iAt = sDocument.find(sLine)
+            break
+    if iAt < 0:
+        note("no contents list found; leaving it alone")
+        return sDocument
+    return sDocument[:iAt] + "\n".join(lsEntries) + "\n" + sDocument[iAt:]
+
+
+def secondsOf(sPath):
+    """How long an audio file runs, asked of ffprobe.
+
+    A duration of zero in a feed is worse than no duration at all: a player
+    shows it, and it is a lie. So the length is measured rather than guessed,
+    and left out when it cannot be.
+    """
+    sProbe = os.path.join(sTool, "ffprobe.exe")
+    if not os.path.isfile(sProbe):
+        sProbe = "ffprobe"
+    try:
+        oResult = subprocess.run(
+            [sProbe, "-v", "error", "-show_entries", "format=duration",
+             "-of", "default=noprint_wrappers=1:nokey=1", sPath],
+            capture_output=True, text=True, timeout=30)
+        dSeconds = float(oResult.stdout.strip())
+        return int(round(dSeconds))
+    except Exception as oError:
+        note("could not measure " + sPath + ": " + str(oError))
+        return 0
+
+
+def clockOf(iSeconds):
+    return "%02d:%02d:%02d" % (iSeconds // 3600, (iSeconds % 3600) // 60, iSeconds % 60)
+
+
+def anchorOf(sTitle):
+    """The anchor Pandoc gives a heading, so a link lands on the right one."""
+    sAnchor = "".join((ch.lower() if ch.isalnum() else ("-" if ch in " ." else "")) for ch in sTitle)
+    while "--" in sAnchor:
+        sAnchor = sAnchor.replace("--", "-")
+    return sAnchor.strip("-")
+
+
+def writeFeed(lsEpisodes, dFeed):
+    """A podcast feed for the walkthroughs, so they can be subscribed to.
+
+    Only the tutorials that have been spoken appear: an item without audio is
+    not an episode. Each one links to its transcript, which is the section of
+    Tutorials.htm the same run wrote.
+    """
+    if not lsEpisodes:
+        note("no audio files found, so no feed is written")
+        return 0
+    sBase = dFeed.get("Base", "")
+    if sBase and not sBase.endswith("/"):
+        sBase += "/"
+    sNow = datetime.datetime.now(datetime.timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")
+
+    lsOut = []
+    lsOut.append('<?xml version="1.0" encoding="UTF-8"?>')
+    lsOut.append('<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">')
+    lsOut.append("  <channel>")
+    lsOut.append("    <title>" + escape(dFeed.get("Title", "Homer Tools Walkthroughs")) + "</title>")
+    lsOut.append("    <link>" + escape(sBase or "Tutorials.htm") + "</link>")
+    lsOut.append("    <description>" + escape(dFeed.get("Description", "")) + "</description>")
+    lsOut.append("    <language>en-us</language>")
+    lsOut.append("    <lastBuildDate>" + sNow + "</lastBuildDate>")
+    lsOut.append("    <itunes:author>" + escape(dFeed.get("Author", "")) + "</itunes:author>")
+    lsOut.append("    <itunes:explicit>false</itunes:explicit>")
+    lsOut.append('    <itunes:category text="Technology"/>')
+    if dFeed.get("Email", ""):
+        lsOut.append("    <itunes:owner><itunes:name>" + escape(dFeed.get("Author", ""))
+                     + "</itunes:name><itunes:email>" + escape(dFeed["Email"]) + "</itunes:email></itunes:owner>")
+    for iAt, dEpisode in enumerate(lsEpisodes, 1):
+        sTranscript = (sBase or "") + "Tutorials.htm#" + anchorOf(dEpisode["number"] + ". " + dEpisode["title"])
+        lsOut.append("    <item>")
+        lsOut.append("      <title>" + escape(dEpisode["title"]) + "</title>")
+        lsOut.append("      <description>" + escape(dEpisode["intro"] + " Full transcript: " + sTranscript)
+                     + "</description>")
+        lsOut.append("      <link>" + escape(sTranscript) + "</link>")
+        lsOut.append('      <guid isPermaLink="false">homer-' + escape(dEpisode["stem"].lower()) + "</guid>")
+        lsOut.append("      <enclosure url=\"" + escape((sBase or "") + dEpisode["audio"])
+                     + "\" length=\"" + str(dEpisode["bytes"]) + "\" type=\"audio/mpeg\"/>")
+        if dEpisode["seconds"] > 0:
+            lsOut.append("      <itunes:duration>" + clockOf(dEpisode["seconds"]) + "</itunes:duration>")
+        lsOut.append("      <itunes:explicit>false</itunes:explicit>")
+        lsOut.append("    </item>")
+    lsOut.append("  </channel>")
+    lsOut.append("</rss>")
+    writeFile(sFeed, "\n".join(lsOut) + "\n")
+    return len(lsEpisodes)
+
+
+def escape(sText):
+    return (sText or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+
+def loadKind():
+    """The kit's kind.py (1.45.0): beside this script, or in the kit's scripts
+    folder wherever the kit is (1.46.0): the HomerDev variable, then a folder
+    named HomerDev above or beside where this runs, at any depth, then one at
+    the top of any fixed drive. Without it the project is taken to be an app,
+    as every script assumed before there were four kinds."""
+    lsDirs = [os.path.dirname(os.path.abspath(__file__)), os.path.join(os.environ.get("HomerDev", ""), "scripts")]
+    for sStart in (os.getcwd(), os.path.dirname(os.path.abspath(__file__))):
+        sDir = os.path.abspath(sStart)
+        while True:
+            lsDirs.append(os.path.join(sDir, "scripts"))
+            lsDirs.append(os.path.join(sDir, "HomerDev", "scripts"))
+            sUp = os.path.dirname(sDir)
+            if sUp == sDir: break
+            sDir = sUp
+    if os.name == "nt":
+        import ctypes
+        lsDirs += [sLetter + ":\\HomerDev\\scripts" for sLetter in "CDEFGHIJKLMNOPQRSTUVWXYZ"
+                   if ctypes.windll.kernel32.GetDriveTypeW(sLetter + ":\\") == 3]
+    for sDir in lsDirs:
+        if sDir and os.path.isfile(os.path.join(sDir, "kind.py")):
+            if sDir not in sys.path: sys.path.insert(0, sDir)
+            import kind
+            return kind.projectKind
+    return lambda sFolder: ("app", "kind.py was not found, so taken to be an app")
+
+def main():
+    startLog()
+    # Tutorials walk through a program; a page or a collection has none (1.45.0).
+    sHere = os.path.dirname(os.path.abspath(__file__))
+    sProject = os.path.dirname(sHere) if os.path.basename(sHere).lower() in ("scripts", "exec", "tools") else sHere
+    sKind, sWhy = loadKind()(sProject)
+    note("kind: %s (%s)" % (sKind, sWhy))
+    if sKind in ("collection", "page"):
+        say("A %s has no program to walk through, so there are no tutorials to write." % sKind)
+        return 0
+    lsSources = sorted(glob.glob(sPattern))
+    note("scripts found: " + str(len(lsSources)) + " -- " + ", ".join(os.path.basename(s) for s in lsSources))
+    if len(lsSources) == 0:
+        say("0 tutorial scripts here, so there is nothing to write.")
+        return 1
+    if not os.path.isfile(sTarget):
+        # A PROJECT WITH NO DOCUMENT YET GETS ONE, rather than an error.
+        # The generated walkthroughs are spliced in ahead of section 1, so a
+        # document has to exist and has to have a section 1 to aim at. Writing
+        # a skeleton here means a new app needs no manual step before its first
+        # tutorial builds -- which is the rule every Homer build script follows.
+        note("no target; writing a skeleton: " + sTarget)
+        say("Tutorials.md was not here, so a starting one was written.")
+        try:
+            with open(sTarget, "wb") as oFile:
+                oFile.write(("\ufeff" + sSkeleton).replace("\n", "\r\n").encode("utf-8"))
+        except Exception as oError:
+            say("Tutorials.md could not be written.")
+            note("write failed: " + str(oError))
+            return 1
+
+    lsBlocks = []
+    lsEpisodes = []
+    dFeed = {}
+    iStepsAll = 0
+    iLetter = 0
+    for sSource in lsSources:
+        try:
+            lsSections = readSteps(readFile(sSource))
+        except Exception as oError:
+            say(os.path.basename(sSource) + " could not be read.")
+            note("read failed: " + str(oError))
+            note(traceback.format_exc())
+            return 1
+        iSteps = len([d for d in lsSections if d["_name"] == "step"])
+        note(os.path.basename(sSource) + ": sections " + str(len(lsSections)) + ", steps " + str(iSteps))
+        if iSteps == 0:
+            say(os.path.basename(sSource) + " holds 0 steps.")
+            return 1
+        iStepsAll += iSteps
+        # The first walk is section 0; the task tutorials are 0a, 0b and so on,
+        # which keeps them together at the front without renumbering anything
+        # that was already written.
+        sNumber = "0" if len(lsBlocks) == 0 else "0" + chr(ord("a") + iLetter)
+        if len(lsBlocks) > 0:
+            iLetter += 1
+        lsBlocks.append(buildMarkdown(lsSections, sNumber))
+
+        dAbout = {}
+        for dSection in lsSections:
+            if dSection["_name"] == "about":
+                dAbout = dSection
+            elif dSection["_name"] == "feed" and not dFeed:
+                for sKey in dSection:
+                    if sKey != "_name":
+                        dFeed[sKey] = dSection[sKey][0]
+        sStem = os.path.splitext(os.path.basename(sSource))[0]
+        # The audio lives in help\tutorials, one .mp3 per script (25 Sep 2026),
+        # named like a chapter: the script's stem without its Tutorial_ prefix.
+        sAudioStem = sStem[len("Tutorial_"):] if sStem.startswith("Tutorial_") else sStem
+        sAudio = os.path.join(sHereFolder, "tutorials", sAudioStem + ".mp3")
+        if os.path.isfile(sAudio):
+            lsEpisodes.append({
+                "stem": sStem,
+                "number": sNumber,
+                "title": firstOf(dAbout, "Title") or sStem,
+                "intro": firstOf(dAbout, "Setup") or firstOf(dAbout, "Intro"),
+                "audio": "tutorials/" + sAudioStem + ".mp3",
+                "bytes": os.path.getsize(sAudio),
+                "seconds": secondsOf(sAudio)})
+        else:
+            note("no audio yet for " + sStem + "; it will join the feed once buildTutorials has run")
+
+    try:
+        sSection = sStartMark + "\n\n" + "\n\n".join(lsBlocks) + "\n\n" + sEndMark
+        sDocument = readFile(sTarget)
+        sDocument = addToContents(spliceIntoTutorials(sDocument, sSection), sSection)
+        writeFile(sTarget, sDocument)
+        # THE SECOND PASS CHANGES NOTHING (14 October 2026, from an audit by another AI). A splice that added a copy at
+        # every build grew DbDo's Tutorials.md to 80 walkthroughs before anyone noticed. The document as written is
+        # read back and given the same walkthrough again, in memory; if that would change it, writing is not settled,
+        # and the build stops here rather than ship a file that grows. Its fingerprint is logged to compare runs.
+        import hashlib
+        sWritten = readFile(sTarget)
+        sAgain = addToContents(spliceIntoTutorials(sWritten, sSection), sSection)
+        note("Tutorials.md written: %d characters, sha256 %s" % (len(sWritten), hashlib.sha256(sWritten.encode("utf-8")).hexdigest()[:16]))
+        if sAgain != sWritten:
+            note("SECOND PASS DIFFERS: %d characters, sha256 %s" % (len(sAgain), hashlib.sha256(sAgain.encode("utf-8")).hexdigest()[:16]))
+            say("Tutorials.md would change if written again, so its walkthrough is not settled; the build stops. The log has both fingerprints.")
+            return 1
+    except Exception as oError:
+        say("Tutorials.md could not be written.")
+        note("write failed: " + str(oError))
+        note(traceback.format_exc())
+        return 1
+
+    say("Wrote " + str(len(lsSources)) + " tutorials into Tutorials.md: " + str(iStepsAll) + " steps.")
+    try:
+        if writeTutorialsHtm(sTarget): say("Wrote Tutorials.htm from it.")
+    except Exception as oError:
+        note("Tutorials.htm failed: " + str(oError))
+        note(traceback.format_exc())
+    try:
+        iFeed = writeFeed(lsEpisodes, dFeed)
+        if iFeed > 0:
+            say("Wrote TutorialFeed.xml: " + str(iFeed) + " with audio.")
+    except Exception as oError:
+        note("feed failed: " + str(oError))
+        note(traceback.format_exc())
+        say("The feed could not be written. The log has why.")
+    note("finished")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,518 @@
+﻿#!/usr/bin/env python3
+"""fixEncoding.py -- put the project's own text files into the Homer encoding.
+
+    fixEncoding            every file RepoFiles.txt names, in the project
+    fixEncoding --check    report only, change nothing (exit 1 if any is wrong)
+
+THE HOMER ENCODING is UTF-8 with a byte order mark and CRLF line endings,
+except that .cmd and .bat files take CRLF and no mark. Pandoc writes UTF-8
+with no mark and bare newlines, so every .htm a build makes -- and every one
+delivered from elsewhere -- is wrong until something fixes it. On 25 Sep 2026
+a release was refused because eighteen delivered .htm files had never been
+put right. Every Homer build runs this over its own files, so the check that
+follows has nothing to find.
+
+OTHER PEOPLE'S FILES KEEP THEIR ENCODING (1.43.11). A project may carry
+third-party tools, dictionaries, or files that demonstrate another encoding;
+a byte order mark on a Lua filter or a tool's config file is read as part of
+its first line. KeepEncoding.txt, beside RepoFiles.txt and in the same form --
+a folder ending in /, a file, or a pattern with * -- names what this tool and
+check leave exactly as it is.
+
+WHICH FILES: the ones RepoFiles.txt names (a folder named there means its
+text files), because those are the project's own. A stray file in the folder
+is tidy's business, not this tool's, and is left as it is. Without a
+RepoFiles.txt the tool does nothing and says so.
+
+Run it in the project folder or its scripts folder; both mean the project.
+The log is logs\\<App>-encoding-yyyyMMdd-HHmmss.log; the console says how
+many files were fixed.
+"""
+
+import datetime, glob, html, io, os, platform, re, sys, time, urllib.parse
+
+# THE HOMER ENCODING RULES, IN ONE PLACE (1.64.0, don't repeat yourself): this
+# file is their authoritative home. The homer-convert skill's toHomerEncoding.py
+# must carry its own copy, to work when uploaded on its own, and the kit's build
+# fails if that copy states different rules. The two had drifted: the skill knew
+# SKILL.md takes no mark, read UTF-16 and Windows-1252, and knew .css, .csv, .js
+# and .tsv; this file knew .lua, .m3u and .spec. Each now has all of it.
+lsTextExtensions = (".bat", ".cmd", ".cs", ".css", ".csv", ".htm", ".html", ".inix", ".iss", ".js", ".json", ".lua",
+               ".m3u", ".md", ".ps1", ".py", ".spec", ".tsv", ".txt", ".xml")
+lsNoBom = (".bat", ".cmd")
+lsNoBomNames = ("skill.md", "version.txt")
+# exec is walked, not pruned (1.43.22): the kit keeps its libraries in
+# exec\\CSharp and exec\\homer, and only what RepoFiles.txt names is touched, so
+# a build's binaries there are left alone either way.
+lsSkipFolders = ("logs", "notes", ".git", "packages", "work", "__pycache__")
+
+oLog = None
+
+
+def logLine(sText):
+    """One event in the Homer log format (1.43.21), as log.py and Log.cs write:
+    an ISO 8601 time with milliseconds and UTC offset, a five-character level,
+    then the text; a line continuing the one above starts "| ", and no line is
+    blank or unstamped. The level is ERROR or WARN when the text says so."""
+    if oLog is None: return True
+    import datetime as _datetime
+    sText = (sText or "").replace("\r\n", "\n").rstrip("\n")
+    if not sText.strip(): return True
+    import re as _re
+    sLevel = ("ERROR" if _re.search(r"\b(ERROR|FAIL|FAILED)\b", sText)
+              else "WARN" if _re.search(r"\bWARN(ING)?\b", sText) else "INFO")
+    # A LEADING LEVEL WORD IS THE LEVEL (1.43.33): "WARN: x" is written
+    # "WARN  x", not "WARN  WARN: x".
+    oLead = _re.match(r"(ERROR|WARN|WARNING)\b:?\s*", sText)
+    if oLead: sText = sText[oLead.end():] or sText
+    sPrefix = "%s %-5s " % (_datetime.datetime.now().astimezone().isoformat(timespec="milliseconds"), sLevel)
+    lsOut = []
+    for iAt, sOne in enumerate(sText.split("\n")):
+        if iAt and not sOne.strip(): continue
+        lsOut.append(sPrefix + ("| " if iAt else "") + sOne.rstrip())
+    oLog.write("\n".join(lsOut) + "\n")
+    oLog.flush()
+    return True
+
+def logValue(sValue):
+    """A value as the Homer log format writes it: bare when it can be, quoted
+    when it holds a space, a quote or an equals sign."""
+    import re as _re
+    s = "" if sValue is None else str(sValue)
+    if s and not _re.search(r'[\s"=]', s): return s
+    s = s.replace('"', '\\"')
+    if s.endswith("\\"): s += "\\"
+    return '"' + s + '"'
+
+
+def logFact(sKey, sValue):
+    """One environment fact: env key=value."""
+    return logLine("env %s=%s" % (sKey, logValue(sValue)))
+
+def logWindows():
+    """The Windows actually running, worded as Log.cs and log.py word it:
+    "Windows 11 25H2 (10.0.26200.9550)"."""
+    try:
+        import winreg as _winreg
+        with _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows NT\CurrentVersion") as oKey:
+            def read(sName):
+                try: return str(_winreg.QueryValueEx(oKey, sName)[0])
+                except OSError: return ""
+            sBuild, sUbr, sDisplay = read("CurrentBuild"), read("UBR"), read("DisplayVersion")
+        sName = "Windows 11" if sBuild.isdigit() and int(sBuild) >= 22000 else "Windows 10"
+        return ("%s %s" % (sName, sDisplay)).strip() + " (10.0.%s%s)" % (sBuild, "." + sUbr if sUbr else "")
+    except Exception:
+        import platform as _platform
+        return _platform.platform()
+
+
+
+
+def projectRoot(sStart):
+    if os.path.basename(sStart).lower() in ("scripts", "exec", "tools"):
+        sParent = os.path.dirname(sStart)
+        if (os.path.isfile(os.path.join(sParent, "version.txt")) or os.path.isfile(os.path.join(sParent, "RepoFiles.txt"))
+                or glob.glob(os.path.join(sParent, "*_setup.iss"))):
+            return sParent
+    return sStart
+
+
+def readNamed(sRoot):
+    """The entries of RepoFiles.txt: files, folders (ending in /), patterns."""
+    sPath = os.path.join(sRoot, "RepoFiles.txt")
+    if not os.path.isfile(sPath): return None
+    lsNamed = []
+    with io.open(sPath, encoding="utf-8-sig") as oFile:
+        for sLine in oFile:
+            sLine = sLine.strip()
+            if not sLine or sLine.startswith("#"): continue
+            lsNamed.append(sLine.replace("\\", "/"))
+    return lsNamed
+
+
+def readKeep(sRoot):
+    """The entries of KeepEncoding.txt, lower case with forward slashes."""
+    sPath = os.path.join(sRoot, "KeepEncoding.txt")
+    if not os.path.isfile(sPath): return []
+    lsKeep = []
+    with io.open(sPath, encoding="utf-8-sig") as oFile:
+        for sLine in oFile:
+            sLine = sLine.strip()
+            if not sLine or sLine.startswith("#") or sLine.startswith(";"): continue
+            lsKeep.append(sLine.replace("\\", "/").lower().lstrip("/"))
+    return lsKeep
+
+
+def isKept(sRoot, sPath, lsKeep):
+    """Does KeepEncoding.txt name this file, its folder, or a pattern it fits?"""
+    sRel = os.path.relpath(sPath, sRoot).replace(os.sep, "/").lower()
+    for sKeep in lsKeep:
+        if sKeep == sRel: return True
+        if sKeep.endswith("/") and sRel.startswith(sKeep): return True
+        if "*" in sKeep and re.match("^" + re.escape(sKeep).replace(r"\*", ".*") + "$", sRel): return True
+    return False
+
+
+def ownFiles(sRoot, lsNamed):
+    """Every text file the whitelist covers, as absolute paths, less what
+    KeepEncoding.txt keeps as it is."""
+    lsKeep = readKeep(sRoot)
+    lsFiles = []
+    for sNamed in lsNamed:
+        if sNamed.endswith("/"):
+            sFolder = os.path.join(sRoot, sNamed.rstrip("/").replace("/", os.sep))
+            for sDirPath, lsDirs, lsNames in os.walk(sFolder):
+                lsDirs[:] = [s for s in lsDirs if s.lower() not in lsSkipFolders]
+                for sName in lsNames:
+                    if sName.lower().endswith(lsTextExtensions): lsFiles.append(os.path.join(sDirPath, sName))
+        elif "*" in sNamed:
+            for sPath in glob.glob(os.path.join(sRoot, sNamed.replace("/", os.sep))):
+                if os.path.isfile(sPath) and sPath.lower().endswith(lsTextExtensions): lsFiles.append(sPath)
+        else:
+            sPath = os.path.join(sRoot, sNamed.replace("/", os.sep))
+            if os.path.isfile(sPath) and sPath.lower().endswith(lsTextExtensions): lsFiles.append(sPath)
+    lsFiles = [sPath for sPath in lsFiles if not isKept(sRoot, sPath, lsKeep)]
+    lsSeen = []
+    for sPath in lsFiles:
+        sKey = os.path.normcase(os.path.abspath(sPath))
+        if sKey not in lsSeen: lsSeen.append(sKey)
+    return sorted(lsSeen)
+
+
+def decodeText(binData):
+    """The text, read in the first encoding that decodes it cleanly: UTF-16 with a mark, then UTF-8 with or without
+    one, then Windows-1252, the encoding older Windows tools wrote. None when it is none of them."""
+    if binData[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        try: return binData.decode("utf-16")
+        except UnicodeDecodeError: return None
+    for sEncoding in ("utf-8-sig", "cp1252"):
+        try: return binData.decode(sEncoding)
+        except UnicodeDecodeError: continue
+    return None
+
+
+# ONE LEVEL-ONE HEADING PER PAGE (9 October 2026). A page built from Markdown by Pandoc held two level-one
+# headings when the Markdown gave its title both in front matter and as a "# " line, and many when it used "# "
+# for its sections; a screen reader user moving by heading met the title twice, or found no single title. Every
+# .htm beside a .md is put right here, after the build has converted it, so each page has exactly one: a repeated
+# title keeps one copy, section headings below the title move down a level, and a page with none gets its own
+# <title> as its heading. Pages not built from Markdown are left as they are.
+reTitleH1 = re.compile(r'(<header id="title-block-header">\s*)<h1 class="title">(.*?)</h1>\s*', re.S)
+reHeading = re.compile(r"<h([1-6])(\b[^>]*)>(.*?)</h\1>", re.S)
+
+
+def headingText(sHtml):
+    """The plain words of a heading, for comparing one with another."""
+    import html as oHtml
+    return re.sub(r"\s+", " ", oHtml.unescape(re.sub(r"<[^>]+>", "", sHtml))).strip().lower()
+
+
+def shiftHeadings(sHtml, iStart):
+    """Moves every heading from offset iStart on down one level; a level-six heading stays at six."""
+    def shift(oMatch):
+        iLevel = min(6, int(oMatch.group(1)) + 1)
+        return "<h%d%s>%s</h%d>" % (iLevel, oMatch.group(2), oMatch.group(3), iLevel)
+    return sHtml[:iStart] + reHeading.sub(shift, sHtml[iStart:])
+
+
+def oneTitleHeading(sHtml):
+    """The page with exactly one level-one heading (see above); unchanged when it already has one."""
+    if len(re.findall(r"(?i)<h1\b", sHtml)) == 1: return sHtml
+    oTitle = reTitleH1.search(sHtml)
+    iBody = oTitle.end() if oTitle else max(0, sHtml.find("<body"))
+    lBodyH1 = [m for m in reHeading.finditer(sHtml, iBody) if m.group(1) == "1"]
+    if oTitle and lBodyH1:
+        if len(lBodyH1) == 1 or headingText(lBodyH1[0].group(3)) == headingText(oTitle.group(2)):
+            # The title twice, or the author's own single "# " heading: that heading stays the page's one level-one
+            # heading, and the title block's copy goes (the <title> in the head still names the page). The title
+            # block can be a bare file name, as the kit's build once passed ("ReadMe").
+            sHtml = sHtml[:oTitle.start()] + oTitle.group(1) + sHtml[oTitle.end():]
+            sHtml = re.sub(r'<header id="title-block-header">\s*</header>\s*', "", sHtml)
+            lBodyH1 = [m for m in reHeading.finditer(sHtml) if m.group(1) == "1"]
+            # Only the extra level-one headings move down, each with the headings beneath it; what sits between
+            # the kept heading and the first extra one is already in its right place.
+            if len(lBodyH1) > 1: sHtml = shiftHeadings(sHtml, lBodyH1[1].start())
+        else:
+            # A title, then sections at level one: the title stays the only level-one heading, and the sections
+            # move down a level from the first of them.
+            sHtml = shiftHeadings(sHtml, lBodyH1[0].start())
+    elif not oTitle and len(lBodyH1) > 1:
+        sHtml = shiftHeadings(sHtml, lBodyH1[1].start())
+    elif not oTitle and not lBodyH1:
+        oPageTitle = re.search(r"(?is)<title>(.*?)</title>", sHtml)
+        oBody = re.search(r"(?i)<body[^>]*>\s*", sHtml)
+        if oPageTitle and oBody and oPageTitle.group(1).strip():
+            sHtml = sHtml[:oBody.end()] + "<h1>" + oPageTitle.group(1).strip() + "</h1>\n" + sHtml[oBody.end():]
+    return sHtml
+
+
+# ---- a finished page (12 October 2026, from audits of the help guides and podcast directories) ----
+#
+# Pandoc's page carries no language, no main landmark and an unlabeled contents list; a page assembled from many
+# publisher articles also carries their duplicate IDs, links to anchors that never came with them, empty links and
+# addresses relative to the publisher's site. finishPage puts each right without touching what the page says:
+#
+#   language      lang="en-US" on <html>, so a screen reader speaks it in the right voice and pronunciation
+#   contents      the contents list labeled "Contents"
+#   main          the content after the contents list wrapped in <main>, the landmark a reader jumps to
+#   IDs           a repeated ID gets -2, -3 ..., so every target is unique; links still reach the first, as before
+#   in-page links a link to an ID the page lacks is repaired when exactly one ID matches it but for punctuation or a
+#                 numeric suffix; otherwise it becomes its own words, since a link that goes nowhere misleads
+#   empty links   a link with no words and no label is removed
+#   web links     a bare domain gains https://; Markdown inside an address yields the address inside; an address
+#                 relative to the publisher's site, which no reader of this page can reach, becomes its own words.
+#                 A link to a file beside the page (another page of the collection) is kept.
+#
+# It is safe to run again: a finished page comes back unchanged.
+
+sLang = "en-US"
+reAnchor = re.compile(r"<a\b([^>]*)>(.*?)</a>", re.S | re.I)
+reBareDomain = re.compile(r"^(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:ai|app|au|ca|co|com|de|dev|edu|fr|gov|info|io|me|net|org|tv|uk|us)(?:[/?#]|$)", re.I)
+
+
+def idKey(sId):
+    """An ID compared without case, punctuation or a numeric suffix."""
+    return re.sub(r"[^a-z0-9]+", "", re.sub(r"-\d+$", "", html.unescape(urllib.parse.unquote(sId)).lower()))
+
+
+def finishPage(sHtml, setLocal=None, dFixes=None):
+    """The page finished as described above, and a count of each change by kind. dFixes maps an address known to be
+    wrong to its verified replacement -- a collection's data\\linkFixes.inix -- and is applied first."""
+    dCounts = {}
+    for sOld, sNew in (dFixes or {}).items():
+        sAttr = 'href="' + sOld + '"'
+        if sAttr in sHtml:
+            dCounts["addresses corrected from linkFixes.inix"] = dCounts.get("addresses corrected from linkFixes.inix", 0) + sHtml.count(sAttr)
+            sHtml = sHtml.replace(sAttr, 'href="' + sNew + '"')
+    def note(sKind, iBy=1): dCounts[sKind] = dCounts.get(sKind, 0) + iBy
+    setLocal = {s.lower() for s in (setLocal or set())}
+    oHtml = re.search(r"<html\b[^>]*>", sHtml)
+    # An empty lang="" declares nothing; Pandoc writes one when it is given no language.
+    if oHtml and not re.search(r'\blang="[^"]+"', oHtml.group(0)):
+        sTag = re.sub(r'\s(?:xml:)?lang=""', "", oHtml.group(0))
+        sHtml = sHtml[:oHtml.start()] + sTag[:-1] + ' lang="%s" xml:lang="%s"' % (sLang, sLang) + ">" + sHtml[oHtml.end():]
+        note("language declared")
+    oNav = re.search(r'<nav id="TOC"[^>]*>', sHtml)
+    if oNav and "aria-label" not in oNav.group(0):
+        sHtml = sHtml[:oNav.end() - 1] + ' aria-label="Contents"' + sHtml[oNav.end() - 1:]
+        note("contents labeled")
+    # Unique IDs: the first keeps its name.
+    dSeen = {}
+    def fnId(oMatch):
+        sId = oMatch.group(1)
+        dSeen[sId] = dSeen.get(sId, 0) + 1
+        if dSeen[sId] == 1: return oMatch.group(0)
+        sNew = sId + "-" + str(dSeen[sId])
+        while sNew in dSeen: sNew += "x"
+        dSeen[sNew] = 1
+        note("duplicate IDs made unique")
+        return ' id="' + sNew + '"'
+    sHtml = re.sub(r'\sid="([^"]+)"', fnId, sHtml)
+    setIds = set(re.findall(r'\sid="([^"]+)"', sHtml))
+    dByKey = {}
+    for sId in setIds: dByKey.setdefault(idKey(sId), []).append(sId)
+    def fnAnchor(oMatch):
+        sAttrs, sInner = oMatch.group(1), oMatch.group(2)
+        oHref = re.search(r'\bhref="([^"]*)"', sAttrs)
+        if not oHref: return oMatch.group(0)
+        sHref = oHref.group(1)
+        bNamed = re.search(r'aria-label="[^"]+"|title="[^"]+"', sAttrs) or re.search(r"<img\b[^>]*\balt=\"[^\"]+\"", sInner)
+        if not re.sub(r"<[^>]+>", "", sInner).strip() and not bNamed:
+            note("empty links removed")
+            return ""
+        def relink(sNew): return "<a" + sAttrs[:oHref.start(1)] + sNew + sAttrs[oHref.end(1):] + ">" + sInner + "</a>"
+        if sHref.startswith("#"):
+            sTarget = html.unescape(urllib.parse.unquote(sHref[1:]))
+            if sTarget in setIds or sHref[1:] in setIds: return oMatch.group(0)
+            lCandidates = dByKey.get(idKey(sTarget), []) if sTarget else []
+            if len(lCandidates) == 1:
+                note("in-page links repaired")
+                return relink("#" + lCandidates[0])
+            note("in-page links to nothing made plain text")
+            return sInner
+        sDecoded = html.unescape(urllib.parse.unquote(sHref))
+        oInside = re.search(r"\]\((https?://[^)\s]+)\)", sDecoded)
+        if oInside:
+            note("addresses taken from Markdown")
+            return relink(html.escape(oInside.group(1), quote=True))
+        if re.match(r"(?i)(https?:|mailto:|tel:|ftp:|data:|javascript:)", sHref): return oMatch.group(0)
+        if sHref.startswith("//"):
+            note("addresses completed")
+            return relink("https:" + sHref)
+        if sHref.split("#")[0].split("?")[0].lower() in setLocal: return oMatch.group(0)
+        if reBareDomain.match(sDecoded) and not re.match(r"(?i)[^/]+\.(php|aspx?|html?|jsp)(?:[?#]|$)", sDecoded):
+            note("addresses completed")
+            return relink("https://" + sHref)
+        note("site-relative links made plain text")
+        return sInner
+    oBody = re.search(r"<body\b[^>]*>", sHtml)
+    iBody = oBody.end() if oBody else 0
+    sHtml = sHtml[:iBody] + reAnchor.sub(fnAnchor, sHtml[iBody:])
+    # The main landmark: after the contents list, or else after the title block, or else the whole body.
+    if not re.search(r"<main\b", sHtml) and oBody:
+        iEnd = sHtml.rfind("</body>")
+        oNavEnd = re.search(r"</nav>", sHtml)
+        oHeaderEnd = re.search(r'<header id="title-block-header">.*?</header>', sHtml, re.S)
+        iStart = oNavEnd.end() if oNavEnd else (oHeaderEnd.end() if oHeaderEnd else re.search(r"<body\b[^>]*>", sHtml).end())
+        if 0 < iStart < iEnd:
+            sHtml = sHtml[:iStart] + "\n<main>" + sHtml[iStart:iEnd].rstrip() + "\n</main>\n" + sHtml[iEnd:]
+            note("main landmark added")
+    return sHtml, dCounts
+
+
+def blockBreakers(sPath):
+    """The lines of a batch file whose unescaped ')' would close the parenthesized block they sit in: an echo of text
+    holding a bracket, as in echo ... (under 100 MB). Command Prompt reads the whole block before running it, so such a
+    line is a syntax error -- ". was unexpected at this time." -- whether or not its branch would run, and a syntax
+    error in a called batch file ends every batch file above it. Returns [(line number, text)]."""
+    lFound, iDepth = [], 0
+    try: sText = open(sPath, "rb").read().decode("utf-8-sig", errors="replace")
+    except OSError: return lFound
+    for iLine, sLine in enumerate(sText.replace("\r\n", "\n").split("\n"), 1):
+        sTrim = sLine.strip()
+        if not sTrim or re.match(r"(?i)^(rem(\s|$)|::)", sTrim): continue
+        oEcho = re.search(r"(?i)\becho[\s.:(]", sLine)
+        iEchoAt = oEcho.end() if oEcho and re.match(r'(?i)^\s*(?:>>?\s*"[^"]*"\s*)?echo[\s.:(]', sLine) else -1
+        bQuote, k = False, 0
+        while k < len(sLine):
+            ch = sLine[k]
+            if ch == '"': bQuote = not bQuote
+            elif ch == "^": k += 1
+            elif not bQuote:
+                bInEcho = iEchoAt >= 0 and k >= iEchoAt
+                if ch == "(" and not bInEcho: iDepth += 1
+                elif ch == ")":
+                    if bInEcho and iDepth > 0:
+                        sRest = sLine[k + 1:].strip()
+                        if sRest and not sRest.startswith(("&", "|", ">", "else")): lFound.append((iLine, sTrim[:100]))
+                        iDepth -= 1
+                    elif not bInEcho: iDepth -= 1
+            k += 1
+    return lFound
+
+
+def wantedBytes(sPath, binData):
+    """What the file should hold; None when it is not text we can decode."""
+    sText = decodeText(binData)
+    if sText is None: return None
+    sText = sText.replace("\r\n", "\n").replace("\r", "\n")
+    if sPath.lower().endswith(".htm") and os.path.isfile(sPath[:-4] + ".md"):
+        sText = oneTitleHeading(sText)
+        sText = finishPage(sText, set(os.listdir(os.path.dirname(os.path.abspath(sPath)))))[0]
+    sText = sText.replace("\n", "\r\n")
+    bBom = not sPath.lower().endswith(lsNoBom) and os.path.basename(sPath).lower() not in lsNoBomNames
+    return (("\ufeff" + sText) if bBom else sText).encode("utf-8")
+
+
+
+def loadKind():
+    """The kit's kind.py (1.45.0): beside this script, or in the kit's scripts
+    folder wherever the kit is (1.46.0): the HomerDev variable, then a folder
+    named HomerDev above or beside where this runs, at any depth, then one at
+    the top of any fixed drive. Without it the project is taken to be an app,
+    as every script assumed before there were four kinds."""
+    lsDirs = [os.path.dirname(os.path.abspath(__file__)), os.path.join(os.environ.get("HomerDev", ""), "scripts")]
+    for sStart in (os.getcwd(), os.path.dirname(os.path.abspath(__file__))):
+        sDir = os.path.abspath(sStart)
+        while True:
+            lsDirs.append(os.path.join(sDir, "scripts"))
+            lsDirs.append(os.path.join(sDir, "HomerDev", "scripts"))
+            sUp = os.path.dirname(sDir)
+            if sUp == sDir: break
+            sDir = sUp
+    if os.name == "nt":
+        import ctypes
+        lsDirs += [sLetter + ":\\HomerDev\\scripts" for sLetter in "CDEFGHIJKLMNOPQRSTUVWXYZ"
+                   if ctypes.windll.kernel32.GetDriveTypeW(sLetter + ":\\") == 3]
+    for sDir in lsDirs:
+        if sDir and os.path.isfile(os.path.join(sDir, "kind.py")):
+            if sDir not in sys.path: sys.path.insert(0, sDir)
+            import kind
+            return kind.projectKind
+    return lambda sFolder: ("app", "kind.py was not found, so taken to be an app")
+
+def main():
+    global oLog
+    bCheck = "--check" in sys.argv
+    sRoot = projectRoot(os.getcwd())
+    sLogDir = os.path.join(sRoot, "logs")
+    os.makedirs(sLogDir, exist_ok=True)
+    sLogPath = os.path.join(sLogDir, "%s-encoding-%s.log" % (os.path.basename(sRoot), datetime.datetime.now().strftime("%Y%m%d-%H%M%S")))
+    oLog = io.open(sLogPath, "w", encoding="utf-8")
+    logLine("fixEncoding start pid=%d" % os.getpid())
+    logFact("script", os.path.abspath(__file__))
+    logFact("python", platform.python_version())
+    logFact("windows", logWindows())
+    logFact("project", sRoot)
+    logFact("arguments", " ".join(sys.argv[1:]))
+    logFact("mode", "check" if bCheck else "fix")
+    lsNamed = readNamed(sRoot)
+    sKind, sWhy = loadKind()(sRoot)
+    logFact("kind", sKind)
+    logLine("kind reason=%s" % logValue(sWhy))
+    if lsNamed is None and sKind == "page":
+        # A PAGE PROJECT NEEDS NO RepoFiles.txt (1.45.0): its own files are its
+        # documents, its scripts and the site files Jekyll reads. post strips
+        # the byte order mark from what it stages, so the Homer encoding is
+        # right here too.
+        lsNamed = ["*.md", "*.htm", "*.cmd", "*.ps1", "_includes/", "_layouts/", "assets/css/"]
+        logLine("page project: own files are %s" % ", ".join(lsNamed))
+    if lsNamed is None:
+        print("No RepoFiles.txt here, so nothing names the project's own files. Nothing was changed.")
+        logLine("NO RepoFiles.txt")
+        return 0
+    lsFiles = ownFiles(sRoot, lsNamed)
+    logLine("Named entries: %d; text files covered: %d" % (len(lsNamed), len(lsFiles)))
+    # NO FILE IS DATED IN THE FUTURE (14 October 2026). Files unzipped from a delivery made on a clock running on UTC
+    # came out dated about seven hours ahead, since a zip records local time with no zone. Every "is this newer?" test
+    # then misfired: a page rebuilt from its .md moments before was still reported older than it. A file dated more
+    # than two minutes ahead is set to now; a page rebuilt earlier in this same build may read as stale once more, and
+    # the next build settles it.
+    if not bCheck:
+        nNow = time.time()
+        iFuture = 0
+        for sPath in lsFiles:
+            try:
+                nWhen = os.path.getmtime(sPath)
+                if nWhen > nNow + 120:
+                    os.utime(sPath, (nNow, nNow))
+                    iFuture += 1
+                    logLine("dated in the future by %d minutes, so set to now: %s" % (int((nWhen - nNow) / 60), os.path.relpath(sPath, sRoot)))
+            except OSError as oError:
+                logLine("could not read or set the date of %s: %s" % (sPath, oError))
+        if iFuture: print("%d file%s dated in the future, as unzipped, %s set to now." % (iFuture, "" if iFuture == 1 else "s", "was" if iFuture == 1 else "were"))
+    iWrong = 0
+    iFixed = 0
+    for sPath in lsFiles:
+        try:
+            binData = open(sPath, "rb").read()
+        except Exception as oError:
+            logLine("COULD NOT READ %s: %s" % (sPath, oError))
+            continue
+        if not binData: continue
+        binWanted = wantedBytes(sPath, binData)
+        if binWanted is None:
+            logLine("NOT UTF-8, left alone: %s" % os.path.relpath(sPath, sRoot))
+            continue
+        if binWanted == binData: continue
+        iWrong += 1
+        sShown = os.path.relpath(sPath, sRoot)
+        if bCheck:
+            logLine("WRONG: %s" % sShown)
+            continue
+        try:
+            open(sPath, "wb").write(binWanted)
+            iFixed += 1
+            logLine("FIXED: %s" % sShown)
+        except Exception as oError:
+            logLine("COULD NOT WRITE %s: %s" % (sPath, oError))
+    if bCheck:
+        print("%d file%s checked, %d wrong." % (len(lsFiles), "" if len(lsFiles) == 1 else "s", iWrong))
+        return 1 if iWrong else 0
+    print("%d file%s checked, %d fixed." % (len(lsFiles), "" if len(lsFiles) == 1 else "s", iFixed))
+    logLine("fixEncoding end")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

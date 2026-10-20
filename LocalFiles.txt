@@ -1,0 +1,13 @@
+﻿# LocalFiles.txt -- what belongs to BatCon on this disk, but never in the repository.
+
+exec/
+logs/
+notes/
+BatCon_setup.exe
+scripts/release.cmd
+scripts/release.ps1
+version.txt
+Version.cs
+# The one-time repository maker, written by newHomerApp or scripts\createRepo from the kit's local-only template.
+createBatConRepo.cmd
+createBatConRepo.ps1

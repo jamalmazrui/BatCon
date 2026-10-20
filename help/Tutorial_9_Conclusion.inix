@@ -1,0 +1,26 @@
+﻿; Tutorial_9_Conclusion.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=9 - Conclusion
+Intro=What to carry away, and where to begin.
+Setup=BatCon is installed and your reader is running.
+Homework=Begin with a folder you convert often.
+
+[step]
+Say=Four things to carry away. One: Alt plus Control plus B opens BatCon.
+
+[step]
+Say=Two: the formats listed are the ones every source converts to.
+
+[step]
+Say=Three: your files are safe. A result appears only when its conversion works, and a source is never overwritten.
+
+[step]
+Say=Four: every run writes a log, named at the end of the results.
+
+[step]
+Say=The guide and the hotkeys are in the help folder and on the project page. BatCon is one of the Homer Tools.
+
+[step]
+Say=What this walk taught: the four things, and where help lives.

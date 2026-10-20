@@ -1,0 +1,37 @@
+﻿; Tutorial_3_Convert_PDFs_to_Markdown.inix -- a spoken walk through BatCon, written for buildTutorials (the format is
+; described at the top of Tutorial_0_Overview.inix in the Homer kit's Templates).
+
+[about]
+Title=3 - Convert PDFs to Markdown
+Intro=A folder of PDF files, each made a Markdown file you can read line by line.
+Setup=BatCon is open, and a folder holds a few PDF files.
+Homework=Convert a folder of your own PDFs.
+
+[step]
+Say=In Source files, type the folder and a pattern, here C colon backslash Reports backslash star dot P D F.
+Key=Alt+S
+Hear=Source files: edit
+
+[step]
+Say=Tab away, and BatCon finds the files and lists what they convert to.
+Key=Tab
+Hear=Browse source... button
+
+[step]
+Say=Alt plus T, Tango, for Target format, and Markdown is already first.
+Key=Alt+T
+Hear=Target format: list box
+Hear=Markdown (md)
+
+[step]
+Say=Enter starts the batch. BatCon says how many files, then names each as it goes.
+Key=Enter
+Hear=Converting 3 files to md
+Hear=2 of 3: Budget.pdf
+
+[step]
+Say=At the end, a window lists each file. Scanned pages are read with Tesseract, when it is installed.
+Hear=3 files converted, 0 skipped, 0 failed.
+
+[step]
+Say=What this walk taught: a pattern in Source files, Markdown in Target format, and Enter.
