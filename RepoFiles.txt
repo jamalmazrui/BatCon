@@ -13,4 +13,5 @@ build.cmd
 help/
 BatCon_setup.iss
 BatCon.cs
+Batch.cs
 scripts/

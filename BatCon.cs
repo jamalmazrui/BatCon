@@ -78,7 +78,10 @@ public static class Program
         {
             // A window program prints to the console it was started from, so the
             // desktop shortcut never flashes a console and a command line still reads.
-            AttachConsole(-1);
+            // ONLY WHEN OUTPUT IS NOT ALREADY GOING SOMEWHERE (20 October 2026): attaching
+            // sent the output to the parent console even when a script or the kit's check
+            // had redirected it to read it, so the check saw /help print nothing.
+            if (!Console.IsOutputRedirected) AttachConsole(-1);
             return runFromCommandLine(aArguments);
         }
         return runFromDialog();

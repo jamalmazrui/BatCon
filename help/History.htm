@@ -200,6 +200,10 @@ between any two formats the Homer kit converts, from a dialog or a
 command line.</li>
 <li><strong>The formats offered are the ones every source converts
 to,</strong> by the kit’s readable names.</li>
+<li><strong>Output on a command line goes where it is sent.</strong>
+BatCon writes to the console it was started from only when its output is
+not already redirected, so a script, or the kit’s check, reads what
+/help and /list print.</li>
 <li><strong>The first BatCon’s leftovers are retired by the
 build:</strong> its copy of the kit, its third-party folder, its extra
 documents and scripts, and the PDF libraries it had put in exec, each
