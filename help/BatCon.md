@@ -10,7 +10,7 @@ BatCon converts whatever the Homer kit converts. Among the most useful:
 - **Documents:** Word, web pages, Markdown, OpenDocument, rich text and plain text.
 - **PDF:** to Markdown, a web page, Word or plain text, with recognition of scanned pages when Tesseract is installed.
 - **Presentations:** Markdown to PowerPoint, and PowerPoint to Markdown or text.
-- **Recordings to transcripts:** an audio or video file becomes a transcript -- plain text, Markdown, a web page, Word or PDF, among others -- written by Whisper on your own computer.
+- **Recordings to transcripts:** an audio or video file becomes a transcript -- plain text, Markdown, a web page, Word or PDF, among others -- written by Whisper on your own computer. With HomerScribe installed, a video also gets a description of what can be seen, in the same document.
 - **Documents to speech:** a document becomes an MP3 or other audio file in Windows' own voice, or an MP4 or other video, the speech over a plain black picture.
 - **Audio, video and pictures:** each to the other formats of its kind, such as WAV to MP3 or PNG to JPEG.
 
