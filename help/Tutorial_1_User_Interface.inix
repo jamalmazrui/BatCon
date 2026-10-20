@@ -5,38 +5,69 @@
 Title=1 - User Interface
 Intro=The one dialog, control by control, and the keys that reach each one.
 Setup=BatCon is installed and your reader is running.
-Homework=Open BatCon and visit each control with its Alt key.
+Homework=Open BatCon and visit each control with its Alt key, then press Escape.
 
 [step]
-Say=BatCon is one dialog. Alt plus Control plus B, B for BatCon, opens it from anywhere in Windows.
+Say=BatCon has one dialog, and everything it does starts there. Alt plus Control plus B, B for BatCon, opens it from anywhere in Windows.
 Key=Alt+Control+B
 Hear=BatCon dialog
-Hear=Source files: edit
+Hear=Source files: edit, Documents
 
 [step]
-Say=Focus starts in Source files, where you name what to convert: files, folders, or patterns such as star dot P D F.
+Say=Focus starts in Source files. It begins at your Documents folder, so a first run already has somewhere sensible to look. Here you name what to convert: one file, a whole folder, or a pattern such as star dot P D F for every PDF in a folder.
 
 [step]
-Say=Every control has an Alt key: the first letter of its name. Alt plus T, Tango, goes to Target format.
+Say=Tab moves forward through the dialog, one control at a time, in the order they are described in this walk. The next control is the button Browse source.
+Key=Tab
+Hear=Browse source... button
+
+[step]
+Say=Browse source opens the standard Browse for Folder dialog, for choosing a folder of files. The three dots after its name mean it opens another window rather than acting at once.
+
+[step]
+Say=Tab again, and you reach Output directory, where the converted files go. It follows Source files: it names the folder the sources are in, until you choose a different one.
+Key=Tab
+Hear=Output directory: edit, Documents
+
+[step]
+Say=Left blank, each converted file is written beside its source. Beside the field is Choose output, for picking a folder with the same Browse for Folder dialog.
+Key=Tab
+Hear=Choose output... button
+
+[step]
+Say=Every control has an Alt key, the first letter of a word in its name, so you need not tab through the whole dialog. Alt plus T, Tango, goes straight to Target format.
 Key=Alt+T
 Hear=Target format: list box
 Hear=Markdown document (md)
 
 [step]
-Say=The list holds every format BatCon can make, by name, with its extension, in alphabetical order.
+Say=Target format lists every format BatCon can make, in alphabetical order by name, each with its extension in parentheses. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
 
 [step]
-Say=Alt plus O, Oscar, is Output directory. Left blank, each result goes beside its source.
-Key=Alt+O
-Hear=Output directory: edit, blank
+Say=After the list come the check boxes. Alt plus I, India, is Include subfolders, for looking inside the folders within a source folder too.
+Key=Alt+I
+Hear=Include subfolders, check box, not checked
 
 [step]
-Say=Three check boxes follow: Include subfolders, Alt plus I; Force replacements, Alt plus F; View output, Alt plus V.
-Key=Alt+V
-Hear=View output, check box, checked
+Say=Space checks a box, and Space again clears it. The others are Force replacements, Alt plus F; View output, Alt plus V; Log session, Alt plus L; and Use configuration, Alt plus U.
+Key=Alt+U
+Hear=Use configuration, check box, not checked
 
 [step]
-Say=Enter, or Control plus Enter from anywhere, presses OK and starts the batch. Escape cancels.
+Say=Use configuration matters most of these four. Checked when you press OK, it keeps every choice you made, so BatCon opens next time just as you left it. Unchecked, BatCon starts each time from its defaults.
 
 [step]
-Say=What this walk taught: Alt plus Control plus B to open BatCon, and Alt with each control's first letter.
+Say=Below the check boxes is a row of buttons: OK, Guide, Default settings and Cancel. Enter presses OK from most controls, and Control plus Enter presses it from anywhere.
+Key=Control+Enter
+Hear=Converting 3 files to md
+
+[step]
+Say=Guide opens the BatCon guide in your web browser. Default settings puts every control back as it was the first time you opened BatCon. Escape cancels, and closes the dialog without converting anything.
+
+[step]
+Say=Two more keys help at any moment. F1 opens Help, which lists every control with what it is for, and ends by checking the web for a newer BatCon. F11 checks for a newer version at once, without the list.
+Key=F1
+Hear=BatCon Help
+
+[step]
+Say=What this walk taught: Alt plus Control plus B opens BatCon; Alt with a control's first letter goes to it; Space checks a box; and Enter or Control plus Enter presses OK.

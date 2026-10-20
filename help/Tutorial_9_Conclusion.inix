@@ -21,9 +21,12 @@ Hear=Markdown document (md)
 
 [step]
 Say=Three: your files are safe. A result appears only when its conversion works, and a source is never overwritten.
+Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
 Say=Four: every run writes a log, named at the end of the results.
+Key=Control+End
+Hear=The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
 
 [step]
 Say=The guide and the hotkeys are in the help folder and on the project page. BatCon is one of the Homer Tools.

@@ -59,7 +59,7 @@ set "progFiles=%ProgramFiles%"
 
 rem ---- SETTINGS: the part an app edits -------------------------------
 rem The oldest kit with everything this build uses.
-set "kitNeeded=1.84.0"
+set "kitNeeded=1.87.1"
 rem The number to start from when version.txt is missing. A newer release
 rem tag, if the repository has one, wins. It is also a floor: a version.txt
 rem holding less is raised to it.
@@ -71,7 +71,7 @@ rem The kit classes the program uses, alphabetical. Lbc needs Elevate (its
 rem Help box offers the update), Log, Paths, Say and Util; Log needs Paths and
 rem Say; Mdi needs KeyMap. Each is compiled from the kit's exec\CSharp.
 rem The whole conversion bundle (kit 1.84.0): media, speech to text and text to speech too.
-set "homerModules=Conversion ConversionMedia Elevate Inix KeyName Lbc Log Media Paths Say Table Util Voice Web"
+set "homerModules=Conversion ConversionMedia ConversionPage Elevate Inix KeyName Lbc Log Media Paths Say Table Util Voice Web"
 rem The app's own sources beside BatCon.cs, if any, space separated.
 set "appSources=Batch.cs"
 rem Files embedded in the program as resources, space separated: a sound, a

@@ -8,30 +8,73 @@ Setup=BatCon is open, and a folder holds a few PDF files.
 Homework=Convert a folder of your own PDFs.
 
 [step]
-Say=In Source files, type the folder and a pattern, here C colon backslash Reports backslash star dot P D F.
-Key=Alt+S
-Hear=Source files: edit
+Say=Markdown is plain text with a little structure: headings start with a number sign, and list items with a dash. A screen reader reads it line by line, and its headings make a long document easy to move through.
 
 [step]
-Say=Tab away from the field; the files are found when you press OK.
+Say=Start in Source files. Alt plus S, Sierra, goes there from anywhere in the dialog.
+Key=Alt+S
+Hear=Source files: edit, Documents
+
+[step]
+Say=Type the folder and a pattern together, here C colon backslash Reports backslash star dot P D F. The star stands for any name, so this means every PDF in Reports.
+Note=C:\Reports\*.pdf
+
+[step]
+Say=Tab away from the field. Output directory follows what you typed, and now names the Reports folder.
 Key=Tab
 Hear=Browse source... button
 
 [step]
-Say=Alt plus T, Tango, for Target format, and Markdown is already first.
+Say=Alt plus O, Oscar, to hear it.
+Key=Alt+O
+Hear=Output directory: edit, C colon backslash Reports
+
+[step]
+Say=Alt plus T, Tango, for Target format. Markdown document may already be chosen; if not, press M to jump to it.
 Key=Alt+T
-Hear=Target format: list box
+Key=M
 Hear=Markdown document (md)
 
 [step]
-Say=Enter starts the batch. BatCon says how many files, then names each as it goes.
+Say=A tagged PDF, made with care for accessibility, keeps its headings and lists. An untagged one is read by its layout: large bold lines become headings, and columns are put in reading order.
+
+[step]
+Say=A scanned PDF holds pictures of pages rather than text. BatCon reads those by recognizing the letters, which takes longer, and needs the Tesseract tool installed.
+
+[step]
+Say=Press Enter to start. BatCon says how many files it is converting, then names each as it goes, no more often than every two seconds, so a long batch is never silent.
 Key=Enter
 Hear=Converting 3 files to md
 Hear=2 of 3: Budget dot p d f
 
 [step]
-Say=At the end, a window lists each file. Scanned pages are read with Tesseract, when it is installed.
+Say=When it is done, the Results box opens. Its first line is the summary.
+Hear=BatCon results
 Hear=3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=What this walk taught: a pattern in Source files, Markdown in Target format, and Enter.
+Say=Down Arrow reads each file's line, saying what it became.
+Key=Down Arrow
+Hear=Converted Budget dot p d f to Budget dot m d.
+
+[step]
+Say=Escape closes the Results box. The Markdown files are now beside the PDFs, with the same names and the extension dot m d.
+Key=Escape
+Note=The reader says nothing as the window closes.
+
+[step]
+Say=Check Include subfolders, Alt plus I, India, to take in the PDFs in every folder below Reports as well. Each result goes beside its own source, or into the output folder.
+Key=Alt+I
+Hear=Include subfolders, check box, checked
+
+[step]
+Say=A web page is the other good target for reading. Pick Web page in Target format, Alt plus T and the letter W, and each PDF becomes a page with the same headings, which a browser's heading keys move through.
+Key=Alt+T
+Key=W
+Hear=Web page (htm)
+
+[step]
+Say=Word document is a third choice, when someone wants to edit the text: after Web page, the letter W twice more passes Word 97 document and reaches it.
+
+[step]
+Say=What this walk taught: a pattern in Source files, Markdown document in Target format, and Enter; and that scanned pages are read by recognizing the letters.

@@ -3,30 +3,81 @@
 
 [about]
 Title=5 - Choose Where Results Go
-Intro=Results in a folder of their own, opened when the batch ends.
+Intro=Results in a folder of their own, the folder made if needed, and opened when the batch ends.
 Setup=BatCon is open with some source files named.
 Homework=Send a batch to a new folder and let View output open it.
 
 [step]
-Say=Alt plus O, Oscar, is Output directory. Blank means beside each source.
+Say=By default, each converted file goes beside its source. That keeps a file and its conversion together, but a batch of fifty conversions can crowd a folder.
+
+[step]
+Say=Alt plus O, Oscar, is Output directory. It names the source's folder until you choose another.
 Key=Alt+O
-Hear=Output directory: edit, blank
+Hear=Output directory: edit, C colon backslash Reports
 
 [step]
-Say=Alt plus C, Charlie, chooses a folder with the standard Browse for Folder dialog.
+Say=To choose a folder by browsing, press Alt plus C, Charlie, for Choose output. The standard Browse for Folder dialog opens.
 Key=Alt+C
-Hear=Choose the output folder dialog
+Hear=Choose the output directory
 
 [step]
-Say=Or type a folder that does not exist yet; BatCon makes it.
+Say=Arrow keys move through the folders, and Right Arrow opens one to show those inside it. Enter chooses the folder you are on.
+Key=Enter
+Hear=Output directory: edit, C colon backslash Reports backslash Converted
 
 [step]
-Say=Alt plus V, Victor, checks View output, which opens the folder at the end.
+Say=You can also type a folder that does not exist yet, such as C colon backslash Reports backslash Markdown. When you press OK, BatCon offers to make it.
+Key=Enter
+Hear=Create C colon backslash Reports backslash Markdown?
+Hear=Yes button
+
+[step]
+Say=Yes is the usual answer, so Enter makes the folder and the batch goes on. No returns you to the dialog with nothing changed.
+Key=Enter
+Hear=Converting 3 files to md
+
+[step]
+Say=Once you choose an output folder, it stays put even if you change Source files; only a folder that still mirrors the source moves with it.
+
+[step]
+Say=Two sources with the same name never overwrite each other's result. The second becomes its name followed by underscore 2, the third underscore 3, and so on.
+
+[step]
+Say=To open the output folder when a batch ends, check View output: Alt plus V, Victor.
 Key=Alt+V
 Hear=View output, check box, checked
 
 [step]
-Say=Two sources with one name never clash: the second becomes name underscore 2.
+Say=With View output checked, File Explorer opens on the output folder after the Results box, with the new files there.
+Hear=Markdown
 
 [step]
-Say=What this walk taught: Alt plus O and Alt plus C for the output, and Alt plus V to view it.
+Say=Log session, Alt plus L, also puts the run's full log in the output folder, as BatCon dot log, handy when you want to see later exactly what happened.
+Key=Alt+L
+Hear=Log session, check box, checked
+
+[step]
+Say=Use configuration, Alt plus U, keeps the output folder and the check boxes for next time, so a folder you send every batch to need only be chosen once.
+Key=Alt+U
+Hear=Use configuration, check box, checked
+
+[step]
+Say=Default settings puts it all back: Source files at Documents, Output directory following it, and every box as it was the first time. It is one of the buttons below the check boxes.
+
+[step]
+Say=Blank is also a choice. Clear Output directory, and each result goes beside its own source, even when the sources are in many folders.
+Key=Alt+O
+Hear=Output directory: edit, blank
+
+[step]
+Say=Choose output opens where Output directory already points, so a folder near the one you want is only a few arrow keys away.
+Key=Alt+C
+Hear=Choose the output directory
+
+[step]
+Say=Escape closes the Browse for Folder dialog without changing anything, and returns you to Output directory.
+Key=Escape
+Hear=Output directory: edit, C colon backslash Reports
+
+[step]
+Say=What this walk taught: Alt plus O and Alt plus C for the output, that BatCon makes a missing folder when you say yes, and Alt plus V and Alt plus L for after the batch.

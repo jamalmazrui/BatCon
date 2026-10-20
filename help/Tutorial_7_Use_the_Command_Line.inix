@@ -5,21 +5,71 @@
 Title=7 - Use the Command Line
 Intro=BatCon without its dialog, from a command prompt or a script.
 Setup=A command prompt is open.
-Homework=Convert a folder from the command line.
+Homework=Convert a folder from the command line, then list the formats.
 
 [step]
-Say=Type BatCon, the files, slash to and a format. Here, every PDF in Reports to Markdown.
+Say=Everything the dialog does, the command line does too. That suits a script that runs every night, or a person who would rather type than tab.
+
+[step]
+Say=Type BatCon, the files to convert, then slash to and the format's extension. Here, every PDF in Reports, to Markdown, into a folder of its own.
 Note=BatCon "C:\Reports\*.pdf" /to md /output C:\Reports\Markdown
 
 [step]
-Say=Each file's result prints as it is made, then the summary and where the log is.
+Say=Quotes go around a path with a space in it, and help with a pattern too. Slash output names the output folder; left out, each result goes beside its source.
+
+[step]
+Say=Press Enter. Each file's result prints as it is made, and then the summary, and where the log is.
+Key=Enter
 Hear=Converted Budget dot p d f to Budget dot m d.
+Hear=1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=Slash list shows the formats without converting anything, and slash help shows every switch.
+Say=The same choices as the check boxes are switches: slash recursive includes subfolders, slash force replaces results already there, slash view opens the output folder, and slash log keeps the session log there.
 
 [step]
-Say=A switch may be typed with a slash, a dash or two dashes, in any case.
+Say=To see every format BatCon can make, type BatCon slash list. It prints each format by name, with its extension, and converts nothing.
+Note=BatCon /list
+Key=Enter
+Hear=Comma separated table (csv)
 
 [step]
-Say=What this walk taught: slash to, slash output, slash list and slash help.
+Say=Slash help prints every switch with a line on what it does.
+Note=BatCon /help
+Key=Enter
+Hear=BatCon -- convert many files at once between formats.
+
+[step]
+Say=A switch may be typed with a slash, a dash or two dashes, in any case. Slash to, dash to and dash dash to all mean the same thing.
+
+[step]
+Say=BatCon also ends with a number a script can test. Zero means it all went well, one means there was nothing to do or a switch was unknown, and three means some files failed.
+
+[step]
+Say=Slash defaults puts the dialog's settings back to how they were the first time, for the next time you open it.
+Note=BatCon /defaults
+Key=Enter
+Hear=Default settings restored.
+
+[step]
+Say=Several sources can follow BatCon at once: a file, a folder and a pattern, separated by spaces. Slash source before any one of them means the same as giving it alone.
+
+[step]
+Say=A batch run from a script writes its log just as the dialog does, in your own BatCon logs folder, one file for each run, named for its date and time.
+
+[step]
+Say=Help for the dialog is F1, and help for the command line is slash help; between them, every choice BatCon offers is described where you are.
+Note=BatCon /help
+Key=Enter
+Hear=BatCon -- convert many files at once between formats.
+
+[step]
+Say=A script can name the program in full, so it runs whatever folder the command prompt is in: under Program Files, then BatCon, then exec.
+Note="C:\Program Files\BatCon\exec\BatCon.exe" /list
+Key=Enter
+Hear=Comma separated table (csv)
+
+[step]
+Say=A command line never opens the dialog, and the dialog's saved settings never change what a command does: each command says everything it needs.
+
+[step]
+Say=What this walk taught: slash to and slash output to convert, slash list to see every format, slash help for every switch, and the exit number for scripts.

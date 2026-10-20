@@ -5,7 +5,7 @@
     <link>Tutorials.htm</link>
     <description>Spoken walks through BatCon, which converts many files at once between formats. Ten walks, each a few minutes, in the order a new person meets them.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Oct 2026 10:44:14 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 11:31:26 +0000</lastBuildDate>
     <itunes:author>Jamal Mazrui</itunes:author>
     <itunes:explicit>false</itunes:explicit>
     <itunes:category text="Technology"/>
@@ -24,17 +24,17 @@
       <description>BatCon is installed and your reader is running. Full transcript: Tutorials.htm#0a-1-user-interface</description>
       <link>Tutorials.htm#0a-1-user-interface</link>
       <guid isPermaLink="false">homer-tutorial_1_user_interface</guid>
-      <enclosure url="tutorials/1_User_Interface.mp3" length="515297" type="audio/mpeg"/>
-      <itunes:duration>00:01:14</itunes:duration>
+      <enclosure url="tutorials/1_User_Interface.mp3" length="1344220" type="audio/mpeg"/>
+      <itunes:duration>00:03:05</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
       <title>2 - Install and Launch</title>
-      <description>A web browser, and your reader running. Full transcript: Tutorials.htm#0b-2-install-and-launch</description>
+      <description>A web browser is open, and your reader is running. Full transcript: Tutorials.htm#0b-2-install-and-launch</description>
       <link>Tutorials.htm#0b-2-install-and-launch</link>
       <guid isPermaLink="false">homer-tutorial_2_install_and_launch</guid>
-      <enclosure url="tutorials/2_Install_and_Launch.mp3" length="270031" type="audio/mpeg"/>
-      <itunes:duration>00:00:39</itunes:duration>
+      <enclosure url="tutorials/2_Install_and_Launch.mp3" length="1242328" type="audio/mpeg"/>
+      <itunes:duration>00:02:51</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -42,8 +42,8 @@
       <description>BatCon is open, and a folder holds a few PDF files. Full transcript: Tutorials.htm#0c-3-convert-pdfs-to-markdown</description>
       <link>Tutorials.htm#0c-3-convert-pdfs-to-markdown</link>
       <guid isPermaLink="false">homer-tutorial_3_convert_pdfs_to_markdown</guid>
-      <enclosure url="tutorials/3_Convert_PDFs_to_Markdown.mp3" length="381470" type="audio/mpeg"/>
-      <itunes:duration>00:00:58</itunes:duration>
+      <enclosure url="tutorials/3_Convert_PDFs_to_Markdown.mp3" length="1176309" type="audio/mpeg"/>
+      <itunes:duration>00:02:45</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -51,8 +51,8 @@
       <description>BatCon is open, and a CSV file is at hand. Full transcript: Tutorials.htm#0d-4-turn-a-table-into-a-workbook</description>
       <link>Tutorials.htm#0d-4-turn-a-table-into-a-workbook</link>
       <guid isPermaLink="false">homer-tutorial_4_turn_a_table_into_a_workbook</guid>
-      <enclosure url="tutorials/4_Turn_a_Table_into_a_Workbook.mp3" length="389975" type="audio/mpeg"/>
-      <itunes:duration>00:00:57</itunes:duration>
+      <enclosure url="tutorials/4_Turn_a_Table_into_a_Workbook.mp3" length="1268119" type="audio/mpeg"/>
+      <itunes:duration>00:02:54</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -60,8 +60,8 @@
       <description>BatCon is open with some source files named. Full transcript: Tutorials.htm#0e-5-choose-where-results-go</description>
       <link>Tutorials.htm#0e-5-choose-where-results-go</link>
       <guid isPermaLink="false">homer-tutorial_5_choose_where_results_go</guid>
-      <enclosure url="tutorials/5_Choose_Where_Results_Go.mp3" length="318178" type="audio/mpeg"/>
-      <itunes:duration>00:00:47</itunes:duration>
+      <enclosure url="tutorials/5_Choose_Where_Results_Go.mp3" length="1261160" type="audio/mpeg"/>
+      <itunes:duration>00:02:57</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -69,8 +69,8 @@
       <description>BatCon is open, and a batch has been converted once. Full transcript: Tutorials.htm#0f-6-convert-again</description>
       <link>Tutorials.htm#0f-6-convert-again</link>
       <guid isPermaLink="false">homer-tutorial_6_convert_again</guid>
-      <enclosure url="tutorials/6_Convert_Again.mp3" length="299283" type="audio/mpeg"/>
-      <itunes:duration>00:00:44</itunes:duration>
+      <enclosure url="tutorials/6_Convert_Again.mp3" length="1200126" type="audio/mpeg"/>
+      <itunes:duration>00:02:48</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -78,17 +78,17 @@
       <description>A command prompt is open. Full transcript: Tutorials.htm#0g-7-use-the-command-line</description>
       <link>Tutorials.htm#0g-7-use-the-command-line</link>
       <guid isPermaLink="false">homer-tutorial_7_use_the_command_line</guid>
-      <enclosure url="tutorials/7_Use_the_Command_Line.mp3" length="236282" type="audio/mpeg"/>
-      <itunes:duration>00:00:34</itunes:duration>
+      <enclosure url="tutorials/7_Use_the_Command_Line.mp3" length="1118648" type="audio/mpeg"/>
+      <itunes:duration>00:02:34</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
       <title>8 - Read the Results</title>
-      <description>BatCon has just finished a batch. Full transcript: Tutorials.htm#0h-8-read-the-results</description>
+      <description>BatCon has just finished a batch with a mix of files. Full transcript: Tutorials.htm#0h-8-read-the-results</description>
       <link>Tutorials.htm#0h-8-read-the-results</link>
       <guid isPermaLink="false">homer-tutorial_8_read_the_results</guid>
-      <enclosure url="tutorials/8_Read_the_Results.mp3" length="345432" type="audio/mpeg"/>
-      <itunes:duration>00:00:50</itunes:duration>
+      <enclosure url="tutorials/8_Read_the_Results.mp3" length="1256557" type="audio/mpeg"/>
+      <itunes:duration>00:02:51</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
     <item>
@@ -96,8 +96,8 @@
       <description>BatCon is installed and your reader is running. Full transcript: Tutorials.htm#0i-9-conclusion</description>
       <link>Tutorials.htm#0i-9-conclusion</link>
       <guid isPermaLink="false">homer-tutorial_9_conclusion</guid>
-      <enclosure url="tutorials/9_Conclusion.mp3" length="308892" type="audio/mpeg"/>
-      <itunes:duration>00:00:46</itunes:duration>
+      <enclosure url="tutorials/9_Conclusion.mp3" length="434653" type="audio/mpeg"/>
+      <itunes:duration>00:01:02</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
   </channel>

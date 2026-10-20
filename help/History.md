@@ -2,6 +2,8 @@
 
 ## 1.0.2, 20 October 2026
 
+- **Web pages in the Homer page form,** as every Homer app makes them: one heading for the title, the page's parts marked for a screen reader, and pictures carried inside the page. The build needs HomerDev 1.87.1 or later.
+- **The spoken tutorials are full length,** three to five minutes each, as every Homer app's are: the dialog, installing, PDFs to Markdown, tables to workbooks, where results go, converting again, the command line, and reading the results.
 - **Recordings become transcripts, and documents become speech.** An audio or video file converts to a transcript in any document format, by Whisper on your computer; a document converts to audio or video in Windows' own voice. Audio, video and pictures convert among their own formats too. All through the Homer kit, as every Homer app converts. The installer offers ffmpeg and Whisper for these.
 - **The dialog has the shape of 2htm's and extCheck's,** the pattern of every Homer launchpad dialog. Add folder is gone: Browse source picks a folder, and files or patterns are typed. Use configuration, Log session and the Guide button are new; F11 checks for a newer BatCon, as Help (F1) does at its end.
 - **The defaults are deliberate:** Source files starts at your Documents folder, and Output directory follows the source, typed or browsed, until you choose another folder.

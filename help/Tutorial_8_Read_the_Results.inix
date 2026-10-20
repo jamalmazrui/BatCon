@@ -3,28 +3,72 @@
 
 [about]
 Title=8 - Read the Results
-Intro=The results window, the log, and what a failure says.
-Setup=BatCon has just finished a batch.
+Intro=The Results box, a skipped file and a failed one, and the log.
+Setup=BatCon has just finished a batch with a mix of files.
 Homework=After a batch, read its results and open its log.
 
 [step]
-Say=When a batch ends, a window lists every file: converted, skipped or failed.
+Say=Every batch ends with the Results box, which tells you exactly what happened. It opens by itself when the batch is done.
 Hear=BatCon results
 
 [step]
-Say=The first line is the summary. Down Arrow reads each file in turn.
+Say=The first line is the summary, four counts in one sentence: converted, kept as they were, skipped for want of a conversion, and failed.
+Hear=5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
+
+[step]
+Say=Skipped for want of a conversion means some source could not become the format you chose. BatCon says so once for each type of file, with the reason. Down Arrow reads it.
+Key=Down Arrow
+Hear=Skipping 2 files of type wav: the Homer kit has no conversion from wav to xlsx.
+
+[step]
+Say=That is not an error. A folder often holds files of several kinds, and BatCon converts the ones it can and tells you plainly about the rest.
+
+[step]
+Say=Next come the files themselves, one line each, in order. A converted file says what it became.
+Key=Down Arrow
+Hear=Converted Budget dot p d f to Budget dot m d.
+
+[step]
+Say=A failed file says why. Here, a PDF of pictures with no text in it, read when no letter recognition was available.
 Key=Down Arrow
 Hear=Failed Notes dot p d f: the conversion made an empty file
 
 [step]
-Say=A failure says why. The last line names the log, which has every detail, one file for each run.
-Key=Control+End
-Hear=The log: C:\Users\you\AppData\Local\BatCon\logs\BatCon-20261019-120000.log
+Say=A failure never touches anything else. The other files still converted, and any earlier result of the failed one is still as it was.
 
 [step]
-Say=Escape closes the window, and the reader says nothing more until you move.
+Say=The last line names the session log, with every detail of the run. Control plus End goes straight to it.
+Key=Control+End
+Hear=The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
+
+[step]
+Say=Every run writes a new log, named for its date and time, so one batch never overwrites another's record.
+
+[step]
+Say=Escape closes the Results box.
 Key=Escape
 Note=The reader says nothing as the window closes.
 
 [step]
-Say=What this walk taught: the summary first, a reason for each failure, and the log at the end.
+Say=The Results box is a plain text window: Up and Down Arrow read it a line at a time, Control plus Home returns to the summary, and Control plus End goes to the log.
+Key=Control+Home
+Hear=5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
+
+[step]
+Say=A kept file is one whose result was already there; walk 6 shows how to replace it with Force replacements.
+
+[step]
+Say=If a batch surprises you, the log is the first place to look. It lists every file, every way BatCon tried, and how long each took, so even a failure has a clear story.
+Key=Control+End
+Hear=The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
+
+[step]
+Say=To keep the log with the converted files, check Log session before the batch, Alt plus L, Lima. BatCon dot log then lands in the output folder beside them.
+Key=Alt+L
+Hear=Log session, check box, checked
+
+[step]
+Say=A skipped type can often be reached another way. A sound file cannot become a workbook, but it can become a transcript as a Markdown document or a Word document, which may be what you wanted all along.
+
+[step]
+Say=What this walk taught: the summary first, a reason for each skipped type and each failure, and the log named at the end.

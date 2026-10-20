@@ -3,24 +3,77 @@
 
 [about]
 Title=6 - Convert Again
-Intro=Running a batch a second time: what is skipped, and how to replace it.
+Intro=Running a batch a second time: what is kept, and how to replace it safely.
 Setup=BatCon is open, and a batch has been converted once.
 Homework=Convert the same batch twice, once with Force replacements.
 
 [step]
-Say=Run the same batch again, and BatCon keeps the results already there.
+Say=Sooner or later you convert the same files again: the sources changed, or you want the newest conversion. BatCon is careful with what is already there.
+
+[step]
+Say=Run the same batch a second time, as it was. Enter starts it.
 Key=Enter
+Hear=BatCon results
+
+[step]
+Say=Every result already there is kept as it was, and the summary says so.
 Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=To replace them, press Alt plus F, Foxtrot, for Force replacements.
+Say=Down Arrow reads why each was kept.
+Key=Down Arrow
+Hear=Skipped Budget dot m d: it is already there.
+
+[step]
+Say=That is the safe choice: nothing you made earlier, or edited since, is replaced unless you ask. Escape closes the Results box.
+Key=Escape
+Note=The reader says nothing as the window closes.
+
+[step]
+Say=To replace the results, open BatCon again, and check Force replacements: Alt plus F, Foxtrot.
 Key=Alt+F
 Hear=Force replacements, check box, checked
 
 [step]
-Say=Even then, an earlier result is replaced only once its new conversion works, so a failure never loses it.
+Say=Press Enter. This time every file is converted again.
 Key=Enter
+Hear=Converting 3 files to md
 Hear=3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=What this walk taught: results are kept by default, and Alt plus F replaces them safely.
+Say=Even with Force replacements, an earlier result is replaced only once its new conversion has worked. Each conversion is written to a temporary file first, and put in place only when it succeeds, so a failure never loses what you had.
+
+[step]
+Say=A source is never overwritten either. If a conversion's name would match a source's, BatCon gives the result a new name instead.
+
+[step]
+Say=Force replacements stays checked only for this run, unless Use configuration is checked too, so you cannot replace results by surprise next time.
+Key=Alt+F
+Hear=Force replacements, check box, not checked
+
+[step]
+Say=A good habit when the sources change: convert into a fresh output folder rather than replacing. The old results stay as they were, and you can compare the two.
+Key=Alt+O
+Hear=Output directory: edit, C colon backslash Reports
+
+[step]
+Say=Force replacements is also a switch on the command line, slash force, for a script that rebuilds every result each night. Walk 7 shows the command line.
+
+[step]
+Say=Whatever you choose, the Results box says what happened to each file, so a run that kept everything never looks like one that did nothing.
+Hear=BatCon results
+
+[step]
+Say=Kept results are not a failure, and the exit number for a script stays zero when everything was either converted or kept, since nothing went wrong.
+Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
+
+[step]
+Say=If you want only the files that changed converted, put the changed ones alone in Source files, or convert into a new output folder and compare; BatCon does not judge which source is newer than its result.
+
+[step]
+Say=Default settings clears Force replacements along with everything else, so it is always safe to start over from there.
+Key=Alt+F
+Hear=Force replacements, check box, not checked
+
+[step]
+Say=What this walk taught: results already there are kept by default, Alt plus F replaces them, and a replacement happens only once its new conversion has worked.

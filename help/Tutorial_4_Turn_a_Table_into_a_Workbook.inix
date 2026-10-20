@@ -8,12 +8,19 @@ Setup=BatCon is open, and a CSV file is at hand.
 Homework=Make a workbook from a table of your own.
 
 [step]
-Say=Source files starts at your Documents folder. Type the file you want, here C colon backslash Data backslash Members dot c s v.
-Key=Alt+S
-Hear=Source files: edit
+Say=A CSV file is a table written as plain text, with commas between the values on each line. Excel opens one, but a true workbook keeps each value in its own cell and holds up better when shared.
 
 [step]
-Say=Output directory follows, the folder of that one file, so the workbook goes beside it.
+Say=Source files starts at your Documents folder. Alt plus S, Sierra, and type the one file you want, here C colon backslash Data backslash Members dot c s v.
+Key=Alt+S
+Hear=Source files: edit, Documents
+
+[step]
+Say=A single file is fine; Source files takes one file as readily as a folder.
+Note=C:\Data\Members.csv
+
+[step]
+Say=Output directory follows: for one file, it names the folder that file is in, so the workbook will go beside it.
 Key=Alt+O
 Hear=Output directory: edit, C colon backslash Data
 
@@ -25,12 +32,47 @@ Key=E
 Hear=Excel workbook (xlsx)
 
 [step]
-Say=Every value goes into the workbook as text, so leading zeros stay, and nothing turns into a formula.
+Say=Every value goes into the workbook as text. A member number written 007 stays 007 rather than losing its zeros, and a value that begins with an equals sign stays words rather than becoming a formula.
 
 [step]
-Say=Enter converts it.
+Say=Tables come in several forms, and BatCon converts among them all: comma separated, tab separated, a Markdown table, a Homer inix file, and an Excel workbook.
+
+[step]
+Say=Press Enter to convert. A single file is quick, so the summary is all you hear.
 Key=Enter
+Hear=BatCon results
 Hear=1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=What this walk taught: Alt plus B to browse, and a table made a workbook.
+Say=Down Arrow reads the line for the file.
+Key=Down Arrow
+Hear=Converted Members dot c s v to Members dot x l s x.
+
+[step]
+Say=Escape closes the Results box, and Members dot x l s x is beside the CSV file, ready for Excel.
+Key=Escape
+Note=The reader says nothing as the window closes.
+
+[step]
+Say=The same works the other way. An Excel workbook as the source, with Comma separated table as the target, gives a CSV file of its first sheet, to read in any text editor.
+
+[step]
+Say=A whole folder of tables converts the same way: put the folder in Source files, and each table becomes a workbook of its own. Files of other kinds in the folder are skipped, and the Results box says so.
+Key=Alt+S
+Hear=Source files: edit, C colon backslash Data backslash Members dot c s v
+
+[step]
+Say=A Markdown document with a table in it converts too: the table becomes the workbook's sheet. That is handy for a table typed by hand in a text editor.
+
+[step]
+Say=The Results box counts what was converted, kept and skipped; walk 8 reads one in full.
+
+[step]
+Say=An inix file is the Homer settings format: plain text in sections, each with names and values. Converting one to a workbook gives a sheet with a row for each section and a column for each name, which is an easy way to review many settings at once.
+Hear=Excel workbook (xlsx)
+
+[step]
+Say=Going back, a workbook converts to an inix file or a Markdown table, which a screen reader reads in order, row by row, with each value announced after its column's name.
+
+[step]
+Say=What this walk taught: a single file can be the source, E twice reaches Excel workbook, and every value keeps its exact text.
