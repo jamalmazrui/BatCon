@@ -59,7 +59,7 @@ set "progFiles=%ProgramFiles%"
 
 rem ---- SETTINGS: the part an app edits -------------------------------
 rem The oldest kit with everything this build uses.
-set "kitNeeded=1.88.0"
+set "kitNeeded=1.88.2"
 rem The number to start from when version.txt is missing. A newer release
 rem tag, if the repository has one, wins. It is also a floor: a version.txt
 rem holding less is raised to it.
@@ -435,12 +435,14 @@ if not errorlevel 1 (
   >> "%log%" echo Asking nuget for PdfPig and its dependencies
   nuget install PdfPig -Version 0.1.16 -OutputDirectory work\packages -ExcludeVersion -NonInteractive -DependencyVersion Highest >> "%log%" 2>&1
 )
-if not exist "scripts\getPdfPig.ps1" (
-  echo The kit's getPdfPig.ps1 is not in scripts. Update HomerDev to !kitNeeded! or later.
-  >> "%log%" echo ERROR: scripts\getPdfPig.ps1 missing
+rem The kit's own copy is run, not the one refreshed into scripts: some builds refresh their
+rem kit scripts after compiling, when this step has already run (2htm, FileDir, 22 October 2026).
+if not exist "!homerDev!\scripts\getPdfPig.ps1" (
+  echo The kit has no scripts\getPdfPig.ps1. Update HomerDev to !kitNeeded! or later.
+  >> "%log%" echo ERROR: !homerDev!\scripts\getPdfPig.ps1 missing
   goto :failed
 )
-powershell -NoProfile -ExecutionPolicy Bypass -File "scripts\getPdfPig.ps1" -App "%app%" >> "%log%" 2>&1
+powershell -NoProfile -ExecutionPolicy Bypass -File "!homerDev!\scripts\getPdfPig.ps1" -App "%app%" >> "%log%" 2>&1
 >> "%log%" echo Ran: getPdfPig, exit code !errorlevel!
 set "pdfDll="
 if exist "exec\pdfpig.name" set /p pdfDll=<exec\pdfpig.name
