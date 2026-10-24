@@ -45,7 +45,9 @@ public static class Batch
     }
 
     // discover: every file the kit can convert, from files, folders and patterns.
-    public static List<string> discover(IEnumerable<string> lsPaths, bool bRecursive, List<string> lsProblems)
+    // A folder gives the files in it, not in the folders within it: Include subfolders was
+    // never asked for, and went on 23 October 2026.
+    public static List<string> discover(IEnumerable<string> lsPaths, List<string> lsProblems)
     {
         HashSet<string> hsFiles = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (string sPath in lsPaths)
@@ -59,10 +61,10 @@ public static class Batch
                     string sFolder = Path.GetDirectoryName(sExpanded);
                     sFolder = Path.GetFullPath(string.IsNullOrEmpty(sFolder) ? "." : sFolder);
                     if (!Directory.Exists(sFolder)) { lsProblems.Add("No folder " + sFolder); continue; }
-                    scan(sFolder, Path.GetFileName(sExpanded), bRecursive, hsFiles, lsProblems);
+                    scan(sFolder, Path.GetFileName(sExpanded), hsFiles, lsProblems);
                 }
                 else if (File.Exists(sExpanded)) hsFiles.Add(Path.GetFullPath(sExpanded));
-                else if (Directory.Exists(sExpanded)) scan(Path.GetFullPath(sExpanded), "*", bRecursive, hsFiles, lsProblems);
+                else if (Directory.Exists(sExpanded)) scan(Path.GetFullPath(sExpanded), "*", hsFiles, lsProblems);
                 else lsProblems.Add("Not found: " + sExpanded);
             }
             catch (Exception oError) { lsProblems.Add(sPath + ": " + oError.Message); }
@@ -72,11 +74,10 @@ public static class Batch
         return lsFiles;
     }
 
-    // scan: the files in one folder, and below it when asked, never following a folder
-    // link, which can loop. Every visible file is taken, whether or not it converts to the
+    // scan: the files in one folder. Every visible file is taken, whether or not it converts to the
     // target, so a file of another type is reported as skipped rather than passed over in
     // silence; hidden and system files, such as desktop.ini, are not the user's documents.
-    private static bool scan(string sFolder, string sPattern, bool bRecursive, HashSet<string> hsFiles, List<string> lsProblems)
+    private static bool scan(string sFolder, string sPattern, HashSet<string> hsFiles, List<string> lsProblems)
     {
         try
         {
@@ -86,9 +87,6 @@ public static class Batch
                 if ((iAttr & (FileAttributes.Hidden | FileAttributes.System)) != 0) continue;
                 hsFiles.Add(Path.GetFullPath(sFile));
             }
-            if (bRecursive)
-                foreach (string sChild in Directory.GetDirectories(sFolder))
-                    if ((File.GetAttributes(sChild) & FileAttributes.ReparsePoint) == 0) scan(sChild, sPattern, true, hsFiles, lsProblems);
         }
         catch (Exception oError) { lsProblems.Add(sFolder + ": " + oError.Message); }
         return true;

@@ -11,9 +11,9 @@ Homework=Convert a folder of your own PDFs.
 Say=Markdown is plain text with a little structure: headings start with a number sign, and list items with a dash. A screen reader reads it line by line, and its headings make a long document easy to move through.
 
 [step]
-Say=Start in Source files. Alt plus S, Sierra, goes there from anywhere in the dialog.
+Say=Start in Source paths. Alt plus S, Sierra, goes there from anywhere in the dialog.
 Key=Alt+S
-Hear=Source files: edit, Documents
+Hear=Source paths: edit, Documents
 
 [step]
 Say=Type the folder and a pattern together, here C colon backslash Reports backslash star dot P D F. The star stands for any name, so this means every PDF in Reports.
@@ -22,7 +22,7 @@ Note=C:\Reports\*.pdf
 [step]
 Say=Tab away from the field. Output directory follows what you typed, and now names the Reports folder.
 Key=Tab
-Hear=Browse source... button
+Hear=Browse local source button
 
 [step]
 Say=Alt plus O, Oscar, to hear it.
@@ -53,8 +53,7 @@ Hear=BatCon results
 Hear=3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=Down Arrow reads each file's line, saying what it became.
-Key=Down Arrow
+Say=The reader goes on to each file's line, saying what it became.
 Hear=Converted Budget dot p d f to Budget dot m d.
 
 [step]
@@ -63,9 +62,7 @@ Key=Escape
 Note=The reader says nothing as the window closes.
 
 [step]
-Say=Check Include subfolders, Alt plus I, India, to take in the PDFs in every folder below Reports as well. Each result goes beside its own source, or into the output folder.
-Key=Alt+I
-Hear=Include subfolders, check box, checked
+Say=A folder means the files in it, not the folders inside it. To take in PDFs from another folder as well, add it to Source paths, with a space between the two.
 
 [step]
 Say=A web page is the other good target for reading. Pick Web page in Target format, Alt plus T and the letter W, and each PDF becomes a page with the same headings, which a browser's heading keys move through.
@@ -74,7 +71,7 @@ Key=W
 Hear=Web page (htm)
 
 [step]
-Say=Word document is a third choice, when someone wants to edit the text: after Web page, the letter W twice more passes Word 97 document and reaches it.
+Say=Word document is a third choice, when someone wants to edit the text: after Web page, the letter W once more reaches it.
 
 [step]
-Say=What this walk taught: a pattern in Source files, Markdown document in Target format, and Enter; and that scanned pages are read by recognizing the letters.
+Say=What this walk taught: a pattern in Source paths, Markdown document in Target format, and Enter; and that scanned pages are read by recognizing the letters.

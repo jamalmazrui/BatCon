@@ -1,21 +1,21 @@
 #EXTM3U
 #EXTINF:67,BatCon Walkthroughs
 0_Overview.mp3
-#EXTINF:185,1 - User Interface
+#EXTINF:191,1 - User Interface
 1_User_Interface.mp3
 #EXTINF:171,2 - Install and Launch
 2_Install_and_Launch.mp3
-#EXTINF:165,3 - Convert PDFs to Markdown
+#EXTINF:156,3 - Convert PDFs to Markdown
 3_Convert_PDFs_to_Markdown.mp3
-#EXTINF:174,4 - Turn a Table into a Workbook
+#EXTINF:171,4 - Turn a Table into a Workbook
 4_Turn_a_Table_into_a_Workbook.mp3
-#EXTINF:177,5 - Choose Where Results Go
+#EXTINF:169,5 - Choose Where Results Go
 5_Choose_Where_Results_Go.mp3
-#EXTINF:168,6 - Convert Again
+#EXTINF:167,6 - Convert Again
 6_Convert_Again.mp3
 #EXTINF:154,7 - Use the Command Line
 7_Use_the_Command_Line.mp3
-#EXTINF:171,8 - Read the Results
+#EXTINF:163,8 - Read the Results
 8_Read_the_Results.mp3
 #EXTINF:62,9 - Conclusion
 9_Conclusion.mp3

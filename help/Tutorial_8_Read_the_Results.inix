@@ -8,16 +8,15 @@ Setup=BatCon has just finished a batch with a mix of files.
 Homework=After a batch, read its results and open its log.
 
 [step]
-Say=Every batch ends with the Results box, which tells you exactly what happened. It opens by itself when the batch is done.
-Hear=BatCon results
+Say=Every batch ends with the Results box, which tells you exactly what happened. It opens by itself when the batch is done, and your screen reader reads it all. Insert plus B reads it again, if you want to hear it once more.
+Hear=BatCon Results
 
 [step]
 Say=The first line is the summary, four counts in one sentence: converted, kept as they were, skipped for want of a conversion, and failed.
 Hear=5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
 
 [step]
-Say=Skipped for want of a conversion means some source could not become the format you chose. BatCon says so once for each type of file, with the reason. Down Arrow reads it.
-Key=Down Arrow
+Say=Skipped for want of a conversion means some source could not become the format you chose. BatCon says so once for each type of file, with the reason.
 Hear=Skipping 2 files of type wav: the Homer kit has no conversion from wav to xlsx.
 
 [step]
@@ -25,47 +24,39 @@ Say=That is not an error. A folder often holds files of several kinds, and BatCo
 
 [step]
 Say=Next come the files themselves, one line each, in order. A converted file says what it became.
-Key=Down Arrow
 Hear=Converted Budget dot p d f to Budget dot m d.
 
 [step]
 Say=A failed file says why. Here, a PDF of pictures with no text in it, read when no letter recognition was available.
-Key=Down Arrow
 Hear=Failed Notes dot p d f: the conversion made an empty file
 
 [step]
 Say=A failure never touches anything else. The other files still converted, and any earlier result of the failed one is still as it was.
 
 [step]
-Say=The last line names the session log, with every detail of the run. Control plus End goes straight to it.
-Key=Control+End
+Say=The last line names the session log, with every detail of the run.
 Hear=The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
 
 [step]
 Say=Every run writes a new log, named for its date and time, so one batch never overwrites another's record.
 
 [step]
-Say=Escape closes the Results box.
+Say=The box has one button, OK, and it has the focus, so Enter, Space or Escape closes it. BatCon then closes too, its work done.
 Key=Escape
 Note=The reader says nothing as the window closes.
 
 [step]
-Say=The Results box is a plain text window: Up and Down Arrow read it a line at a time, Control plus Home returns to the summary, and Control plus End goes to the log.
-Key=Control+Home
-Hear=5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
+Say=A big batch makes a long report. The box then shows its first 15 lines and names a text file holding the rest, in BatCon's logs folder, which any editor reads a line at a time.
 
 [step]
 Say=A kept file is one whose result was already there; walk 6 shows how to replace it with Force replacements.
 
 [step]
-Say=If a batch surprises you, the log is the first place to look. It lists every file, every way BatCon tried, and how long each took, so even a failure has a clear story.
-Key=Control+End
+Say=If a batch surprises you, the log is the first place to look. It lists every file, every way BatCon tried, and how long each took, so even a failure has a clear story. The last line of the Results box names it.
 Hear=The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
 
 [step]
-Say=To keep the log with the converted files, check Log session before the batch, Alt plus L, Lima. BatCon dot log then lands in the output folder beside them.
-Key=Alt+L
-Hear=Log session, check box, checked
+Say=Logging is automatic, so there is nothing to switch on: every run's log is kept in BatCon's logs folder, under your local application data, and Help names that folder too.
 
 [step]
 Say=A skipped type can often be reached another way. A sound file cannot become a workbook, but it can become a transcript as a Markdown document or a Word document, which may be what you wanted all along.

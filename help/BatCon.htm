@@ -227,88 +227,110 @@ speech over a plain black picture.</li>
 <li><strong>Audio, video and pictures:</strong> each to the other
 formats of its kind, such as WAV to MP3 or PNG to JPEG.</li>
 </ul>
-<p>The Target format list shows every format BatCon can make. A source
-that cannot become the one you pick is skipped, and BatCon says why.</p>
+<p>The Target format list offers twelve formats: CSV, an SQLite database
+(db), Word, EPUB, a web page, inix, Markdown, PDF, PowerPoint, TSV,
+plain text and Excel. A source that cannot become the one you pick is
+skipped, and BatCon says why. A database (db) is an SQLite file with one
+table named after it, its fields from the source’s first table. A PDF is
+made through a web page that Microsoft Edge prints, so no Office is
+needed.</p>
 <h2 id="the-dialog">The dialog</h2>
-<p>BatCon’s dialog has the same shape as 2htm’s and extCheck’s. The
-controls, in the order Tab moves through them:</p>
+<p>BatCon’s dialog is the one every Homer launch app shows, with the
+same names and the same Alt letters in each. It is in rows called bands,
+and Tab moves through them in this order:</p>
 <ul>
-<li><strong>Source files (Alt+S):</strong> the files to convert. It
+<li><strong>Source paths (Alt+S):</strong> the files to convert. It
 starts at your Documents folder. Type one or more files, folders or
 patterns such as <code>*.docx</code>, putting quotes around any with a
-space.</li>
-<li><strong>Browse source (Alt+B):</strong> picks a folder of files with
-a standard Browse for Folder dialog.</li>
+space. A folder means the files in it, not the folders inside it.</li>
+<li><strong>Browse local source (Alt+B):</strong> picks a folder of
+files with a standard Browse for Folder dialog. It opens where Source
+paths points, or else in Documents.</li>
+<li><strong>Target format (Alt+T):</strong> the format to convert to, in
+alphabetical order by name, such as “Markdown document (md)”.</li>
 <li><strong>Output directory (Alt+O):</strong> where the results go. It
-follows Source files – the folder itself, or the folder of a single file
+follows Source paths – the folder itself, or the folder of a single file
 or pattern – until you choose another. Blank means each result goes
 beside its source.</li>
-<li><strong>Choose output (Alt+C):</strong> picks the output
+<li><strong>Choose output directory (Alt+C):</strong> picks the output
 folder.</li>
-<li><strong>Target format (Alt+T):</strong> the format to convert to,
-from every format BatCon can make, in alphabetical order by name, such
-as “Markdown document (md)”.</li>
-<li><strong>Include subfolders (Alt+I):</strong> looks inside the
-folders within each source folder too.</li>
-<li><strong>Force replacements (Alt+F):</strong> replaces a result
-already there, once its new conversion succeeds, instead of keeping
-it.</li>
-<li><strong>View output (Alt+V):</strong> opens the output folder when
-the batch finishes.</li>
-<li><strong>Log session (Alt+L):</strong> also writes BatCon.log, the
-run’s log, in the output folder.</li>
+<li><strong>Force replacements (Alt+F):</strong> Do the work again for a
+source whose result is already there, replacing the old result once the
+new one is complete. Unchecked, that source is skipped, its result kept,
+and the Results box says how many.</li>
 <li><strong>Use configuration (Alt+U):</strong> when checked as you
 press OK, saves every field and starts from them next time. Unchecked,
 BatCon starts from its defaults.</li>
-<li><strong>OK, Guide, Default settings, Cancel and Help:</strong> OK,
-or Enter, starts the batch, and offers to make an output folder that
-does not exist. Guide opens this guide. Default settings puts every
-field back to its default and forgets the saved configuration. Help, or
-F1, lists each field and checks for a newer BatCon; F11 checks at
-once.</li>
+<li><strong>View output directory (Alt+V):</strong> opens the output
+folder after you close the Results box.</li>
+<li><strong>Default settings (Alt+D):</strong> puts every field back to
+its default and forgets the saved configuration.</li>
+<li><strong>Help (Alt+H or F1):</strong> lists each field with its tip,
+the dialog’s keys and where the logs are kept, and checks for a newer
+BatCon.</li>
+<li><strong>OK and Cancel:</strong> OK starts the batch, and offers to
+make an output folder that does not exist. Control+Enter presses OK and
+Escape presses Cancel, from anywhere in the dialog. F11 checks for a
+newer BatCon from anywhere, too.</li>
 </ul>
 <h2 id="while-it-works">While it works</h2>
 <p>A file whose type does not convert to the target is skipped, and
 BatCon says so once for each type, with the reason, such as “Skipping 3
 files of type wav: the Homer kit has no conversion from wav to xlsx.”
-BatCon then says how many files it is converting, and names each as it
-goes, no more often than every two seconds. At the end, a window gives
-the counts – converted, kept because a result was already there, skipped
-for want of a conversion, and failed – then each skipping message and
-each file’s outcome with its reason. The last line names the log, which
-has every detail.</p>
+While it works, BatCon shows a small window titled with its name and
+what it is doing, such as “BatCon, Budget.pdf, 2 of 5 done, 40%”. Once
+it can estimate honestly, it adds the time left, such as “about 3 min
+left”, and a progress bar shows the same. Its Status box has the focus,
+so Insert+Tab reads the latest status; Cancel, or Escape, stops after
+the current file. Your screen reader speaks the progress only while
+BatCon is the window you are in, so you can work in another program
+undisturbed; coming back says where things stand. At the end, the BatCon
+Results box gives the counts – converted, kept because a result was
+already there, skipped for want of a conversion, and failed – then each
+skipping message and each file’s outcome with its reason. The last line
+names the log, which has every detail. A long report shows its first 15
+lines and names a file with the rest. Its only button is OK, so Enter,
+Space or Escape closes it, and then BatCon closes too.</p>
 <p>Your files are safe. Each result is written to a temporary file first
 and put in place only when its conversion works, so a failure never
 leaves half a file. A source is never overwritten, and two sources with
 the same name get name_2, name_3 and so on.</p>
 <h2 id="from-a-command-line">From a command line</h2>
-<pre><code>BatCon &quot;C:\Reports\*.pdf&quot; /to md /output C:\Reports\Markdown
-BatCon C:\Data /recursive /to xlsx
-BatCon /list</code></pre>
+<pre><code>batcon &quot;C:\Reports\*.pdf&quot; -t md -o C:\Reports\Markdown
+batcon C:\Data -t xlsx -v
+batcon /list</code></pre>
+<p>Each long switch is a name from the dialog, and each letter is that
+control’s Alt letter:</p>
 <ul>
-<li><strong>/to format:</strong> the format to convert to, by its
-extension.</li>
-<li><strong>/output folder:</strong> where the results go.</li>
-<li><strong>/recursive:</strong> includes subfolders.</li>
-<li><strong>/force:</strong> replaces results already there.</li>
-<li><strong>/view:</strong> opens the output folder at the end.</li>
+<li><strong>-t, –target-format format:</strong> the format to convert
+to, by its extension.</li>
+<li><strong>-o, –output-directory folder:</strong> where the results
+go.</li>
+<li><strong>-f, –force-replacements:</strong> Do the work again for a
+source whose result is already there, replacing it; without it, that
+source is skipped and its result kept.</li>
+<li><strong>-u, –use-configuration:</strong> starts from the settings
+the dialog saved.</li>
+<li><strong>-v, –view-output-directory:</strong> opens the output folder
+at the end.</li>
+<li><strong>-d, –default-settings:</strong> puts the settings back as
+they were first.</li>
 <li><strong>/list:</strong> prints every format BatCon can convert to,
 and converts nothing.</li>
-<li><strong>/log:</strong> also writes BatCon.log in the output
-folder.</li>
-<li><strong>/defaults:</strong> puts the settings back as they were
-first.</li>
-<li><strong>/help:</strong> prints the usage.</li>
+<li><strong>-h, –help:</strong> prints the usage.</li>
 </ul>
-<p>A switch may also be written with a dash or two, such as -to or –to.
-The exit code is 0 when all went well, 1 when there was nothing to do or
-a switch was unknown, and 3 when some files failed.</p>
+<p>A switch may be written with a slash, a dash or two dashes, in any
+case. The older names, such as /to, /output, /force and /view, still
+work. The exit code is 0 when all went well, 1 when there was nothing to
+do or a switch was unknown, and 3 when some files failed.</p>
 <h2 id="where-things-are">Where things are</h2>
 <ul>
 <li><strong>The program:</strong> C:Files.</li>
 <li><strong>Your settings, when Use configuration is checked:</strong>
 %LOCALAPPDATA%.inix.</li>
-<li><strong>The logs:</strong> %LOCALAPPDATA%, one for each run.</li>
+<li><strong>The logs:</strong> %LOCALAPPDATA%, one for each run, named
+BatCon-yyyyMMdd-HHmmss.log for the date and time it started. Logging is
+automatic; there is nothing to switch on.</li>
 </ul>
 </main>
 </body>

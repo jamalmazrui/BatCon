@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc 3.12.1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>BatCon walkthroughs</title>
+  <title>BatCon Tutorials</title>
   <style>
     /* Default styles provided by pandoc.
     ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -183,49 +183,10 @@
 </head>
 <body>
 <main>
-<h1 id="batcon-walkthroughs">BatCon walkthroughs</h1>
-<p>These are written walkthroughs for this development build. Spoken
-tutorials and recorded screen-reader responses are not included.</p>
-<h2 id="convert-a-document">Convert a document</h2>
-<ol type="1">
-<li>Run BatCon.cmd.</li>
-<li>In Source, type the full path of a PDF, or press Browse source and
-choose it.</li>
-<li>Tab to Target format. Use the arrow keys to choose md.</li>
-<li>In Output, type a directory for the result, or use Choose
-output.</li>
-<li>Press Control+Enter. The conversion window shows progress.</li>
-<li>Read Results. The converted Markdown file is in the Output
-directory. The log gives the conversion route.</li>
-</ol>
-<h2 id="convert-a-table">Convert a table</h2>
-<ol type="1">
-<li>Run BatCon.cmd.</li>
-<li>In Source, enter an INIX file containing record sections.</li>
-<li>In Target format, choose xlsx.</li>
-<li>Choose an Output directory and press OK.</li>
-<li>Open the workbook. The Data sheet has one column for each field.
-Leading zeros remain text, and values beginning with an equals sign
-remain literal values.</li>
-</ol>
-<h2 id="convert-a-folder">Convert a folder</h2>
-<ol type="1">
-<li>Use Add folder to append a directory.</li>
-<li>Check Include subfolders if needed.</li>
-<li>Press Refresh files. The status gives the source count and number of
-common target formats.</li>
-<li>Choose a Target format and Output directory, then press OK.</li>
-<li>Use Stop after current file if you need to end the batch. Read the
-unprocessed count in Results.</li>
-</ol>
-<h2 id="repeat-safely">Repeat safely</h2>
-<ol type="1">
-<li>Run a completed batch again with Force replacements unchecked.</li>
-<li>Results report existing outputs as skipped.</li>
-<li>Check Force replacements only when you intend to replace those
-outputs.</li>
-<li>Run again. A failed conversion preserves the existing output.</li>
-</ol>
+<h1 id="batcon-tutorials">BatCon Tutorials</h1>
+<h2 id="contents">Contents</h2>
+<p>These are the spoken walks as text: a host does the work, and the
+screen reader answers.</p>
 <!-- walkthrough: written by makeTutorials.py, do not edit between the markers -->
 <h2 id="overview">0 - Overview</h2>
 <p>What BatCon does, and what each walk covers.</p>
@@ -249,7 +210,7 @@ serves in place of Insert where your reader is set up that way. Insert
 plus Tab says what has the focus.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Source files: edit</li>
+<li>Source paths: edit</li>
 </ul>
 <h3 id="step-5-insertt">Step 5: Insert+T</h3>
 <p>Insert plus T says the title of the window.</p>
@@ -279,95 +240,93 @@ Control plus B, B for BatCon, opens it from anywhere in Windows.</p>
 <p>Screen reader:</p>
 <ul>
 <li>BatCon dialog</li>
-<li>Source files: edit, Documents</li>
+<li>Source paths: edit, Documents</li>
 </ul>
 <h3 id="step-2-1">Step 2</h3>
-<p>Focus starts in Source files. It begins at your Documents folder, so
+<p>Focus starts in Source paths. It begins at your Documents folder, so
 a first run already has somewhere sensible to look. Here you name what
 to convert: one file, a whole folder, or a pattern such as star dot P D
 F for every PDF in a folder.</p>
 <h3 id="step-3-tab">Step 3: Tab</h3>
 <p>Tab moves forward through the dialog, one control at a time, in the
-order they are described in this walk. The next control is the button
-Browse source.</p>
+order they are described in this walk. The dialog is in rows called
+bands, and each band reads from left to right. Next to Source paths, on
+the same band, is the button Browse local source.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Browse source… button</li>
+<li>Browse local source button</li>
 </ul>
 <h3 id="step-4">Step 4</h3>
-<p>Browse source opens the standard Browse for Folder dialog, for
-choosing a folder of files. The three dots after its name mean it opens
-another window rather than acting at once.</p>
+<p>Browse local source opens the standard Browse for Folder dialog, for
+choosing a folder of files. It opens where Source paths points, or else
+in your Documents folder.</p>
 <h3 id="step-5-tab">Step 5: Tab</h3>
-<p>Tab again, and you reach Output directory, where the converted files
-go. It follows Source files: it names the folder the sources are in,
-until you choose a different one.</p>
-<p>Screen reader:</p>
-<ul>
-<li>Output directory: edit, Documents</li>
-</ul>
-<h3 id="step-6-tab">Step 6: Tab</h3>
-<p>Left blank, each converted file is written beside its source. Beside
-the field is Choose output, for picking a folder with the same Browse
-for Folder dialog.</p>
-<p>Screen reader:</p>
-<ul>
-<li>Choose output… button</li>
-</ul>
-<h3 id="step-7-altt">Step 7: Alt+T</h3>
-<p>Every control has an Alt key, the first letter of a word in its name,
-so you need not tab through the whole dialog. Alt plus T, Tango, goes
-straight to Target format.</p>
+<p>Tab again reaches BatCon’s own band, with one control: Target
+format.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Target format: list box</li>
 <li>Markdown document (md)</li>
 </ul>
-<h3 id="step-8">Step 8</h3>
-<p>Target format lists every format BatCon can make, in alphabetical
-order by name, each with its extension in parentheses. Up and Down Arrow
-move through it, and a letter jumps to the first name starting with
-it.</p>
-<h3 id="step-9-alti">Step 9: Alt+I</h3>
-<p>After the list come the check boxes. Alt plus I, India, is Include
-subfolders, for looking inside the folders within a source folder
-too.</p>
+<h3 id="step-6">Step 6</h3>
+<p>Target format lists twelve formats, in alphabetical order by name,
+each with its extension in parentheses. Up and Down Arrow move through
+it, and a letter jumps to the first name starting with it.</p>
+<h3 id="step-7-tab">Step 7: Tab</h3>
+<p>Tab again, and you reach Output directory, where the converted files
+go. It follows Source paths: it names the folder the sources are in,
+until you choose a different one.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Include subfolders, check box, not checked</li>
+<li>Output directory: edit, Documents</li>
 </ul>
-<h3 id="step-10-altu">Step 10: Alt+U</h3>
-<p>Space checks a box, and Space again clears it. The others are Force
-replacements, Alt plus F; View output, Alt plus V; Log session, Alt plus
-L; and Use configuration, Alt plus U.</p>
+<h3 id="step-8-tab">Step 8: Tab</h3>
+<p>Left blank, each converted file is written beside its source. Beside
+the field is Choose output directory, for picking a folder with the same
+Browse for Folder dialog.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Choose output directory button</li>
+</ul>
+<h3 id="step-9-altu">Step 9: Alt+U</h3>
+<p>Every control has an Alt key, the first letter of a word in its name,
+so you need not tab through the whole dialog. The next band has three
+check boxes: Force replacements, Alt plus F; Use configuration, Alt plus
+U; and View output directory, Alt plus V.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Use configuration, check box, not checked</li>
 </ul>
-<h3 id="step-11">Step 11</h3>
-<p>Use configuration matters most of these four. Checked when you press
-OK, it keeps every choice you made, so BatCon opens next time just as
-you left it. Unchecked, BatCon starts each time from its defaults.</p>
-<h3 id="step-12-controlenter">Step 12: Control+Enter</h3>
-<p>Below the check boxes is a row of buttons: OK, Guide, Default
-settings and Cancel. Enter presses OK from most controls, and Control
-plus Enter presses it from anywhere.</p>
+<h3 id="step-10">Step 10</h3>
+<p>Space checks a box, and Space again clears it. Use configuration
+matters most of these three. Checked when you press OK, it keeps every
+choice you made, so BatCon opens next time just as you left it.
+Unchecked, BatCon starts each time from its defaults.</p>
+<h3 id="step-11-f1">Step 11: F1</h3>
+<p>The band after that has two buttons. Default settings, Alt plus D,
+puts every control back as it was the first time you opened BatCon.
+Help, Alt plus H or F1, lists every control with what it is for, says
+where the logs are kept, and ends by checking the web for a newer
+BatCon.</p>
+<p>Screen reader:</p>
+<ul>
+<li>Help: BatCon dialog</li>
+</ul>
+<h3 id="step-12">Step 12</h3>
+<p>Logging is automatic. Every run writes a log in your local
+application data, in BatCon’s logs folder, named with the date and time
+it started. There is nothing to switch on.</p>
+<h3 id="step-13-controlenter">Step 13: Control+Enter</h3>
+<p>Last, alone at the bottom right, are OK and Cancel. Control plus
+Enter presses OK from anywhere in the dialog, and Escape presses Cancel
+from anywhere, closing the dialog without converting anything.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Converting 3 files to md</li>
 </ul>
-<h3 id="step-13">Step 13</h3>
-<p>Guide opens the BatCon guide in your web browser. Default settings
-puts every control back as it was the first time you opened BatCon.
-Escape cancels, and closes the dialog without converting anything.</p>
-<h3 id="step-14-f1">Step 14: F1</h3>
-<p>Two more keys help at any moment. F1 opens Help, which lists every
-control with what it is for, and ends by checking the web for a newer
-BatCon. F11 checks for a newer version at once, without the list.</p>
-<p>Screen reader:</p>
-<ul>
-<li>BatCon Help</li>
-</ul>
+<h3 id="step-14">Step 14</h3>
+<p>One more key helps at any moment. F11 checks the web for a newer
+version of BatCon at once, though no control shows it.</p>
 <h3 id="step-15">Step 15</h3>
 <p>What this walk taught: Alt plus Control plus B opens BatCon; Alt with
 a control’s first letter goes to it; Space checks a box; and Enter or
@@ -426,7 +385,7 @@ tool: installed, updated, or already current. Down Arrow reads it a line
 at a time, and Enter closes it.</p>
 <p>The reader says nothing as the box closes; the installer has
 finished.</p>
-<h3 id="step-8-1">Step 8</h3>
+<h3 id="step-8">Step 8</h3>
 <p>To install with no questions at all, start the installer with slash
 default after its name. It then takes every usual answer by itself, as
 if you had pressed Enter on each screen.</p>
@@ -436,7 +395,7 @@ works from anywhere in Windows, whatever program you are in.</p>
 <p>Screen reader:</p>
 <ul>
 <li>BatCon dialog</li>
-<li>Source files: edit, Documents</li>
+<li>Source paths: edit, Documents</li>
 </ul>
 <h3 id="step-10-windows">Step 10: Windows</h3>
 <p>BatCon is also on the Start menu. The Windows key, then the word
@@ -453,12 +412,12 @@ defaults.</p>
 <ul>
 <li>Use configuration, check box, not checked</li>
 </ul>
-<h3 id="step-12">Step 12</h3>
+<h3 id="step-12-1">Step 12</h3>
 <p>Updating later is the same: run the newest setup file, and it
 installs over the old one, keeping your settings. Inside BatCon, F11
 checks for a newer version, says whether there is one, and offers to
 install it.</p>
-<h3 id="step-13-1">Step 13</h3>
+<h3 id="step-13">Step 13</h3>
 <p>If a tool on the finish page could not be installed, the Results box
 says why, and BatCon still works for every conversion that does not need
 it. A conversion that does need it is reported as failed, with the tool
@@ -487,11 +446,11 @@ a few PDF files.</p>
 number sign, and list items with a dash. A screen reader reads it line
 by line, and its headings make a long document easy to move through.</p>
 <h3 id="step-2-alts">Step 2: Alt+S</h3>
-<p>Start in Source files. Alt plus S, Sierra, goes there from anywhere
+<p>Start in Source paths. Alt plus S, Sierra, goes there from anywhere
 in the dialog.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Source files: edit, Documents</li>
+<li>Source paths: edit, Documents</li>
 </ul>
 <h3 id="step-3-1">Step 3</h3>
 <p>Type the folder and a pattern together, here C colon backslash
@@ -503,7 +462,7 @@ means every PDF in Reports.</p>
 now names the Reports folder.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Browse source… button</li>
+<li>Browse local source button</li>
 </ul>
 <h3 id="step-5-alto">Step 5: Alt+O</h3>
 <p>Alt plus O, Oscar, to hear it.</p>
@@ -522,7 +481,7 @@ be chosen; if not, press M to jump to it.</p>
 <p>A tagged PDF, made with care for accessibility, keeps its headings
 and lists. An untagged one is read by its layout: large bold lines
 become headings, and columns are put in reading order.</p>
-<h3 id="step-8-2">Step 8</h3>
+<h3 id="step-8-1">Step 8</h3>
 <p>A scanned PDF holds pictures of pages rather than text. BatCon reads
 those by recognizing the letters, which takes longer, and needs the
 Tesseract tool installed.</p>
@@ -535,7 +494,7 @@ long batch is never silent.</p>
 <li>Converting 3 files to md</li>
 <li>2 of 3: Budget dot p d f</li>
 </ul>
-<h3 id="step-10">Step 10</h3>
+<h3 id="step-10-1">Step 10</h3>
 <p>When it is done, the Results box opens. Its first line is the
 summary.</p>
 <p>Screen reader:</p>
@@ -544,8 +503,8 @@ summary.</p>
 <li>3 files converted, 0 kept as they were, 0 skipped for want of a
 conversion, 0 failed.</li>
 </ul>
-<h3 id="step-11-down-arrow">Step 11: Down Arrow</h3>
-<p>Down Arrow reads each file’s line, saying what it became.</p>
+<h3 id="step-11">Step 11</h3>
+<p>The reader goes on to each file’s line, saying what it became.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Converted Budget dot p d f to Budget dot m d.</li>
@@ -554,14 +513,10 @@ conversion, 0 failed.</li>
 <p>Escape closes the Results box. The Markdown files are now beside the
 PDFs, with the same names and the extension dot m d.</p>
 <p>The reader says nothing as the window closes.</p>
-<h3 id="step-13-alti">Step 13: Alt+I</h3>
-<p>Check Include subfolders, Alt plus I, India, to take in the PDFs in
-every folder below Reports as well. Each result goes beside its own
-source, or into the output folder.</p>
-<p>Screen reader:</p>
-<ul>
-<li>Include subfolders, check box, checked</li>
-</ul>
+<h3 id="step-13-1">Step 13</h3>
+<p>A folder means the files in it, not the folders inside it. To take in
+PDFs from another folder as well, add it to Source paths, with a space
+between the two.</p>
 <h3 id="step-14-altt">Step 14: Alt+T</h3>
 <p>A web page is the other good target for reading. Pick Web page in
 Target format, Alt plus T and the letter W, and each PDF becomes a page
@@ -572,10 +527,9 @@ with the same headings, which a browser’s heading keys move through.</p>
 </ul>
 <h3 id="step-15-2">Step 15</h3>
 <p>Word document is a third choice, when someone wants to edit the text:
-after Web page, the letter W twice more passes Word 97 document and
-reaches it.</p>
+after Web page, the letter W once more reaches it.</p>
 <h3 id="step-16">Step 16</h3>
-<p>What this walk taught: a pattern in Source files, Markdown document
+<p>What this walk taught: a pattern in Source paths, Markdown document
 in Target format, and Enter; and that scanned pages are read by
 recognizing the letters.</p>
 <p><strong>Something to try:</strong> Convert a folder of your own
@@ -590,15 +544,15 @@ at hand.</p>
 values on each line. Excel opens one, but a true workbook keeps each
 value in its own cell and holds up better when shared.</p>
 <h3 id="step-2-alts-1">Step 2: Alt+S</h3>
-<p>Source files starts at your Documents folder. Alt plus S, Sierra, and
+<p>Source paths starts at your Documents folder. Alt plus S, Sierra, and
 type the one file you want, here C colon backslash Data backslash
 Members dot c s v.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Source files: edit, Documents</li>
+<li>Source paths: edit, Documents</li>
 </ul>
 <h3 id="step-3-2">Step 3</h3>
-<p>A single file is fine; Source files takes one file as readily as a
+<p>A single file is fine; Source paths takes one file as readily as a
 folder.</p>
 <p>C:.csv</p>
 <h3 id="step-4-alto">Step 4: Alt+O</h3>
@@ -616,7 +570,7 @@ workbook.</p>
 <ul>
 <li>Excel workbook (xlsx)</li>
 </ul>
-<h3 id="step-6">Step 6</h3>
+<h3 id="step-6-1">Step 6</h3>
 <p>Every value goes into the workbook as text. A member number written
 007 stays 007 rather than losing its zeros, and a value that begins with
 an equals sign stays words rather than becoming a formula.</p>
@@ -633,8 +587,8 @@ you hear.</p>
 <li>1 file converted, 0 kept as they were, 0 skipped for want of a
 conversion, 0 failed.</li>
 </ul>
-<h3 id="step-9-down-arrow">Step 9: Down Arrow</h3>
-<p>Down Arrow reads the line for the file.</p>
+<h3 id="step-9">Step 9</h3>
+<p>Then comes the line for the file.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Converted Members dot c s v to Members dot x l s x.</li>
@@ -649,18 +603,18 @@ Comma separated table as the target, gives a CSV file of its first
 sheet, to read in any text editor.</p>
 <h3 id="step-12-alts">Step 12: Alt+S</h3>
 <p>A whole folder of tables converts the same way: put the folder in
-Source files, and each table becomes a workbook of its own. Files of
+Source paths, and each table becomes a workbook of its own. Files of
 other kinds in the folder are skipped, and the Results box says so.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Source files: edit, C colon backslash Data backslash Members dot c s
+<li>Source paths: edit, C colon backslash Data backslash Members dot c s
 v</li>
 </ul>
 <h3 id="step-13-2">Step 13</h3>
 <p>A Markdown document with a table in it converts too: the table
 becomes the workbook’s sheet. That is handy for a table typed by hand in
 a text editor.</p>
-<h3 id="step-14">Step 14</h3>
+<h3 id="step-14-1">Step 14</h3>
 <p>The Results box counts what was converted, kept and skipped; walk 8
 reads one in full.</p>
 <h3 id="step-15-3">Step 15</h3>
@@ -699,7 +653,7 @@ until you choose another.</p>
 </ul>
 <h3 id="step-3-altc">Step 3: Alt+C</h3>
 <p>To choose a folder by browsing, press Alt plus C, Charlie, for Choose
-output. The standard Browse for Folder dialog opens.</p>
+output directory. The standard Browse for Folder dialog opens.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Choose the output directory</li>
@@ -730,35 +684,27 @@ on. No returns you to the dialog with nothing changed.</p>
 </ul>
 <h3 id="step-7-3">Step 7</h3>
 <p>Once you choose an output folder, it stays put even if you change
-Source files; only a folder that still mirrors the source moves with
+Source paths; only a folder that still mirrors the source moves with
 it.</p>
-<h3 id="step-8-3">Step 8</h3>
+<h3 id="step-8-2">Step 8</h3>
 <p>Two sources with the same name never overwrite each other’s result.
 The second becomes its name followed by underscore 2, the third
 underscore 3, and so on.</p>
 <h3 id="step-9-altv">Step 9: Alt+V</h3>
-<p>To open the output folder when a batch ends, check View output: Alt
-plus V, Victor.</p>
+<p>To open the output folder when a batch ends, check View output
+directory: Alt plus V, Victor.</p>
 <p>Screen reader:</p>
 <ul>
-<li>View output, check box, checked</li>
+<li>View output directory, check box, checked</li>
 </ul>
-<h3 id="step-10-1">Step 10</h3>
-<p>With View output checked, File Explorer opens on the output folder
-after the Results box, with the new files there.</p>
+<h3 id="step-10-2">Step 10</h3>
+<p>With View output directory checked, File Explorer opens on the output
+folder after the Results box, with the new files there.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Markdown</li>
 </ul>
-<h3 id="step-11-altl">Step 11: Alt+L</h3>
-<p>Log session, Alt plus L, also puts the run’s full log in the output
-folder, as BatCon dot log, handy when you want to see later exactly what
-happened.</p>
-<p>Screen reader:</p>
-<ul>
-<li>Log session, check box, checked</li>
-</ul>
-<h3 id="step-12-altu">Step 12: Alt+U</h3>
+<h3 id="step-11-altu-1">Step 11: Alt+U</h3>
 <p>Use configuration, Alt plus U, keeps the output folder and the check
 boxes for next time, so a folder you send every batch to need only be
 chosen once.</p>
@@ -766,37 +712,37 @@ chosen once.</p>
 <ul>
 <li>Use configuration, check box, checked</li>
 </ul>
-<h3 id="step-13-3">Step 13</h3>
-<p>Default settings puts it all back: Source files at Documents, Output
+<h3 id="step-12-2">Step 12</h3>
+<p>Default settings puts it all back: Source paths at Documents, Output
 directory following it, and every box as it was the first time. It is
-one of the buttons below the check boxes.</p>
-<h3 id="step-14-alto">Step 14: Alt+O</h3>
+the button after the check boxes, Alt plus D.</p>
+<h3 id="step-13-alto">Step 13: Alt+O</h3>
 <p>Blank is also a choice. Clear Output directory, and each result goes
 beside its own source, even when the sources are in many folders.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Output directory: edit, blank</li>
 </ul>
-<h3 id="step-15-altc">Step 15: Alt+C</h3>
-<p>Choose output opens where Output directory already points, so a
-folder near the one you want is only a few arrow keys away.</p>
+<h3 id="step-14-altc">Step 14: Alt+C</h3>
+<p>Choose output directory opens where Output directory already points,
+so a folder near the one you want is only a few arrow keys away.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Choose the output directory</li>
 </ul>
-<h3 id="step-16-escape">Step 16: Escape</h3>
+<h3 id="step-15-escape">Step 15: Escape</h3>
 <p>Escape closes the Browse for Folder dialog without changing anything,
 and returns you to Output directory.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Output directory: edit, C colon backslash Reports</li>
 </ul>
-<h3 id="step-17-1">Step 17</h3>
+<h3 id="step-16-2">Step 16</h3>
 <p>What this walk taught: Alt plus O and Alt plus C for the output, that
 BatCon makes a missing folder when you say yes, and Alt plus V and Alt
 plus L for after the batch.</p>
 <p><strong>Something to try:</strong> Send a batch to a new folder and
-let View output open it.</p>
+let View output directory open it.</p>
 <h2 id="convert-again">6 - Convert Again</h2>
 <p>Running a batch a second time: what is kept, and how to replace it
 safely.</p>
@@ -820,8 +766,8 @@ so.</p>
 <li>0 files converted, 3 kept as they were, 0 skipped for want of a
 conversion, 0 failed.</li>
 </ul>
-<h3 id="step-4-down-arrow">Step 4: Down Arrow</h3>
-<p>Down Arrow reads why each was kept.</p>
+<h3 id="step-4-1">Step 4</h3>
+<p>Then the box says why each was kept.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Skipped Budget dot m d: it is already there.</li>
@@ -845,12 +791,12 @@ replacements: Alt plus F, Foxtrot.</p>
 <li>3 files converted, 0 kept as they were, 0 skipped for want of a
 conversion, 0 failed.</li>
 </ul>
-<h3 id="step-8-4">Step 8</h3>
+<h3 id="step-8-3">Step 8</h3>
 <p>Even with Force replacements, an earlier result is replaced only once
 its new conversion has worked. Each conversion is written to a temporary
 file first, and put in place only when it succeeds, so a failure never
 loses what you had.</p>
-<h3 id="step-9">Step 9</h3>
+<h3 id="step-9-1">Step 9</h3>
 <p>A source is never overwritten either. If a conversion’s name would
 match a source’s, BatCon gives the result a new name instead.</p>
 <h3 id="step-10-altf">Step 10: Alt+F</h3>
@@ -869,18 +815,18 @@ can compare the two.</p>
 <ul>
 <li>Output directory: edit, C colon backslash Reports</li>
 </ul>
-<h3 id="step-12-1">Step 12</h3>
+<h3 id="step-12-3">Step 12</h3>
 <p>Force replacements is also a switch on the command line, slash force,
 for a script that rebuilds every result each night. Walk 7 shows the
 command line.</p>
-<h3 id="step-13-4">Step 13</h3>
+<h3 id="step-13-3">Step 13</h3>
 <p>Whatever you choose, the Results box says what happened to each file,
 so a run that kept everything never looks like one that did nothing.</p>
 <p>Screen reader:</p>
 <ul>
 <li>BatCon results</li>
 </ul>
-<h3 id="step-14-1">Step 14</h3>
+<h3 id="step-14-2">Step 14</h3>
 <p>Kept results are not a failure, and the exit number for a script
 stays zero when everything was either converted or kept, since nothing
 went wrong.</p>
@@ -891,7 +837,7 @@ conversion, 0 failed.</li>
 </ul>
 <h3 id="step-15-4">Step 15</h3>
 <p>If you want only the files that changed converted, put the changed
-ones alone in Source files, or convert into a new output folder and
+ones alone in Source paths, or convert into a new output folder and
 compare; BatCon does not judge which source is newer than its
 result.</p>
 <h3 id="step-16-altf">Step 16: Alt+F</h3>
@@ -901,7 +847,7 @@ else, so it is always safe to start over from there.</p>
 <ul>
 <li>Force replacements, check box, not checked</li>
 </ul>
-<h3 id="step-17-2">Step 17</h3>
+<h3 id="step-17-1">Step 17</h3>
 <p>What this walk taught: results already there are kept by default, Alt
 plus F replaces them, and a replacement happens only once its new
 conversion has worked.</p>
@@ -953,10 +899,10 @@ nothing.</p>
 <li>BatCon – convert many files at once between formats.</li>
 </ul>
 <p>BatCon /help</p>
-<h3 id="step-8-5">Step 8</h3>
+<h3 id="step-8-4">Step 8</h3>
 <p>A switch may be typed with a slash, a dash or two dashes, in any
 case. Slash to, dash to and dash dash to all mean the same thing.</p>
-<h3 id="step-9-1">Step 9</h3>
+<h3 id="step-9-2">Step 9</h3>
 <p>BatCon also ends with a number a script can test. Zero means it all
 went well, one means there was nothing to do or a switch was unknown,
 and three means some files failed.</p>
@@ -972,7 +918,7 @@ first time, for the next time you open it.</p>
 <p>Several sources can follow BatCon at once: a file, a folder and a
 pattern, separated by spaces. Slash source before any one of them means
 the same as giving it alone.</p>
-<h3 id="step-12-2">Step 12</h3>
+<h3 id="step-12-4">Step 12</h3>
 <p>A batch run from a script writes its log just as the dialog does, in
 your own BatCon logs folder, one file for each run, named for its date
 and time.</p>
@@ -997,7 +943,7 @@ command prompt is in: under Program Files, then BatCon, then exec.</p>
 <p>A command line never opens the dialog, and the dialog’s saved
 settings never change what a command does: each command says everything
 it needs.</p>
-<h3 id="step-16-2">Step 16</h3>
+<h3 id="step-16-3">Step 16</h3>
 <p>What this walk taught: slash to and slash output to convert, slash
 list to see every format, slash help for every switch, and the exit
 number for scripts.</p>
@@ -1009,10 +955,12 @@ line, then list the formats.</p>
 with a mix of files.</p>
 <h3 id="step-1-7">Step 1</h3>
 <p>Every batch ends with the Results box, which tells you exactly what
-happened. It opens by itself when the batch is done.</p>
+happened. It opens by itself when the batch is done, and your screen
+reader reads it all. Insert plus B reads it again, if you want to hear
+it once more.</p>
 <p>Screen reader:</p>
 <ul>
-<li>BatCon results</li>
+<li>BatCon Results</li>
 </ul>
 <h3 id="step-2-3">Step 2</h3>
 <p>The first line is the summary, four counts in one sentence:
@@ -1023,27 +971,27 @@ failed.</p>
 <li>5 files converted, 1 kept as they were, 2 skipped for want of a
 conversion, 1 failed.</li>
 </ul>
-<h3 id="step-3-down-arrow">Step 3: Down Arrow</h3>
+<h3 id="step-3-5">Step 3</h3>
 <p>Skipped for want of a conversion means some source could not become
 the format you chose. BatCon says so once for each type of file, with
-the reason. Down Arrow reads it.</p>
+the reason.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Skipping 2 files of type wav: the Homer kit has no conversion from
 wav to xlsx.</li>
 </ul>
-<h3 id="step-4-1">Step 4</h3>
+<h3 id="step-4-2">Step 4</h3>
 <p>That is not an error. A folder often holds files of several kinds,
 and BatCon converts the ones it can and tells you plainly about the
 rest.</p>
-<h3 id="step-5-down-arrow">Step 5: Down Arrow</h3>
+<h3 id="step-5-2">Step 5</h3>
 <p>Next come the files themselves, one line each, in order. A converted
 file says what it became.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Converted Budget dot p d f to Budget dot m d.</li>
 </ul>
-<h3 id="step-6-down-arrow">Step 6: Down Arrow</h3>
+<h3 id="step-6-2">Step 6</h3>
 <p>A failed file says why. Here, a PDF of pictures with no text in it,
 read when no letter recognition was available.</p>
 <p>Screen reader:</p>
@@ -1054,56 +1002,49 @@ read when no letter recognition was available.</p>
 <p>A failure never touches anything else. The other files still
 converted, and any earlier result of the failed one is still as it
 was.</p>
-<h3 id="step-8-controlend">Step 8: Control+End</h3>
-<p>The last line names the session log, with every detail of the run.
-Control plus End goes straight to it.</p>
+<h3 id="step-8-5">Step 8</h3>
+<p>The last line names the session log, with every detail of the
+run.</p>
 <p>Screen reader:</p>
 <ul>
 <li>The log: C colon backslash Users backslash you backslash AppData
 backslash Local backslash BatCon backslash logs backslash BatCon dash
 20261020 dot log</li>
 </ul>
-<h3 id="step-9-2">Step 9</h3>
+<h3 id="step-9-3">Step 9</h3>
 <p>Every run writes a new log, named for its date and time, so one batch
 never overwrites another’s record.</p>
 <h3 id="step-10-escape-1">Step 10: Escape</h3>
-<p>Escape closes the Results box.</p>
+<p>The box has one button, OK, and it has the focus, so Enter, Space or
+Escape closes it. BatCon then closes too, its work done.</p>
 <p>The reader says nothing as the window closes.</p>
-<h3 id="step-11-controlhome">Step 11: Control+Home</h3>
-<p>The Results box is a plain text window: Up and Down Arrow read it a
-line at a time, Control plus Home returns to the summary, and Control
-plus End goes to the log.</p>
-<p>Screen reader:</p>
-<ul>
-<li>5 files converted, 1 kept as they were, 2 skipped for want of a
-conversion, 1 failed.</li>
-</ul>
-<h3 id="step-12-3">Step 12</h3>
+<h3 id="step-11-3">Step 11</h3>
+<p>A big batch makes a long report. The box then shows its first 15
+lines and names a text file holding the rest, in BatCon’s logs folder,
+which any editor reads a line at a time.</p>
+<h3 id="step-12-5">Step 12</h3>
 <p>A kept file is one whose result was already there; walk 6 shows how
 to replace it with Force replacements.</p>
-<h3 id="step-13-controlend">Step 13: Control+End</h3>
+<h3 id="step-13-4">Step 13</h3>
 <p>If a batch surprises you, the log is the first place to look. It
 lists every file, every way BatCon tried, and how long each took, so
-even a failure has a clear story.</p>
+even a failure has a clear story. The last line of the Results box names
+it.</p>
 <p>Screen reader:</p>
 <ul>
 <li>The log: C colon backslash Users backslash you backslash AppData
 backslash Local backslash BatCon backslash logs backslash BatCon dash
 20261020 dot log</li>
 </ul>
-<h3 id="step-14-altl">Step 14: Alt+L</h3>
-<p>To keep the log with the converted files, check Log session before
-the batch, Alt plus L, Lima. BatCon dot log then lands in the output
-folder beside them.</p>
-<p>Screen reader:</p>
-<ul>
-<li>Log session, check box, checked</li>
-</ul>
+<h3 id="step-14-3">Step 14</h3>
+<p>Logging is automatic, so there is nothing to switch on: every run’s
+log is kept in BatCon’s logs folder, under your local application data,
+and Help names that folder too.</p>
 <h3 id="step-15-6">Step 15</h3>
 <p>A skipped type can often be reached another way. A sound file cannot
 become a workbook, but it can become a transcript as a Markdown document
 or a Word document, which may be what you wanted all along.</p>
-<h3 id="step-16-3">Step 16</h3>
+<h3 id="step-16-4">Step 16</h3>
 <p>What this walk taught: the summary first, a reason for each skipped
 type and each failure, and the log named at the end.</p>
 <p><strong>Something to try:</strong> After a batch, read its results
@@ -1118,7 +1059,7 @@ BatCon.</p>
 <p>Screen reader:</p>
 <ul>
 <li>BatCon dialog</li>
-<li>Source files: edit</li>
+<li>Source paths: edit</li>
 </ul>
 <h3 id="step-2-altt">Step 2: Alt+T</h3>
 <p>Two: every format BatCon can make is listed, and a source that cannot
@@ -1128,7 +1069,7 @@ become it is skipped, with the reason.</p>
 <li>Target format: list box</li>
 <li>Markdown document (md)</li>
 </ul>
-<h3 id="step-3-5">Step 3</h3>
+<h3 id="step-3-6">Step 3</h3>
 <p>Three: your files are safe. A result appears only when its conversion
 works, and a source is never overwritten.</p>
 <p>Screen reader:</p>
@@ -1136,18 +1077,19 @@ works, and a source is never overwritten.</p>
 <li>0 files converted, 3 kept as they were, 0 skipped for want of a
 conversion, 0 failed.</li>
 </ul>
-<h3 id="step-4-controlend">Step 4: Control+End</h3>
-<p>Four: every run writes a log, named at the end of the results.</p>
+<h3 id="step-4-3">Step 4</h3>
+<p>Four: every run writes a log, with nothing to switch on, named at the
+end of the results.</p>
 <p>Screen reader:</p>
 <ul>
 <li>The log: C colon backslash Users backslash you backslash AppData
 backslash Local backslash BatCon backslash logs backslash BatCon dash
 20261020 dot log</li>
 </ul>
-<h3 id="step-5-2">Step 5</h3>
+<h3 id="step-5-3">Step 5</h3>
 <p>The guide and the hotkeys are in the help folder and on the project
 page. BatCon is one of the Homer Tools.</p>
-<h3 id="step-6-1">Step 6</h3>
+<h3 id="step-6-3">Step 6</h3>
 <p>What this walk taught: the four things, and where help lives.</p>
 <p><strong>Something to try:</strong> Begin with a folder you convert
 often.</p>

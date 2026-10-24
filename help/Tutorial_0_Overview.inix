@@ -26,7 +26,7 @@ Say=Two voices take these walks. I am the host; the other voice plays the screen
 [step]
 Say=Three screen reader keys help whenever you are unsure, and Caps Lock serves in place of Insert where your reader is set up that way. Insert plus Tab says what has the focus.
 Key=Insert+Tab
-Hear=Source files: edit
+Hear=Source paths: edit
 
 [step]
 Say=Insert plus T says the title of the window.

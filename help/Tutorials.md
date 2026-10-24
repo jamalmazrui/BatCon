@@ -1,38 +1,9 @@
-﻿# BatCon walkthroughs
+﻿# BatCon Tutorials
 
-These are written walkthroughs for this development build. Spoken tutorials and recorded screen-reader responses are not included.
+## Contents
 
-## Convert a document
 
-1. Run BatCon.cmd.
-2. In Source, type the full path of a PDF, or press Browse source and choose it.
-3. Tab to Target format. Use the arrow keys to choose md.
-4. In Output, type a directory for the result, or use Choose output.
-5. Press Control+Enter. The conversion window shows progress.
-6. Read Results. The converted Markdown file is in the Output directory. The log gives the conversion route.
-
-## Convert a table
-
-1. Run BatCon.cmd.
-2. In Source, enter an INIX file containing record sections.
-3. In Target format, choose xlsx.
-4. Choose an Output directory and press OK.
-5. Open the workbook. The Data sheet has one column for each field. Leading zeros remain text, and values beginning with an equals sign remain literal values.
-
-## Convert a folder
-
-1. Use Add folder to append a directory.
-2. Check Include subfolders if needed.
-3. Press Refresh files. The status gives the source count and number of common target formats.
-4. Choose a Target format and Output directory, then press OK.
-5. Use Stop after current file if you need to end the batch. Read the unprocessed count in Results.
-
-## Repeat safely
-
-1. Run a completed batch again with Force replacements unchecked.
-2. Results report existing outputs as skipped.
-3. Check Force replacements only when you intend to replace those outputs.
-4. Run again. A failed conversion preserves the existing output.
+These are the spoken walks as text: a host does the work, and the screen reader answers.
 
 <!-- walkthrough: written by makeTutorials.py, do not edit between the markers -->
 
@@ -60,7 +31,7 @@ Three screen reader keys help whenever you are unsure, and Caps Lock serves in p
 
 Screen reader:
 
-- Source files: edit
+- Source paths: edit
 
 ### Step 5: Insert+T
 
@@ -97,92 +68,88 @@ BatCon has one dialog, and everything it does starts there. Alt plus Control plu
 Screen reader:
 
 - BatCon dialog
-- Source files: edit, Documents
+- Source paths: edit, Documents
 
 ### Step 2
 
-Focus starts in Source files. It begins at your Documents folder, so a first run already has somewhere sensible to look. Here you name what to convert: one file, a whole folder, or a pattern such as star dot P D F for every PDF in a folder.
+Focus starts in Source paths. It begins at your Documents folder, so a first run already has somewhere sensible to look. Here you name what to convert: one file, a whole folder, or a pattern such as star dot P D F for every PDF in a folder.
 
 ### Step 3: Tab
 
-Tab moves forward through the dialog, one control at a time, in the order they are described in this walk. The next control is the button Browse source.
+Tab moves forward through the dialog, one control at a time, in the order they are described in this walk. The dialog is in rows called bands, and each band reads from left to right. Next to Source paths, on the same band, is the button Browse local source.
 
 Screen reader:
 
-- Browse source... button
+- Browse local source button
 
 ### Step 4
 
-Browse source opens the standard Browse for Folder dialog, for choosing a folder of files. The three dots after its name mean it opens another window rather than acting at once.
+Browse local source opens the standard Browse for Folder dialog, for choosing a folder of files. It opens where Source paths points, or else in your Documents folder.
 
 ### Step 5: Tab
 
-Tab again, and you reach Output directory, where the converted files go. It follows Source files: it names the folder the sources are in, until you choose a different one.
-
-Screen reader:
-
-- Output directory: edit, Documents
-
-### Step 6: Tab
-
-Left blank, each converted file is written beside its source. Beside the field is Choose output, for picking a folder with the same Browse for Folder dialog.
-
-Screen reader:
-
-- Choose output... button
-
-### Step 7: Alt+T
-
-Every control has an Alt key, the first letter of a word in its name, so you need not tab through the whole dialog. Alt plus T, Tango, goes straight to Target format.
+Tab again reaches BatCon's own band, with one control: Target format.
 
 Screen reader:
 
 - Target format: list box
 - Markdown document (md)
 
-### Step 8
+### Step 6
 
-Target format lists every format BatCon can make, in alphabetical order by name, each with its extension in parentheses. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
+Target format lists twelve formats, in alphabetical order by name, each with its extension in parentheses. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
 
-### Step 9: Alt+I
+### Step 7: Tab
 
-After the list come the check boxes. Alt plus I, India, is Include subfolders, for looking inside the folders within a source folder too.
+Tab again, and you reach Output directory, where the converted files go. It follows Source paths: it names the folder the sources are in, until you choose a different one.
 
 Screen reader:
 
-- Include subfolders, check box, not checked
+- Output directory: edit, Documents
 
-### Step 10: Alt+U
+### Step 8: Tab
 
-Space checks a box, and Space again clears it. The others are Force replacements, Alt plus F; View output, Alt plus V; Log session, Alt plus L; and Use configuration, Alt plus U.
+Left blank, each converted file is written beside its source. Beside the field is Choose output directory, for picking a folder with the same Browse for Folder dialog.
+
+Screen reader:
+
+- Choose output directory button
+
+### Step 9: Alt+U
+
+Every control has an Alt key, the first letter of a word in its name, so you need not tab through the whole dialog. The next band has three check boxes: Force replacements, Alt plus F; Use configuration, Alt plus U; and View output directory, Alt plus V.
 
 Screen reader:
 
 - Use configuration, check box, not checked
 
-### Step 11
+### Step 10
 
-Use configuration matters most of these four. Checked when you press OK, it keeps every choice you made, so BatCon opens next time just as you left it. Unchecked, BatCon starts each time from its defaults.
+Space checks a box, and Space again clears it. Use configuration matters most of these three. Checked when you press OK, it keeps every choice you made, so BatCon opens next time just as you left it. Unchecked, BatCon starts each time from its defaults.
 
-### Step 12: Control+Enter
+### Step 11: F1
 
-Below the check boxes is a row of buttons: OK, Guide, Default settings and Cancel. Enter presses OK from most controls, and Control plus Enter presses it from anywhere.
+The band after that has two buttons. Default settings, Alt plus D, puts every control back as it was the first time you opened BatCon. Help, Alt plus H or F1, lists every control with what it is for, says where the logs are kept, and ends by checking the web for a newer BatCon.
+
+Screen reader:
+
+- Help: BatCon dialog
+
+### Step 12
+
+Logging is automatic. Every run writes a log in your local application data, in BatCon's logs folder, named with the date and time it started. There is nothing to switch on.
+
+### Step 13: Control+Enter
+
+Last, alone at the bottom right, are OK and Cancel. Control plus Enter presses OK from anywhere in the dialog, and Escape presses Cancel from anywhere, closing the dialog without converting anything.
 
 Screen reader:
 
 - Converting 3 files to md
 
-### Step 13
+### Step 14
 
-Guide opens the BatCon guide in your web browser. Default settings puts every control back as it was the first time you opened BatCon. Escape cancels, and closes the dialog without converting anything.
-
-### Step 14: F1
-
-Two more keys help at any moment. F1 opens Help, which lists every control with what it is for, and ends by checking the web for a newer BatCon. F11 checks for a newer version at once, without the list.
-
-Screen reader:
-
-- BatCon Help
+One more key helps at any moment. F11 checks the web for a newer version of BatCon at once, though no control shows it.
 
 ### Step 15
 
@@ -253,7 +220,7 @@ Now open BatCon with its desktop key, Alt plus Control plus B. It works from any
 Screen reader:
 
 - BatCon dialog
-- Source files: edit, Documents
+- Source paths: edit, Documents
 
 ### Step 10: Windows
 
@@ -305,11 +272,11 @@ Markdown is plain text with a little structure: headings start with a number sig
 
 ### Step 2: Alt+S
 
-Start in Source files. Alt plus S, Sierra, goes there from anywhere in the dialog.
+Start in Source paths. Alt plus S, Sierra, goes there from anywhere in the dialog.
 
 Screen reader:
 
-- Source files: edit, Documents
+- Source paths: edit, Documents
 
 ### Step 3
 
@@ -323,7 +290,7 @@ Tab away from the field. Output directory follows what you typed, and now names 
 
 Screen reader:
 
-- Browse source... button
+- Browse local source button
 
 ### Step 5: Alt+O
 
@@ -367,9 +334,9 @@ Screen reader:
 - BatCon results
 - 3 files converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
-### Step 11: Down Arrow
+### Step 11
 
-Down Arrow reads each file's line, saying what it became.
+The reader goes on to each file's line, saying what it became.
 
 Screen reader:
 
@@ -381,13 +348,9 @@ Escape closes the Results box. The Markdown files are now beside the PDFs, with 
 
 The reader says nothing as the window closes.
 
-### Step 13: Alt+I
+### Step 13
 
-Check Include subfolders, Alt plus I, India, to take in the PDFs in every folder below Reports as well. Each result goes beside its own source, or into the output folder.
-
-Screen reader:
-
-- Include subfolders, check box, checked
+A folder means the files in it, not the folders inside it. To take in PDFs from another folder as well, add it to Source paths, with a space between the two.
 
 ### Step 14: Alt+T
 
@@ -399,11 +362,11 @@ Screen reader:
 
 ### Step 15
 
-Word document is a third choice, when someone wants to edit the text: after Web page, the letter W twice more passes Word 97 document and reaches it.
+Word document is a third choice, when someone wants to edit the text: after Web page, the letter W once more reaches it.
 
 ### Step 16
 
-What this walk taught: a pattern in Source files, Markdown document in Target format, and Enter; and that scanned pages are read by recognizing the letters.
+What this walk taught: a pattern in Source paths, Markdown document in Target format, and Enter; and that scanned pages are read by recognizing the letters.
 
 **Something to try:** Convert a folder of your own PDFs.
 
@@ -419,15 +382,15 @@ A CSV file is a table written as plain text, with commas between the values on e
 
 ### Step 2: Alt+S
 
-Source files starts at your Documents folder. Alt plus S, Sierra, and type the one file you want, here C colon backslash Data backslash Members dot c s v.
+Source paths starts at your Documents folder. Alt plus S, Sierra, and type the one file you want, here C colon backslash Data backslash Members dot c s v.
 
 Screen reader:
 
-- Source files: edit, Documents
+- Source paths: edit, Documents
 
 ### Step 3
 
-A single file is fine; Source files takes one file as readily as a folder.
+A single file is fine; Source paths takes one file as readily as a folder.
 
 C:\Data\Members.csv
 
@@ -464,9 +427,9 @@ Screen reader:
 - BatCon results
 - 1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
-### Step 9: Down Arrow
+### Step 9
 
-Down Arrow reads the line for the file.
+Then comes the line for the file.
 
 Screen reader:
 
@@ -484,11 +447,11 @@ The same works the other way. An Excel workbook as the source, with Comma separa
 
 ### Step 12: Alt+S
 
-A whole folder of tables converts the same way: put the folder in Source files, and each table becomes a workbook of its own. Files of other kinds in the folder are skipped, and the Results box says so.
+A whole folder of tables converts the same way: put the folder in Source paths, and each table becomes a workbook of its own. Files of other kinds in the folder are skipped, and the Results box says so.
 
 Screen reader:
 
-- Source files: edit, C colon backslash Data backslash Members dot c s v
+- Source paths: edit, C colon backslash Data backslash Members dot c s v
 
 ### Step 13
 
@@ -536,7 +499,7 @@ Screen reader:
 
 ### Step 3: Alt+C
 
-To choose a folder by browsing, press Alt plus C, Charlie, for Choose output. The standard Browse for Folder dialog opens.
+To choose a folder by browsing, press Alt plus C, Charlie, for Choose output directory. The standard Browse for Folder dialog opens.
 
 Screen reader:
 
@@ -569,7 +532,7 @@ Screen reader:
 
 ### Step 7
 
-Once you choose an output folder, it stays put even if you change Source files; only a folder that still mirrors the source moves with it.
+Once you choose an output folder, it stays put even if you change Source paths; only a folder that still mirrors the source moves with it.
 
 ### Step 8
 
@@ -577,29 +540,21 @@ Two sources with the same name never overwrite each other's result. The second b
 
 ### Step 9: Alt+V
 
-To open the output folder when a batch ends, check View output: Alt plus V, Victor.
+To open the output folder when a batch ends, check View output directory: Alt plus V, Victor.
 
 Screen reader:
 
-- View output, check box, checked
+- View output directory, check box, checked
 
 ### Step 10
 
-With View output checked, File Explorer opens on the output folder after the Results box, with the new files there.
+With View output directory checked, File Explorer opens on the output folder after the Results box, with the new files there.
 
 Screen reader:
 
 - Markdown
 
-### Step 11: Alt+L
-
-Log session, Alt plus L, also puts the run's full log in the output folder, as BatCon dot log, handy when you want to see later exactly what happened.
-
-Screen reader:
-
-- Log session, check box, checked
-
-### Step 12: Alt+U
+### Step 11: Alt+U
 
 Use configuration, Alt plus U, keeps the output folder and the check boxes for next time, so a folder you send every batch to need only be chosen once.
 
@@ -607,11 +562,11 @@ Screen reader:
 
 - Use configuration, check box, checked
 
-### Step 13
+### Step 12
 
-Default settings puts it all back: Source files at Documents, Output directory following it, and every box as it was the first time. It is one of the buttons below the check boxes.
+Default settings puts it all back: Source paths at Documents, Output directory following it, and every box as it was the first time. It is the button after the check boxes, Alt plus D.
 
-### Step 14: Alt+O
+### Step 13: Alt+O
 
 Blank is also a choice. Clear Output directory, and each result goes beside its own source, even when the sources are in many folders.
 
@@ -619,15 +574,15 @@ Screen reader:
 
 - Output directory: edit, blank
 
-### Step 15: Alt+C
+### Step 14: Alt+C
 
-Choose output opens where Output directory already points, so a folder near the one you want is only a few arrow keys away.
+Choose output directory opens where Output directory already points, so a folder near the one you want is only a few arrow keys away.
 
 Screen reader:
 
 - Choose the output directory
 
-### Step 16: Escape
+### Step 15: Escape
 
 Escape closes the Browse for Folder dialog without changing anything, and returns you to Output directory.
 
@@ -635,11 +590,11 @@ Screen reader:
 
 - Output directory: edit, C colon backslash Reports
 
-### Step 17
+### Step 16
 
 What this walk taught: Alt plus O and Alt plus C for the output, that BatCon makes a missing folder when you say yes, and Alt plus V and Alt plus L for after the batch.
 
-**Something to try:** Send a batch to a new folder and let View output open it.
+**Something to try:** Send a batch to a new folder and let View output directory open it.
 
 ## 6 - Convert Again
 
@@ -667,9 +622,9 @@ Screen reader:
 
 - 0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
-### Step 4: Down Arrow
+### Step 4
 
-Down Arrow reads why each was kept.
+Then the box says why each was kept.
 
 Screen reader:
 
@@ -744,7 +699,7 @@ Screen reader:
 
 ### Step 15
 
-If you want only the files that changed converted, put the changed ones alone in Source files, or convert into a new output folder and compare; BatCon does not judge which source is newer than its result.
+If you want only the files that changed converted, put the changed ones alone in Source paths, or convert into a new output folder and compare; BatCon does not judge which source is newer than its result.
 
 ### Step 16: Alt+F
 
@@ -877,11 +832,11 @@ The Results box, a skipped file and a failed one, and the log.
 
 ### Step 1
 
-Every batch ends with the Results box, which tells you exactly what happened. It opens by itself when the batch is done.
+Every batch ends with the Results box, which tells you exactly what happened. It opens by itself when the batch is done, and your screen reader reads it all. Insert plus B reads it again, if you want to hear it once more.
 
 Screen reader:
 
-- BatCon results
+- BatCon Results
 
 ### Step 2
 
@@ -891,9 +846,9 @@ Screen reader:
 
 - 5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
 
-### Step 3: Down Arrow
+### Step 3
 
-Skipped for want of a conversion means some source could not become the format you chose. BatCon says so once for each type of file, with the reason. Down Arrow reads it.
+Skipped for want of a conversion means some source could not become the format you chose. BatCon says so once for each type of file, with the reason.
 
 Screen reader:
 
@@ -903,7 +858,7 @@ Screen reader:
 
 That is not an error. A folder often holds files of several kinds, and BatCon converts the ones it can and tells you plainly about the rest.
 
-### Step 5: Down Arrow
+### Step 5
 
 Next come the files themselves, one line each, in order. A converted file says what it became.
 
@@ -911,7 +866,7 @@ Screen reader:
 
 - Converted Budget dot p d f to Budget dot m d.
 
-### Step 6: Down Arrow
+### Step 6
 
 A failed file says why. Here, a PDF of pictures with no text in it, read when no letter recognition was available.
 
@@ -923,9 +878,9 @@ Screen reader:
 
 A failure never touches anything else. The other files still converted, and any earlier result of the failed one is still as it was.
 
-### Step 8: Control+End
+### Step 8
 
-The last line names the session log, with every detail of the run. Control plus End goes straight to it.
+The last line names the session log, with every detail of the run.
 
 Screen reader:
 
@@ -937,37 +892,29 @@ Every run writes a new log, named for its date and time, so one batch never over
 
 ### Step 10: Escape
 
-Escape closes the Results box.
+The box has one button, OK, and it has the focus, so Enter, Space or Escape closes it. BatCon then closes too, its work done.
 
 The reader says nothing as the window closes.
 
-### Step 11: Control+Home
+### Step 11
 
-The Results box is a plain text window: Up and Down Arrow read it a line at a time, Control plus Home returns to the summary, and Control plus End goes to the log.
-
-Screen reader:
-
-- 5 files converted, 1 kept as they were, 2 skipped for want of a conversion, 1 failed.
+A big batch makes a long report. The box then shows its first 15 lines and names a text file holding the rest, in BatCon's logs folder, which any editor reads a line at a time.
 
 ### Step 12
 
 A kept file is one whose result was already there; walk 6 shows how to replace it with Force replacements.
 
-### Step 13: Control+End
+### Step 13
 
-If a batch surprises you, the log is the first place to look. It lists every file, every way BatCon tried, and how long each took, so even a failure has a clear story.
+If a batch surprises you, the log is the first place to look. It lists every file, every way BatCon tried, and how long each took, so even a failure has a clear story. The last line of the Results box names it.
 
 Screen reader:
 
 - The log: C colon backslash Users backslash you backslash AppData backslash Local backslash BatCon backslash logs backslash BatCon dash 20261020 dot log
 
-### Step 14: Alt+L
+### Step 14
 
-To keep the log with the converted files, check Log session before the batch, Alt plus L, Lima. BatCon dot log then lands in the output folder beside them.
-
-Screen reader:
-
-- Log session, check box, checked
+Logging is automatic, so there is nothing to switch on: every run's log is kept in BatCon's logs folder, under your local application data, and Help names that folder too.
 
 ### Step 15
 
@@ -992,7 +939,7 @@ Four things to carry away. One: Alt plus Control plus B opens BatCon.
 Screen reader:
 
 - BatCon dialog
-- Source files: edit
+- Source paths: edit
 
 ### Step 2: Alt+T
 
@@ -1011,9 +958,9 @@ Screen reader:
 
 - 0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
-### Step 4: Control+End
+### Step 4
 
-Four: every run writes a log, named at the end of the results.
+Four: every run writes a log, with nothing to switch on, named at the end of the results.
 
 Screen reader:
 

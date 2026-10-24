@@ -27,7 +27,7 @@ FileTask = accept
 Name = the program starts and answers for itself
 Run = exec\BatCon.exe /help
 Expect = 0
-Wants = /source
+Wants = --source-paths
 
 [check]
 Name = a bad switch is refused rather than ignored

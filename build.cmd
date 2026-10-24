@@ -59,7 +59,7 @@ set "progFiles=%ProgramFiles%"
 
 rem ---- SETTINGS: the part an app edits -------------------------------
 rem The oldest kit with everything this build uses.
-set "kitNeeded=1.88.2"
+set "kitNeeded=1.92.1"
 rem The number to start from when version.txt is missing. A newer release
 rem tag, if the repository has one, wins. It is also a floor: a version.txt
 rem holding less is raised to it.
@@ -71,7 +71,7 @@ rem The kit classes the program uses, alphabetical. Lbc needs Elevate (its
 rem Help box offers the update), Log, Paths, Say and Util; Log needs Paths and
 rem Say; Mdi needs KeyMap. Each is compiled from the kit's exec\CSharp.
 rem The whole conversion bundle (kit 1.84.0): media, speech to text and text to speech too.
-set "homerModules=Conversion ConversionMedia ConversionPage ConversionPdf Elevate Inix KeyName Lbc Log Media Paths PdfReader Say Table Util Voice Web"
+set "homerModules=Conversion ConversionMedia ConversionPage ConversionPdf Elevate Inix KeyName Lbc Log Media Paths PdfReader Quality Say Table Util Voice Web"
 rem The app's own sources beside BatCon.cs, if any, space separated.
 set "appSources=Batch.cs"
 rem Files embedded in the program as resources, space separated: a sound, a
@@ -151,8 +151,16 @@ for %%F in (AGENTS.md BatCon.cmd KeepEncoding.txt help\KitChanges.md help\KitCha
 echo Building %app%. The log is %log%
 
 rem ---- the Homer Development Kit -------------------------------------
+rem THE NEWEST KIT FOUND IS USED (24 October 2026). The HomerDev variable, C:\HomerDev and the
+rem folders above this one are each considered, and the highest version wins. The variable was
+rem never honoured before 1.89.1, since set "homerDev=" also emptied it (names in cmd ignore
+rem case); once honoured, it named an installed kit in Program Files at 1.77.6, older than
+rem C:\HomerDev, and the build stopped. The log names every kit considered.
+set "sKitFromEnv=%HomerDev%"
 set "homerDev="
-if defined HomerDev if exist "%HomerDev%\exec\CSharp\Lbc.cs" set "homerDev=%HomerDev%"
+set "sKitVersion="
+call :considerKit "%sKitFromEnv%"
+call :considerKit "C:\HomerDev"
 rem FOUND WHEREVER IT IS (1.46.0): only Windows and the folder name HomerDev
 rem are assumed, never a drive or a depth. After the HomerDev variable: the
 rem current folder and every folder above it, then this script's folder and
@@ -865,9 +873,28 @@ goto :eof
 :findKitUp
 rem Climbs from sUp to the top of its drive (1.46.0), looking for the kit
 rem itself or for a folder named HomerDev that holds it.
-if exist "!sUp!\exec\CSharp\Lbc.cs" (set "homerDev=!sUp!" & goto :eof)
-if exist "!sUp!\HomerDev\exec\CSharp\Lbc.cs" (set "homerDev=!sUp!\HomerDev" & goto :eof)
+rem A drive's top, "C:\", is held as "C:", so no path doubles its backslash.
+if "!sUp:~-1!"=="\" set "sUp=!sUp:~0,-1!"
+if exist "!sUp!\exec\CSharp\Lbc.cs" if exist "!sUp!\HomerDev.cs" (set "homerDev=!sUp!" & goto :eof)
+if exist "!sUp!\HomerDev\exec\CSharp\Lbc.cs" if exist "!sUp!\HomerDev\HomerDev.cs" (set "homerDev=!sUp!\HomerDev" & goto :eof)
 for %%I in ("!sUp!\..") do set "sNext=%%~fI"
+if "!sNext:~-1!"=="\" set "sNext=!sNext:~0,-1!"
 if /i "!sNext!"=="!sUp!" goto :eof
 set "sUp=!sNext!"
 goto :findKitUp
+
+:considerKit
+rem One kit candidate: used when it is a kit (HomerDev.cs at its top, exec\CSharp\Lbc.cs
+rem inside) and newer than the kit chosen so far.
+set "sTry=%~1"
+if not defined sTry goto :eof
+if "!sTry:~-1!"=="\" set "sTry=!sTry:~0,-1!"
+if not exist "!sTry!\HomerDev.cs" goto :eof
+if not exist "!sTry!\exec\CSharp\Lbc.cs" goto :eof
+set "sTryVersion=0.0.0"
+if exist "!sTry!\version.txt" for /f "usebackq delims=" %%v in (`powershell -NoProfile -Command "(Get-Content -Raw -LiteralPath '!sTry!\version.txt').Trim([char]0xFEFF, ' ', [char]13, [char]10)"`) do set "sTryVersion=%%v"
+>> "%log%" echo Kit candidate: !sTry! version !sTryVersion!
+if not defined homerDev (set "homerDev=!sTry!" & set "sKitVersion=!sTryVersion!" & goto :eof)
+powershell -NoProfile -Command "try { if ([version]'!sTryVersion!' -gt [version]'!sKitVersion!') { exit 0 } else { exit 1 } } catch { exit 1 }"
+if not errorlevel 1 (set "homerDev=!sTry!" & set "sKitVersion=!sTryVersion!")
+goto :eof

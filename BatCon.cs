@@ -4,33 +4,33 @@
 // against the installed kit, never a copy of it. Every conversion is the kit's
 // Conversion.convert, the one technique every Homer app uses.
 //
-// THE DIALOG FOLLOWS 2htm AND extCheck, the pattern of every Homer launchpad dialog
-// (20 October 2026, the author's audit), in the order Tab moves through it:
-//   Source files        text box   &Source files       a path, or /source <path>
-//   Browse source       button     &Browse source...   picks a folder of files
-//   Output directory    text box   &Output directory   /output <folder>
-//   Choose output       button     &Choose output...
-//   -- separator --
-//   Target format       list       &Target format      /to <extension>
-//   Include subfolders  check      &Include subfolders /recursive
-//   Force replacements  check      &Force replacements /force
-//   View output         check      &View output        /view
-//   Log session         check      &Log session        /log
-//   Use configuration   check      &Use configuration
-//   OK, Guide, Default settings, Cancel; Lbc adds Help (F1), whose box lists each
-//   field's tip and ends with the version check. F11 checks for a newer BatCon.
-// Target format and Include subfolders are BatCon's own options, after the
-// separator where 2htm puts its own.
+// THE DIALOG IS THE KIT'S LAUNCH DIALOG (23 October 2026, help\LaunchDialog.md in
+// HomerDev), the one every Homer launch app shows, in the order Tab moves through it:
+//   Source paths            text box  &Source paths            paths, or /source <path>
+//   Browse local source     button    &Browse local source     picks a folder of files
+//   Target format           list      &Target format           /to <extension>, -t
+//   Output directory        text box  &Output directory        /output-directory, -o
+//   Choose output directory button    &Choose output directory
+//   Force replacements      check     &Force replacements      /force-replacements, -f
+//   Use configuration       check     &Use configuration       /use-configuration, -u
+//   View output directory   check     &View output directory   /view-output-directory, -v
+//   Default settings, Help  buttons                            /default-settings, -d
+//   OK and Cancel, alone at the bottom right.
+// Target format is BatCon's own control, in the band after the source. Logging is
+// automatic: every run writes %LOCALAPPDATA%\BatCon\logs\BatCon-yyyyMMdd-HHmmss.log,
+// and the Help box says so. Every run ends with the Results box, then BatCon closes.
 //
 // THE DEFAULTS ARE DELIBERATE, as in 2htm: Source files starts at your Documents
 // folder; Output directory is derived from the source -- the folder itself, or the
 // folder of a single file or pattern -- and follows the source while it still mirrors
 // it, until you choose another. Blank means beside each source.
 //
-// THE TARGET LIST IS THE KIT'S WHOLE LIST, alphabetical by name, from the outset
-// (Conversion.allTargets), so it never changes under the cursor. A source whose type
+// THE TARGET LIST IS THE TWELVE FORMATS THE AUTHOR CHOSE (23 October 2026), csv, db,
+// docx, epub, htm, inix, md, pdf, pptx, tsv, txt and xlsx, each named as the kit names
+// it and sorted by that name, so it never changes under the cursor. A source whose type
 // does not convert to the target is skipped, said once per type with the reason, and
-// counted in the Results box.
+// counted in the Results box -- which is what happens for db until the kit has a route
+// that makes one.
 //
 // USE CONFIGURATION, as in 2htm and extCheck: when it is checked at OK, every field
 // is saved in %LOCALAPPDATA%\BatCon\configs\BatCon.inix and loaded the next time;
@@ -61,13 +61,8 @@ public static class Program
     private const string sGitHubOwner = "JamalMazrui";
     private const string sSettingsFile = "BatCon.inix";
     private const string sSection = "Settings";
-    private const string sSessionLogName = "BatCon.log";
-    // Spoken progress at most this often, in milliseconds, so a fast batch is not a torrent of speech.
-    private const int iSpeakGap = 2000;
 
     private static bool bForce = false;
-    private static bool bLogSession = false;
-    private static bool bRecursive = false;
     private static bool bUseConfig = false;
     private static bool bViewOutput = false;
     private static string sOutput = "";
@@ -111,7 +106,7 @@ public static class Program
         sSource = defaultSource();
         sOutput = Batch.deriveOutput(sSource);
         sTarget = "md";
-        bRecursive = false; bForce = false; bViewOutput = false; bLogSession = false; bUseConfig = false;
+        bForce = false; bViewOutput = false; bUseConfig = false;
         return true;
     }
 
@@ -125,10 +120,8 @@ public static class Program
         sSource = InixCodec.readValue(sPath, sSection, "Source", sSource);
         sOutput = InixCodec.readValue(sPath, sSection, "Output", sOutput);
         sTarget = InixCodec.readValue(sPath, sSection, "Target", sTarget);
-        bRecursive = InixCodec.readValue(sPath, sSection, "Recursive", "0") == "1";
         bForce = InixCodec.readValue(sPath, sSection, "Force", "0") == "1";
         bViewOutput = InixCodec.readValue(sPath, sSection, "ViewOutput", "0") == "1";
-        bLogSession = InixCodec.readValue(sPath, sSection, "LogSession", "0") == "1";
         bUseConfig = true;
         Log.info("Configuration loaded from " + sPath);
         return true;
@@ -146,10 +139,8 @@ public static class Program
             InixCodec.writeValue(sPath, sSection, "Source", sSource);
             InixCodec.writeValue(sPath, sSection, "Output", sOutput);
             InixCodec.writeValue(sPath, sSection, "Target", sTarget);
-            InixCodec.writeValue(sPath, sSection, "Recursive", bRecursive ? "1" : "0");
             InixCodec.writeValue(sPath, sSection, "Force", bForce ? "1" : "0");
             InixCodec.writeValue(sPath, sSection, "ViewOutput", bViewOutput ? "1" : "0");
-            InixCodec.writeValue(sPath, sSection, "LogSession", bLogSession ? "1" : "0");
             Log.info("Configuration saved in " + sPath);
         }
         catch (Exception oError) { Log.error("Configuration: " + oError.Message); }
@@ -158,24 +149,59 @@ public static class Program
 
     // ---- the dialog ---------------------------------------------------------
 
+    // THE TARGET FORMATS OFFERED, by extension (23 October 2026). Their names come from
+    // the kit, so a format reads as every Homer app names it.
+    private static readonly string[] aOfferedTargets = { "csv", "db", "docx", "epub", "htm", "inix", "md", "pdf", "pptx", "tsv", "txt", "xlsx" };
+
+    // offeredTargets: the extensions in the order shown, with their labels, sorted by label.
+    private static string[] offeredTargets(out string[] aLabels)
+    {
+        string[] aKitLabels;
+        string[] aKitTargets = Conversion.allTargets(out aKitLabels);
+        List<string[]> lsPairs = new List<string[]>();
+        foreach (string sType in aOfferedTargets)
+        {
+            int iKit = Array.IndexOf(aKitTargets, sType);
+            string sLabel = iKit >= 0 ? aKitLabels[iKit] : "";
+            if (sLabel == "")
+            {
+                string sName = Conversion.typeName(sType);
+                if (string.IsNullOrEmpty(sName) || sName == sType) sName = sType.ToUpperInvariant() + " file";
+                sLabel = char.ToUpperInvariant(sName[0]) + sName.Substring(1) + " (" + sType + ")";
+            }
+            lsPairs.Add(new string[] { sLabel, sType });
+        }
+        lsPairs.Sort(delegate(string[] a, string[] b) { return string.Compare(a[0], b[0], StringComparison.OrdinalIgnoreCase); });
+        aLabels = new string[lsPairs.Count];
+        string[] aTypes = new string[lsPairs.Count];
+        for (int i = 0; i < lsPairs.Count; i++) { aLabels[i] = lsPairs[i][0]; aTypes[i] = lsPairs[i][1]; }
+        return aTypes;
+    }
+
     private static int runFromDialog()
     {
         string[] aLabels;
-        string[] aTargets = Conversion.allTargets(out aLabels);
+        string[] aTargets = offeredTargets(out aLabels);
         while (true)
         {
             string sButton;
-            using (LbcDialog dlg = new LbcDialog(sAppName, null))
+            using (LaunchDialog oLaunch = new LaunchDialog(sAppName))
             {
-                dlg.addBand();
-                TextBox tbSource = dlg.addInputBox("&Source files:", sSource,
-                    "One or more files, folders or wildcard patterns such as *.pdf, separated by spaces, each in quotes if it has a space. A folder means every file in it.");
-                Button btnBrowse = dlg.addButton("&Browse source...", "Choose a folder of files to convert.");
-                dlg.addBand();
-                TextBox tbOutput = dlg.addInputBox("&Output directory:", sOutput,
-                    "Where each converted file is written. Blank means beside its source.");
-                Button btnChoose = dlg.addButton("&Choose output...", "Choose the folder the converted files go to.");
-                dlg.endBand();
+                oLaunch.sourcePick = "folder";
+                TextBox tbSource = oLaunch.addSourceBand(sSource,
+                    "One or more files, folders or wildcard patterns such as *.pdf, separated by spaces, each in quotes if it has a space. A folder means every file in it.",
+                    "Choose a folder of files to convert. It opens where Source paths points, else in Documents.");
+
+                // BatCon's own choice: what to convert to.
+                oLaunch.dialog.addBand();
+                int iTarget = Array.IndexOf(aTargets, sTarget);
+                ListBox lbTarget = oLaunch.dialog.addPickBox("&Target format:", aLabels, iTarget >= 0 ? aLabels[iTarget] : aLabels[0],
+                    "The format to convert to. A source that does not convert to it is skipped, and the Results box says why.");
+                oLaunch.dialog.endBand();
+
+                TextBox tbOutput = oLaunch.addOutputBand(sOutput,
+                    "Where each converted file is written. Blank means beside its source.",
+                    "Choose the folder the converted files go to.");
 
                 // THE OUTPUT FOLLOWS THE SOURCE while it still mirrors it, whether the source is
                 // browsed or typed; a folder the user chose, or typed, stays put.
@@ -186,65 +212,26 @@ public static class Program
                     sMirror = Batch.deriveOutput(tbSource.Text);
                     if (bMirrors) tbOutput.Text = sMirror;
                 };
-                btnBrowse.Click += delegate(object oSender, EventArgs evArgs)
-                {
-                    string sPicked = pickFolder(dlg.form, "Choose a folder of files to convert", tbSource.Text);
-                    if (sPicked == null) return;
-                    tbSource.Text = sPicked.Contains(" ") ? "\"" + sPicked + "\"" : sPicked;
-                    followSource();
-                    tbSource.Focus();
-                };
+                oLaunch.sourceChosen = followSource;
                 tbSource.Leave += delegate(object oSender, EventArgs evArgs) { followSource(); };
-                btnChoose.Click += delegate(object oSender, EventArgs evArgs)
-                {
-                    string sPicked = pickFolder(dlg.form, "Choose the output directory", tbOutput.Text);
-                    if (sPicked == null) return;
-                    tbOutput.Text = sPicked;
-                    tbOutput.Focus();
-                };
 
-                dlg.addSeparator();
-                int iTarget = Array.IndexOf(aTargets, sTarget);
-                ListBox lbTarget = dlg.addPickBox("&Target format:", aLabels, iTarget >= 0 ? aLabels[iTarget] : (aLabels.Length > 0 ? aLabels[0] : ""),
-                    "The format to convert to: every format the Homer kit makes, by name. A source that does not convert to it is skipped and counted.");
-                CheckBox cbRecursive = dlg.addCheckBox("&Include subfolders", bRecursive, "Look inside the folders within each source folder too.");
-                CheckBox cbForce = dlg.addCheckBox("&Force replacements", bForce, "Replace a result already there, once its new conversion succeeds, instead of keeping it.");
-                CheckBox cbView = dlg.addCheckBox("&View output", bViewOutput, "Open the output folder in File Explorer when the run is done.");
-                CheckBox cbLog = dlg.addCheckBox("&Log session", bLogSession,
-                    "Also write " + sSessionLogName + " in the output folder. A session log is always kept in %LOCALAPPDATA%\\BatCon\\logs.");
-                CheckBox cbUseConfig = dlg.addCheckBox("&Use configuration", bUseConfig,
-                    "Load these settings next time, and save them when you press OK, in %LOCALAPPDATA%\\BatCon\\configs\\" + sSettingsFile + ".");
+                oLaunch.addOperationBands(bForce, "",
+                    bUseConfig, "Load these settings next time, and save them when you press OK, in %LOCALAPPDATA%\\BatCon\\configs\\" + sSettingsFile + ".",
+                    bViewOutput, "Open the output directory in File Explorer when the run is done.");
 
-                // F11: is there a newer BatCon on the web? (Elevate sounds like eleven.)
-                dlg.commandKey = delegate(Keys k)
-                {
-                    if (k != Keys.F11) return false;
-                    Log.info("F11: checking the web for a newer version");
-                    if (Elevate.offer(dlg.form))
-                    {
-                        Log.info("F11: the setup program was started; closing the dialog");
-                        dlg.form.DialogResult = DialogResult.Cancel;
-                        dlg.form.Close();
-                    }
-                    return true;
-                };
-
-                sButton = dlg.runWithButtons(new string[] { "OK", "Guide", "Default settings", "Cancel" });
+                sButton = oLaunch.run();
 
                 // Harvest every field before the dialog is disposed, so a return keeps what was typed.
                 sSource = (tbSource.Text ?? "").Trim();
                 sOutput = (tbOutput.Text ?? "").Trim();
                 int iPicked = lbTarget.SelectedIndex;
                 if (iPicked >= 0 && iPicked < aTargets.Length) sTarget = aTargets[iPicked];
-                bRecursive = cbRecursive.Checked;
-                bForce = cbForce.Checked;
-                bViewOutput = cbView.Checked;
-                bLogSession = cbLog.Checked;
-                bUseConfig = cbUseConfig.Checked;
+                bForce = oLaunch.forceBox.Checked;
+                bViewOutput = oLaunch.viewOutputBox.Checked;
+                bUseConfig = oLaunch.useConfigBox.Checked;
             }
-            if (string.IsNullOrEmpty(sButton) || string.Equals(sButton, "Cancel", StringComparison.OrdinalIgnoreCase)) return 0;
-            if (string.Equals(sButton, "Guide", StringComparison.OrdinalIgnoreCase)) { openGuide(); continue; }
-            if (string.Equals(sButton, "Default settings", StringComparison.OrdinalIgnoreCase))
+            if (sButton == "Cancel") return 0;
+            if (sButton == "Default settings")
             {
                 restoreDefaults();
                 try { if (File.Exists(settingsPath())) File.Delete(settingsPath()); } catch (Exception) { }
@@ -256,24 +243,12 @@ public static class Program
             break;
         }
         List<string> lsProblems = new List<string>();
-        List<string> lsFiles = Batch.discover(Batch.tokens(sSource), bRecursive, lsProblems);
+        List<string> lsFiles = Batch.discover(Batch.tokens(sSource), lsProblems);
         List<string> lsReport = new List<string>();
-        int iResult = runJob(lsFiles, lsProblems, lsReport, true);
-        HelpDialog.show(null, "BatCon results", string.Join("\r\n", lsReport.ToArray()));
+        string sOpen;
+        int iResult = runJob(lsFiles, lsProblems, lsReport, true, out sOpen);
+        LaunchDialog.finish(sAppName, string.Join("\r\n", lsReport.ToArray()), iResult != 0, bViewOutput ? sOpen : "");
         return iResult;
-    }
-
-    // pickFolder: a Browse For Folder dialog starting where the field points, else Documents.
-    private static string pickFolder(IWin32Window owner, string sTitle, string sFieldText)
-    {
-        using (FolderBrowserDialog dlgFolder = new FolderBrowserDialog())
-        {
-            dlgFolder.Description = sTitle;
-            dlgFolder.ShowNewFolderButton = true;
-            string sStart = Batch.deriveOutput(sFieldText);
-            dlgFolder.SelectedPath = sStart != "" ? sStart : defaultSource();
-            return dlgFolder.ShowDialog(owner) == DialogResult.OK ? dlgFolder.SelectedPath : null;
-        }
     }
 
     // confirmOutput: offer to make an output directory that does not exist yet, Yes by default.
@@ -292,40 +267,33 @@ public static class Program
         }
     }
 
-    // openGuide: help\BatCon.htm beside exec, in the installed tree and the project alike.
-    private static bool openGuide()
-    {
-        foreach (string sName in new string[] { "help\\BatCon.htm", "ReadMe.htm", "help\\BatCon.md" })
-        {
-            string sPath = Path.Combine(Paths.installedFolder, sName);
-            if (!File.Exists(sPath)) continue;
-            try { Process.Start(sPath); return true; } catch (Exception oError) { Log.error("Guide: " + oError.Message); }
-        }
-        Say.say("The guide was not found");
-        return false;
-    }
-
     // ---- the command line ---------------------------------------------------
 
     private static int runFromCommandLine(string[] aArguments)
     {
         List<string> lsSources = new List<string>();
         bool bList = false;
+        // USE CONFIGURATION FIRST, wherever it is written, so the switches after it can
+        // still change any setting it loads.
+        foreach (string sArgument in aArguments)
+        {
+            string sSwitch = Util.switchName(sArgument);
+            if (sSwitch == "use-configuration" || sSwitch == "u") { loadConfiguration(); break; }
+        }
         for (int i = 0; i < aArguments.Length; i++)
         {
             string sArgument = aArguments[i];
             string sSwitch = Util.switchName(sArgument);
             string sNext = (i + 1 < aArguments.Length) ? aArguments[i + 1] : "";
             if (sSwitch == "help" || sSwitch == "h" || sArgument == "/?") { Console.WriteLine(helpText()); return 0; }
-            else if (sSwitch == "source") { lsSources.Add(sNext); i++; }
-            else if (sSwitch == "to") { sTarget = Conversion.typeOf(sNext); i++; }
-            else if (sSwitch == "output") { sOutput = sNext; i++; }
-            else if (sSwitch == "recursive") bRecursive = true;
-            else if (sSwitch == "force") bForce = true;
-            else if (sSwitch == "view") bViewOutput = true;
-            else if (sSwitch == "log") bLogSession = true;
+            else if (sSwitch == "source" || sSwitch == "source-paths" || sSwitch == "s") { lsSources.Add(sNext); i++; }
+            else if (sSwitch == "to" || sSwitch == "target-format" || sSwitch == "t") { sTarget = Conversion.typeOf(sNext); i++; }
+            else if (sSwitch == "output-directory" || sSwitch == "output" || sSwitch == "o") { sOutput = sNext; i++; }
+            else if (sSwitch == "force-replacements" || sSwitch == "force" || sSwitch == "f") bForce = true;
+            else if (sSwitch == "view-output-directory" || sSwitch == "view-output" || sSwitch == "view" || sSwitch == "v") bViewOutput = true;
+            else if (sSwitch == "use-configuration" || sSwitch == "u") { }
             else if (sSwitch == "list") bList = true;
-            else if (sSwitch == "defaults")
+            else if (sSwitch == "default-settings" || sSwitch == "defaults" || sSwitch == "d")
             {
                 try { if (File.Exists(settingsPath())) File.Delete(settingsPath()); } catch (Exception) { }
                 Console.WriteLine("Default settings restored.");
@@ -342,15 +310,20 @@ public static class Program
         if (bList)
         {
             string[] aLabels;
-            Conversion.allTargets(out aLabels);
+            offeredTargets(out aLabels);
             foreach (string sLabel in aLabels) Console.WriteLine(sLabel);
             return 0;
         }
         List<string> lsProblems = new List<string>();
-        List<string> lsFiles = Batch.discover(lsSources, bRecursive, lsProblems);
+        List<string> lsFiles = Batch.discover(lsSources, lsProblems);
         List<string> lsReport = new List<string>();
-        int iResult = runJob(lsFiles, lsProblems, lsReport, false);
+        string sOpen;
+        int iResult = runJob(lsFiles, lsProblems, lsReport, false, out sOpen);
         foreach (string sLine in lsReport) Console.WriteLine(sLine);
+        if (bViewOutput && sOpen != "")
+        {
+            try { if (Directory.Exists(sOpen)) Process.Start("explorer.exe", "\"" + sOpen + "\""); } catch (Exception oError) { Log.error("View output directory: " + oError.Message); }
+        }
         return iResult;
     }
 
@@ -358,8 +331,24 @@ public static class Program
 
     // runJob: skip, by type, every source that does not convert to the target, saying why;
     // convert the rest; report each outcome with its count.
-    private static int runJob(List<string> lsFiles, List<string> lsProblems, List<string> lsReport, bool bSpeak)
+    // sOpen gives back the folder View output directory would open.
+    //
+    // bShow: from the dialog, the work runs under the kit's LaunchProgress window
+    // (23 October 2026): "BatCon, <status>" in its title, a status box, Cancel
+    // (Escape), and speech only while BatCon is the window in front, so a batch
+    // never talks over work in another program. From the command line nothing is
+    // shown or spoken, and the report goes to the console.
+    private static int runJob(List<string> lsFiles, List<string> lsProblems, List<string> lsReport, bool bShow, out string sOpen)
     {
+        sOpen = "";
+        LaunchProgress oProgress = bShow ? new LaunchProgress(sAppName, "Finding the files", delegate(string sLine) { Log.info(sLine); }) : null;
+        try { return runJobShown(lsFiles, lsProblems, lsReport, oProgress, out sOpen); }
+        finally { if (oProgress != null) oProgress.Dispose(); }
+    }
+
+    private static int runJobShown(List<string> lsFiles, List<string> lsProblems, List<string> lsReport, LaunchProgress oProgress, out string sOpen)
+    {
+        sOpen = "";
         foreach (string sProblem in lsProblems) Log.error(sProblem);
         if (lsFiles.Count == 0 || sTarget == "")
         {
@@ -389,26 +378,27 @@ public static class Program
                 + ": the Homer kit has no conversion from " + sType + " to " + sTarget + ".";
             lsSkipLines.Add(sLine);
             Log.info(sLine);
-            if (bSpeak) Say.say(sLine);
+            if (oProgress != null) oProgress.status(sLine);
         }
 
         string sOutputFull = sOutput == "" ? "" : Path.GetFullPath(Environment.ExpandEnvironmentVariables(sOutput.Trim('"')));
         Log.info("Batch: " + lsToConvert.Count + " files to " + sTarget + (sOutputFull == "" ? ", each beside its source" : " in " + sOutputFull)
             + (bForce ? ", replacing results" : ""));
-        if (bSpeak && lsToConvert.Count > 0) Say.say("Converting " + Batch.count(lsToConvert.Count, "file") + " to " + sTarget);
+        if (oProgress != null && lsToConvert.Count > 0) oProgress.status("Converting " + Batch.count(lsToConvert.Count, "file") + " to " + sTarget);
         HashSet<string> hsReserved = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         HashSet<string> hsSources = new HashSet<string>(lsFiles, StringComparer.OrdinalIgnoreCase);
         int iConverted = 0, iFailed = 0, iKept = 0, iAt = 0;
-        Stopwatch oSince = Stopwatch.StartNew();
         List<string> lsLines = new List<string>();
         foreach (string sFile in lsToConvert)
         {
-            iAt++;
-            if (bSpeak && oSince.ElapsedMilliseconds >= iSpeakGap)
+            // Cancel in the progress window stops before the next file.
+            if (oProgress != null && oProgress.cancelled)
             {
-                Say.say(iAt + " of " + lsToConvert.Count + ": " + Path.GetFileName(sFile));
-                oSince.Restart();
+                lsProblems.Add("Cancelled: " + Batch.count(lsToConvert.Count - iAt, "file") + " not converted.");
+                break;
             }
+            iAt++;
+            if (oProgress != null) oProgress.step(Path.GetFileName(sFile), iAt - 1, lsToConvert.Count);
             string sFolder = sOutputFull == "" ? Path.GetDirectoryName(sFile) : sOutputFull;
             string sResultPath = Batch.destination(sFile, sFolder, sTarget, hsReserved, hsSources);
             string sOutcome = Batch.convertOne(sFile, sResultPath, bForce);
@@ -419,21 +409,13 @@ public static class Program
         }
         lsReport.Add(Batch.count(iConverted, "file") + " converted, " + iKept + " kept as they were, "
             + iSkippedNoRoute + " skipped for want of a conversion, " + iFailed + " failed.");
+        if (iKept > 0) lsReport.Add(LaunchDialog.keptLine(iKept, "file"));
         lsReport.AddRange(lsSkipLines);
         lsReport.AddRange(lsProblems);
         lsReport.AddRange(lsLines);
         lsReport.Add("The log: " + Log.path);
         Log.info(lsReport[0]);
-        string sOpen = sOutputFull != "" ? sOutputFull : (lsFiles.Count > 0 ? Path.GetDirectoryName(lsFiles[0]) : "");
-        if (bLogSession && sOpen != "")
-        {
-            try { File.Copy(Log.path, Path.Combine(sOpen, sSessionLogName), true); lsReport.Add("The session log is also in " + Path.Combine(sOpen, sSessionLogName)); }
-            catch (Exception oError) { Log.error("Log session: " + oError.Message); }
-        }
-        if (bViewOutput && sOpen != "")
-        {
-            try { if (Directory.Exists(sOpen)) Process.Start(sOpen); } catch (Exception oError) { Log.error("View output: " + oError.Message); }
-        }
+        sOpen = sOutputFull != "" ? sOutputFull : (lsFiles.Count > 0 ? Path.GetDirectoryName(lsFiles[0]) : "");
         return iFailed > 0 ? 3 : 0;
     }
 
@@ -442,16 +424,26 @@ public static class Program
         StringBuilder sbText = new StringBuilder();
         sbText.AppendLine("BatCon " + BuildVersion.Version + " -- convert many files at once between formats.");
         sbText.AppendLine("");
-        sbText.AppendLine("  BatCon                                   the dialog");
-        sbText.AppendLine("  BatCon <paths> /to <format> [/output <folder>] [/recursive] [/force] [/view] [/log]");
-        sbText.AppendLine("  BatCon /list                             every format BatCon can convert to");
-        sbText.AppendLine("  BatCon /defaults                         settings back to their defaults");
-        sbText.AppendLine("  BatCon /help");
+        sbText.AppendLine("  batcon                          the dialog");
+        sbText.AppendLine("  batcon <paths> -t <format> [-o <folder>] [-f] [-u] [-v]");
+        sbText.AppendLine("  batcon /list                    the formats BatCon converts to");
+        sbText.AppendLine("  batcon -d                       settings back to their defaults");
+        sbText.AppendLine("  batcon -h");
         sbText.AppendLine("");
-        sbText.AppendLine("A path is a file, a folder or a pattern such as *.pdf; /source <path> names one too.");
+        sbText.AppendLine("  <paths>                         files, folders or patterns such as *.pdf");
+        sbText.AppendLine("  -s, --source-paths <path>       one more source, as often as wanted (/source too)");
+        sbText.AppendLine("  -t, --target-format <format>    the format to convert to, such as md or docx");
+        sbText.AppendLine("  -o, --output-directory <folder> where results go; without it, beside each source");
+        sbText.AppendLine("  -f, --force-replacements        replace results that are already there");
+        sbText.AppendLine("  -u, --use-configuration         start from the settings the dialog saved");
+        sbText.AppendLine("  -v, --view-output-directory     open the output directory when done");
+        sbText.AppendLine("  -d, --default-settings          forget the saved settings");
+        sbText.AppendLine("  -h, --help                      this list");
+        sbText.AppendLine("");
         sbText.AppendLine("A source that does not convert to the format is skipped and counted. Switches may be");
-        sbText.AppendLine("written /switch, -switch or --switch. Exit code: 0 done, 1 nothing to do or an unknown");
-        sbText.AppendLine("switch, 3 some files failed. Each run writes a log under %LOCALAPPDATA%\\BatCon\\logs.");
+        sbText.AppendLine("written /switch, -switch or --switch, in any case. Exit code: 0 done, 1 nothing to do or");
+        sbText.AppendLine("an unknown switch, 3 some files failed. Logging is automatic: each run writes");
+        sbText.AppendLine("%LOCALAPPDATA%\\BatCon\\logs\\BatCon-yyyyMMdd-HHmmss.log.");
         return sbText.ToString();
     }
 }

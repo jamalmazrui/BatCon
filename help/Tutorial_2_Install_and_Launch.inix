@@ -45,7 +45,7 @@ Say=To install with no questions at all, start the installer with slash default 
 Say=Now open BatCon with its desktop key, Alt plus Control plus B. It works from anywhere in Windows, whatever program you are in.
 Key=Alt+Control+B
 Hear=BatCon dialog
-Hear=Source files: edit, Documents
+Hear=Source paths: edit, Documents
 
 [step]
 Say=BatCon is also on the Start menu. The Windows key, then the word BatCon, then Enter, opens it the same way.

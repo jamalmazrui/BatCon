@@ -11,12 +11,12 @@ Homework=Make a workbook from a table of your own.
 Say=A CSV file is a table written as plain text, with commas between the values on each line. Excel opens one, but a true workbook keeps each value in its own cell and holds up better when shared.
 
 [step]
-Say=Source files starts at your Documents folder. Alt plus S, Sierra, and type the one file you want, here C colon backslash Data backslash Members dot c s v.
+Say=Source paths starts at your Documents folder. Alt plus S, Sierra, and type the one file you want, here C colon backslash Data backslash Members dot c s v.
 Key=Alt+S
-Hear=Source files: edit, Documents
+Hear=Source paths: edit, Documents
 
 [step]
-Say=A single file is fine; Source files takes one file as readily as a folder.
+Say=A single file is fine; Source paths takes one file as readily as a folder.
 Note=C:\Data\Members.csv
 
 [step]
@@ -44,8 +44,7 @@ Hear=BatCon results
 Hear=1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=Down Arrow reads the line for the file.
-Key=Down Arrow
+Say=Then comes the line for the file.
 Hear=Converted Members dot c s v to Members dot x l s x.
 
 [step]
@@ -57,9 +56,9 @@ Note=The reader says nothing as the window closes.
 Say=The same works the other way. An Excel workbook as the source, with Comma separated table as the target, gives a CSV file of its first sheet, to read in any text editor.
 
 [step]
-Say=A whole folder of tables converts the same way: put the folder in Source files, and each table becomes a workbook of its own. Files of other kinds in the folder are skipped, and the Results box says so.
+Say=A whole folder of tables converts the same way: put the folder in Source paths, and each table becomes a workbook of its own. Files of other kinds in the folder are skipped, and the Results box says so.
 Key=Alt+S
-Hear=Source files: edit, C colon backslash Data backslash Members dot c s v
+Hear=Source paths: edit, C colon backslash Data backslash Members dot c s v
 
 [step]
 Say=A Markdown document with a table in it converts too: the table becomes the workbook's sheet. That is handy for a table typed by hand in a text editor.

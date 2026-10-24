@@ -20,8 +20,7 @@ Say=Every result already there is kept as it was, and the summary says so.
 Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=Down Arrow reads why each was kept.
-Key=Down Arrow
+Say=Then the box says why each was kept.
 Hear=Skipped Budget dot m d: it is already there.
 
 [step]
@@ -68,7 +67,7 @@ Say=Kept results are not a failure, and the exit number for a script stays zero 
 Hear=0 files converted, 3 kept as they were, 0 skipped for want of a conversion, 0 failed.
 
 [step]
-Say=If you want only the files that changed converted, put the changed ones alone in Source files, or convert into a new output folder and compare; BatCon does not judge which source is newer than its result.
+Say=If you want only the files that changed converted, put the changed ones alone in Source paths, or convert into a new output folder and compare; BatCon does not judge which source is newer than its result.
 
 [step]
 Say=Default settings clears Force replacements along with everything else, so it is always safe to start over from there.

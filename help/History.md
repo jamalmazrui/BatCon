@@ -1,5 +1,27 @@
 ﻿# BatCon History
 
+## 24 October 2026
+
+- **Word, Excel and PowerPoint files it makes are judged by extCheck's rules,** from the kit (HomerDev 1.92.1).
+- **The help names the source switch on a line of its own,** -s, --source-paths, which its acceptance check looks for; the release had stopped on it.
+- **The build uses the newest Homer kit it finds,** logging each one: your HomerDev variable, C:\HomerDev and the folders above. The variable named an older installed kit, which stopped BatCon's build.
+- **Markdown it makes is judged by every extCheck rule,** and every PDF is checked for tags, from the kit (HomerDev 1.92.0).
+- **PDF and db are made too.** A PDF is printed by Microsoft Edge from a web page, so no Office is needed, and a db is an SQLite file of one table. Any source converts to any target the kit can reach, through Markdown when no direct route exists (HomerDev 1.90.0).
+- **The build finds the kit again.** It climbed from its folder and took C:\ itself for the kit, so it stopped with "kit 0.0.0 is older than 1.89.0". It now tries C:\HomerDev first, accepts a kit only where HomerDev.cs is too, and honours the HomerDev environment variable.
+
+## 1.0.3, 23 October 2026
+
+- **Target format offers twelve formats:** csv, db, docx, epub, htm, inix, md, pdf, pptx, tsv, txt and xlsx, sorted by name. The kit cannot make a db yet, so a source is skipped for it, with the reason.
+- **The dialog is the one every Homer launch app shows,** built by the Homer kit's LaunchDialog (kit 1.89.0). It is in rows called bands, read left to right: Source paths and Browse local source; Target format; Output directory and Choose output directory; Force replacements, Use configuration and View output directory; Default settings and Help; then OK and Cancel alone at the bottom right, as Microsoft's dialog guidance places them.
+- **Insert+Tab names the Source paths box again, and the Output directory box is found again.** The kit put a band's label after the band, so the box had no name and Browse seemed to come first.
+- **Control+Enter is OK and Escape is Cancel from any control, and F11 checks for a newer version from anywhere.** Help says so, and says where the logs are kept.
+- **Logging is automatic.** The Log session checkbox and /log are gone; every run writes %LOCALAPPDATA%\BatCon\logs\BatCon-yyyyMMdd-HHmmss.log. The Guide button and Include subfolders are gone too: a folder means the files in it.
+- **Every run ends with the Results box,** whose one OK button has the focus, so Enter, Space or Escape closes it; the output directory then opens if View output directory is checked, and BatCon closes.
+- **Switches match the dialog:** a long switch is a control's label and a short one its Alt letter, written with /, - or --, in any case. New: -t, --target-format; -o, --output-directory; -u; -d, --default-settings. /recursive is gone. The older names still work.
+- **The work has a progress window, the kit's LaunchProgress:** "BatCon, <status>" in its title, a Status box with the focus, the percentage done and time left ("2 of 5 done, 40%, about 3 min left"), and Cancel (Escape) to stop after the current file. Progress used to be spoken every two seconds even while you worked in another program; now it is spoken only while BatCon is the window in front, and coming back says where things stand.
+- **Force replacements works as in every launch app:** unchecked, a source whose result is already there is skipped and kept, and the Results box says how many and how to replace them; checked, the work is done again and the old result kept until the new one is complete. Its tip is now the kit's standard one.
+- **The build needs HomerDev 1.89.0 or later.**
+
 ## 1.0.2, 20 October 2026
 
 - **PDFs are read with the Homer kit's own PDF reader,** which keeps a tagged PDF's structure and reads an untagged one by its layout. The build fetches what it needs, PdfPig, by itself. It needs HomerDev 1.88.0 or later.
