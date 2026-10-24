@@ -34,6 +34,26 @@ Name = a bad switch is refused rather than ignored
 Run = exec\BatCon.exe /nonsense
 Expect = 1
 
+; THE BUILT PROGRAM DOES THE ACTUAL JOB (24 October 2026, from QUILL's word_selfcheck). QUILL's runtime once
+; lacked a library its Word reader needed; every build exited 0 and every installed copy quietly opened Word
+; files as plain text, because nothing asked the build to convert anything. These convert BatCon's own guide
+; to a Word file, an EPUB and a PDF -- the PDF through Edge -- into logs\accept, which tidy keeps out of git.
+
+[check]
+Name = the built program makes a Word file
+Run = exec\BatCon.exe help\BatCon.md -t docx -o logs\accept -f
+Expect = 0
+
+[check]
+Name = the built program makes an EPUB
+Run = exec\BatCon.exe help\BatCon.md -t epub -o logs\accept -f
+Expect = 0
+
+[check]
+Name = the built program makes a PDF
+Run = exec\BatCon.exe help\BatCon.md -t pdf -o logs\accept -f
+Expect = 0
+
 [check]
 Name = a missing source is reported, not crashed on
 Run = exec\BatCon.exe /source nothing-here.txt

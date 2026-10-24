@@ -2,6 +2,7 @@
 
 ## 24 October 2026
 
+- **Its acceptance checks convert its own guide to Word, EPUB and PDF,** so a build that cannot do the job fails before it is released. Its spoken progress is also shown on a braille display (HomerDev 1.92.3).
 - **Word, Excel and PowerPoint files it makes are judged by extCheck's rules,** from the kit (HomerDev 1.92.1).
 - **The help names the source switch on a line of its own,** -s, --source-paths, which its acceptance check looks for; the release had stopped on it.
 - **The build uses the newest Homer kit it finds,** logging each one: your HomerDev variable, C:\HomerDev and the folders above. The variable named an older installed kit, which stopped BatCon's build.
