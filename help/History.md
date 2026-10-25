@@ -1,5 +1,9 @@
 ﻿# BatCon History
 
+## 25 October 2026, later
+
+- **Built against HomerDev 1.93.5,** whose checks and tidy use the newest kit found, and whose tidy cleared the kit copy from the top of C:\. kitNeeded is 1.93.5.
+
 ## 24 October 2026
 
 - **Its acceptance checks convert its own guide to Word, EPUB and PDF,** so a build that cannot do the job fails before it is released. Its spoken progress is also shown on a braille display (HomerDev 1.92.3).
