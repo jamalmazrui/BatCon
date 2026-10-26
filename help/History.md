@@ -1,5 +1,10 @@
 ﻿# BatCon History
 
+## 25 October 2026, evening
+
+- **Target formats read extension first,** "txt (plain text)", so the list runs in extension order and pressing t reaches txt (HomerDev 1.93.7).
+- **The progress window keeps the focus,** running on a thread of its own, so you can stay on its Status box while the work goes on, and the time left is said without "about": "3 min left" (HomerDev 1.93.6).
+
 ## 25 October 2026, later
 
 - **Built against HomerDev 1.93.5,** whose checks and tidy use the newest kit found, and whose tidy cleared the kit copy from the top of C:\. kitNeeded is 1.93.5.

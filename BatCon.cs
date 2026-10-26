@@ -165,9 +165,9 @@ public static class Program
             string sLabel = iKit >= 0 ? aKitLabels[iKit] : "";
             if (sLabel == "")
             {
-                string sName = Conversion.typeName(sType);
-                if (string.IsNullOrEmpty(sName) || sName == sType) sName = sType.ToUpperInvariant() + " file";
-                sLabel = char.ToUpperInvariant(sName[0]) + sName.Substring(1) + " (" + sType + ")";
+                // The kit's wording, "txt (plain text)", extension first, so the list sorted by label runs in
+                // extension order and t reaches txt (HomerDev 1.93.7).
+                sLabel = Conversion.targetLabel(sType, Conversion.typeName(sType));
             }
             lsPairs.Add(new string[] { sLabel, sType });
         }
