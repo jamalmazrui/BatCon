@@ -1,5 +1,13 @@
 ﻿# BatCon History
 
+## 30 October 2026 -- more fixes from an audit by another AI
+
+- **An incomplete run is not reported as a success.** A path that could not be found, or a run stopped with Cancel, ended with exit code 0. Both now end with 3, as a failed conversion does; a type skipped for want of a conversion still does not.
+
+## 30 October 2026 -- fixes from an audit by another AI
+
+- **A converted document's title is its own name.** A result made under BatCon's temporary name took ".batcon-" and a long number as its title. BatCon now tells the Homer kit the name the file is made for. The build needs HomerDev 1.94.1 or later.
+
 ## 25 October 2026, evening
 
 - **Target formats read extension first,** "txt (plain text)", so the list runs in extension order and pressing t reaches txt (HomerDev 1.93.7).

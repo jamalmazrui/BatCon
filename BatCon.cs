@@ -388,6 +388,12 @@ public static class Program
         HashSet<string> hsReserved = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         HashSet<string> hsSources = new HashSet<string>(lsFiles, StringComparer.OrdinalIgnoreCase);
         int iConverted = 0, iFailed = 0, iKept = 0, iAt = 0;
+        // INCOMPLETE IS NOT SUCCESS (30 October 2026, from an audit by another AI): the exit code
+        // looked only at failed conversions, so a path that could not be found, or a run stopped
+        // with Cancel, ended with 0. Problems found before converting, and Cancel, now end with 3,
+        // as a failure does; a type skipped for want of a conversion is still not a failure.
+        int iProblemsBefore = lsProblems.Count;
+        bool bCancelled = false;
         List<string> lsLines = new List<string>();
         foreach (string sFile in lsToConvert)
         {
@@ -395,6 +401,7 @@ public static class Program
             if (oProgress != null && oProgress.cancelled)
             {
                 lsProblems.Add("Cancelled: " + Batch.count(lsToConvert.Count - iAt, "file") + " not converted.");
+                bCancelled = true;
                 break;
             }
             iAt++;
@@ -416,7 +423,7 @@ public static class Program
         lsReport.Add("The log: " + Log.path);
         Log.info(lsReport[0]);
         sOpen = sOutputFull != "" ? sOutputFull : (lsFiles.Count > 0 ? Path.GetDirectoryName(lsFiles[0]) : "");
-        return iFailed > 0 ? 3 : 0;
+        return (iFailed > 0 || bCancelled || iProblemsBefore > 0) ? 3 : 0;
     }
 
     private static string helpText()

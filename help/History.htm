@@ -186,6 +186,12 @@
 <ul>
 <li><a href="#batcon-history" id="toc-batcon-history">BatCon History</a>
 <ul>
+<li><a href="#october-2026-more-fixes-from-an-audit-by-another-ai"
+id="toc-october-2026-more-fixes-from-an-audit-by-another-ai">30 October
+2026 – more fixes from an audit by another AI</a></li>
+<li><a href="#october-2026-fixes-from-an-audit-by-another-ai"
+id="toc-october-2026-fixes-from-an-audit-by-another-ai">30 October 2026
+– fixes from an audit by another AI</a></li>
 <li><a href="#october-2026-evening" id="toc-october-2026-evening">25
 October 2026, evening</a></li>
 <li><a href="#october-2026-later" id="toc-october-2026-later">25 October
@@ -203,6 +209,22 @@ October 2026, evening</a></li>
 </nav>
 <main>
 <h1 id="batcon-history">BatCon History</h1>
+<h2 id="october-2026-more-fixes-from-an-audit-by-another-ai">30 October
+2026 – more fixes from an audit by another AI</h2>
+<ul>
+<li><strong>An incomplete run is not reported as a success.</strong> A
+path that could not be found, or a run stopped with Cancel, ended with
+exit code 0. Both now end with 3, as a failed conversion does; a type
+skipped for want of a conversion still does not.</li>
+</ul>
+<h2 id="october-2026-fixes-from-an-audit-by-another-ai">30 October 2026
+– fixes from an audit by another AI</h2>
+<ul>
+<li><strong>A converted document’s title is its own name.</strong> A
+result made under BatCon’s temporary name took “.batcon-” and a long
+number as its title. BatCon now tells the Homer kit the name the file is
+made for. The build needs HomerDev 1.94.1 or later.</li>
+</ul>
 <h2 id="october-2026-evening">25 October 2026, evening</h2>
 <ul>
 <li><strong>Target formats read extension first,</strong> “txt (plain

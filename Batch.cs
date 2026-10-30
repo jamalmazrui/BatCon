@@ -138,6 +138,10 @@ public static class Batch
         try
         {
             Directory.CreateDirectory(sFolder);
+            // THE TITLE COMES FROM THE RESULT'S NAME (30 October 2026, from an audit by another
+            // AI): a document made under this temporary name took ".batcon-" and a number as
+            // its title. The kit is told the name it is made for (HomerDev 1.94.1).
+            Conversion.intendFor(sTemp, sResult);
             string sError;
             if (!Conversion.convert(sSource, sTemp, out sError)) throw new IOException(sError == "" ? "the conversion failed" : sError);
             if (!File.Exists(sTemp) || new FileInfo(sTemp).Length == 0) throw new IOException("the conversion made an empty file");
@@ -153,6 +157,7 @@ public static class Batch
         }
         finally
         {
+            Conversion.forgetIntended(sTemp);
             try { if (File.Exists(sTemp)) File.Delete(sTemp); } catch (Exception oError) { Log.warn("Temporary file left: " + oError.Message); }
         }
     }
