@@ -454,8 +454,10 @@ begin
   if homerStartForDefaults() then begin Result := False; exit; end;
   iPandoc := homerAdd('Pandoc', 'JohnMacFarlane.Pandoc', 'pandoc',
     '{pf}\Pandoc\pandoc.exe', 'converts documents between formats', 'Pandoc');
-  iPdfTools := homerAdd('PDF tools', 'Python.Python.3.13', 'python',
-    '', 'reads PDF files as text, through Python', 'Python 3.13');
+  // pip:pymupdf4llm, not winget's Python 3.13 (3 November 2026), as in HomerDev: the box compares the PDF package
+  // itself, which installPdfTools updates, so it says Update only when there is one. Needs HomerDev 1.115.0.
+  iPdfTools := homerAdd('PDF tools', 'pip:pymupdf4llm', '',
+    '', 'reads PDF files as text, through Python', '');
   iFfmpeg := homerAdd('ffmpeg', 'Gyan.FFmpeg', 'ffmpeg',
     '', 'converts audio and video, with ffprobe', '');
   iWhisper := homerAdd('Whisper', '', '"{pf}\Whisper\whisper-cli.exe"',
