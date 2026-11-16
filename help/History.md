@@ -1,5 +1,9 @@
 ﻿# BatCon History
 
+## 15 November 2026 -- The kit being developed wins a tie
+
+- When the installed kit in Program Files has the same version as C:\HomerDev, the build now uses C:\HomerDev, the one being developed.
+
 ## 15 November 2026 -- Only formats your files can become, and button tips from the kit
 
 - **Target format offers only what your files can become.** It used to list twelve formats whatever the source, so its check failed under HomerDev 1.220.0, which carries your ruling of 12 November to offer only valid conversions, and push stopped. The list now comes from the files Source paths names, through the kit's Conversion.targetsForPaths, and changes when the source does. When the files have no format in common, it says to name files of one kind, and OK says the same rather than starting.
