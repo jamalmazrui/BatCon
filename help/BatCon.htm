@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="generator" content="pandoc 3.14" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>BatCon</title>
   <style>
@@ -35,27 +35,6 @@
       }
       h1 {
         font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        color-scheme: light only;
-      }
-      html, body, pre, code {
-        background-color: transparent;
-      }
-      body, a, a:visited, blockquote {
-        color: black;
-      }
-      pre, code {
-        padding: 0;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
       }
     }
     p {
@@ -163,6 +142,12 @@
       text-decoration: none;
     }
     span.smallcaps{font-variant: small-caps;}
+    em, em em em, em em em em em {
+      font-style: italic;
+    }
+    em em, em em em em {
+      font-style: normal;
+    }
     div.columns{display: flex; gap: 1.5em;}
     div.column{flex: auto;}
     @media screen {
@@ -179,7 +164,27 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-  </style>
+    @media print {
+      html {
+        color-scheme: light only;
+      }
+      html, body, pre, code {
+        background-color: transparent;
+      }
+      body, a, a:visited, blockquote {
+        color: black;
+      }
+      pre, code {
+        padding: 0;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }  </style>
 </head>
 <body>
 <nav id="TOC" role="doc-toc" aria-label="Contents">
@@ -227,13 +232,14 @@ speech over a plain black picture.</li>
 <li><strong>Audio, video and pictures:</strong> each to the other
 formats of its kind, such as WAV to MP3 or PNG to JPEG.</li>
 </ul>
-<p>The Target format list offers twelve formats: CSV, an SQLite database
-(db), Word, EPUB, a web page, inix, Markdown, PDF, PowerPoint, TSV,
-plain text and Excel. A source that cannot become the one you pick is
-skipped, and BatCon says why. A database (db) is an SQLite file with one
-table named after it, its fields from the source’s first table. A PDF is
-made through a web page that Microsoft Edge prints, so no Office is
-needed.</p>
+<p>The Target format list offers only the formats every file in Source
+paths can become, so a PDF folder offers Word, a web page, Markdown,
+OpenDocument text, rich text, plain text and Excel. The list changes
+when the source does. When the files have no format in common, it says
+to name files of one kind, such as *.docx. A database (db) is an SQLite
+file with one table named after it, its fields from the source’s first
+table. A PDF is made through a web page that Microsoft Edge prints, so
+no Office is needed.</p>
 <h2 id="the-dialog">The dialog</h2>
 <p>BatCon’s dialog is the one every Homer launch app shows, with the
 same names and the same Alt letters in each. It is in rows called bands,
@@ -298,7 +304,7 @@ the same name get name_2, name_3 and so on.</p>
 <h2 id="from-a-command-line">From a command line</h2>
 <pre><code>batcon &quot;C:\Reports\*.pdf&quot; -t md -o C:\Reports\Markdown
 batcon C:\Data -t xlsx -v
-batcon /list</code></pre>
+batcon &quot;C:\Reports\*.pdf&quot; /list</code></pre>
 <p>Each long switch is a name from the dialog, and each letter is that
 control’s Alt letter:</p>
 <ul>
@@ -315,8 +321,9 @@ the dialog saved.</li>
 at the end.</li>
 <li><strong>-d, –default-settings:</strong> puts the settings back as
 they were first.</li>
-<li><strong>/list:</strong> prints every format BatCon can convert to,
-and converts nothing.</li>
+<li><strong>/list:</strong> prints the formats every one of the named
+files can become, and converts nothing. With no files named, it says how
+to name them.</li>
 <li><strong>-h, –help:</strong> prints the usage.</li>
 </ul>
 <p>A switch may be written with a slash, a dash or two dashes, in any

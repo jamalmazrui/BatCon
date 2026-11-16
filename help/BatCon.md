@@ -14,7 +14,7 @@ BatCon converts whatever the Homer kit converts. Among the most useful:
 - **Documents to speech:** a document becomes an MP3 or other audio file in Windows' own voice, or an MP4 or other video, the speech over a plain black picture.
 - **Audio, video and pictures:** each to the other formats of its kind, such as WAV to MP3 or PNG to JPEG.
 
-The Target format list offers twelve formats: CSV, an SQLite database (db), Word, EPUB, a web page, inix, Markdown, PDF, PowerPoint, TSV, plain text and Excel. A source that cannot become the one you pick is skipped, and BatCon says why. A database (db) is an SQLite file with one table named after it, its fields from the source's first table. A PDF is made through a web page that Microsoft Edge prints, so no Office is needed.
+The Target format list offers only the formats every file in Source paths can become, so a PDF folder offers Word, a web page, Markdown, OpenDocument text, rich text, plain text and Excel. The list changes when the source does. When the files have no format in common, it says to name files of one kind, such as *.docx. A database (db) is an SQLite file with one table named after it, its fields from the source's first table. A PDF is made through a web page that Microsoft Edge prints, so no Office is needed.
 
 ## The dialog
 
@@ -42,7 +42,7 @@ Your files are safe. Each result is written to a temporary file first and put in
 
     batcon "C:\Reports\*.pdf" -t md -o C:\Reports\Markdown
     batcon C:\Data -t xlsx -v
-    batcon /list
+    batcon "C:\Reports\*.pdf" /list
 
 Each long switch is a name from the dialog, and each letter is that control's Alt letter:
 
@@ -52,7 +52,7 @@ Each long switch is a name from the dialog, and each letter is that control's Al
 - **-u, --use-configuration:** starts from the settings the dialog saved.
 - **-v, --view-output-directory:** opens the output folder at the end.
 - **-d, --default-settings:** puts the settings back as they were first.
-- **/list:** prints every format BatCon can convert to, and converts nothing.
+- **/list:** prints the formats every one of the named files can become, and converts nothing. With no files named, it says how to name them.
 - **-h, --help:** prints the usage.
 
 A switch may be written with a slash, a dash or two dashes, in any case. The older names, such as /to, /output, /force and /view, still work. The exit code is 0 when all went well, 1 when there was nothing to do or a switch was unknown, and 3 when some files failed.

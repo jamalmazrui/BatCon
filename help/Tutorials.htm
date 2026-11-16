@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="pandoc 3.13" />
+  <meta name="generator" content="pandoc 3.14" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>BatCon Tutorials</title>
   <style>
@@ -35,27 +35,6 @@
       }
       h1 {
         font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        color-scheme: light only;
-      }
-      html, body, pre, code {
-        background-color: transparent;
-      }
-      body, a, a:visited, blockquote {
-        color: black;
-      }
-      pre, code {
-        padding: 0;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
       }
     }
     p {
@@ -163,6 +142,12 @@
       text-decoration: none;
     }
     span.smallcaps{font-variant: small-caps;}
+    em, em em em, em em em em em {
+      font-style: italic;
+    }
+    em em, em em em em {
+      font-style: normal;
+    }
     div.columns{display: flex; gap: 1.5em;}
     div.column{flex: auto;}
     @media screen {
@@ -179,7 +164,27 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-  </style>
+    @media print {
+      html {
+        color-scheme: light only;
+      }
+      html, body, pre, code {
+        background-color: transparent;
+      }
+      body, a, a:visited, blockquote {
+        color: black;
+      }
+      pre, code {
+        padding: 0;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }  </style>
 </head>
 <body>
 <main>
@@ -269,9 +274,10 @@ format.</p>
 <li>Markdown document (md)</li>
 </ul>
 <h3 id="step-6">Step 6</h3>
-<p>Target format lists twelve formats, in alphabetical order by name,
-each with its extension in parentheses. Up and Down Arrow move through
-it, and a letter jumps to the first name starting with it.</p>
+<p>Target format lists only the formats every file in Source paths can
+become, in alphabetical order by extension, each followed by its name.
+It changes when the source does. Up and Down Arrow move through it, and
+a letter jumps to the first name starting with it.</p>
 <h3 id="step-7-tab">Step 7: Tab</h3>
 <p>Tab again, and you reach Output directory, where the converted files
 go. It follows Source paths: it names the folder the sources are in,
@@ -884,14 +890,14 @@ includes subfolders, slash force replaces results already there, slash
 view opens the output folder, and slash log keeps the session log
 there.</p>
 <h3 id="step-6-enter-2">Step 6: Enter</h3>
-<p>To see every format BatCon can make, type BatCon slash list. It
-prints each format by name, with its extension, and converts
-nothing.</p>
+<p>To see what files can become, type BatCon, the files, then slash
+list. It prints each format every one of them can become, by extension
+and name, and converts nothing.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Comma separated table (csv)</li>
+<li>docx (Word document)</li>
 </ul>
-<p>BatCon /list</p>
+<p>BatCon “C:*.pdf” /list</p>
 <h3 id="step-7-enter-2">Step 7: Enter</h3>
 <p>Slash help prints every switch with a line on what it does.</p>
 <p>Screen reader:</p>
@@ -936,19 +942,19 @@ are.</p>
 command prompt is in: under Program Files, then BatCon, then exec.</p>
 <p>Screen reader:</p>
 <ul>
-<li>Comma separated table (csv)</li>
+<li>docx (Word document)</li>
 </ul>
-<p>“C:Files.exe” /list</p>
+<p>“C:Files.exe” “C:*.pdf” /list</p>
 <h3 id="step-15-5">Step 15</h3>
 <p>A command line never opens the dialog, and the dialog’s saved
 settings never change what a command does: each command says everything
 it needs.</p>
 <h3 id="step-16-3">Step 16</h3>
 <p>What this walk taught: slash to and slash output to convert, slash
-list to see every format, slash help for every switch, and the exit
-number for scripts.</p>
+list to see what files can become, slash help for every switch, and the
+exit number for scripts.</p>
 <p><strong>Something to try:</strong> Convert a folder from the command
-line, then list the formats.</p>
+line, then list the formats its files can become.</p>
 <h2 id="read-the-results">8 - Read the Results</h2>
 <p>The Results box, a skipped file and a failed one, and the log.</p>
 <p><strong>Before you start:</strong> BatCon has just finished a batch
@@ -1062,8 +1068,8 @@ BatCon.</p>
 <li>Source paths: edit</li>
 </ul>
 <h3 id="step-2-altt">Step 2: Alt+T</h3>
-<p>Two: every format BatCon can make is listed, and a source that cannot
-become it is skipped, with the reason.</p>
+<p>Two: only the formats your files can become are listed, so a file is
+skipped only when it cannot be read at all, and BatCon says why.</p>
 <p>Screen reader:</p>
 <ul>
 <li>Target format: list box</li>

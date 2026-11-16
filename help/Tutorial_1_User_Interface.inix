@@ -31,7 +31,7 @@ Hear=Target format: list box
 Hear=Markdown document (md)
 
 [step]
-Say=Target format lists twelve formats, in alphabetical order by name, each with its extension in parentheses. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
+Say=Target format lists only the formats every file in Source paths can become, in alphabetical order by extension, each followed by its name. It changes when the source does. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
 
 [step]
 Say=Tab again, and you reach Output directory, where the converted files go. It follows Source paths: it names the folder the sources are in, until you choose a different one.

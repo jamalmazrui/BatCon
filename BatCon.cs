@@ -149,39 +149,48 @@ public static class Program
 
     // ---- the dialog ---------------------------------------------------------
 
-    // THE TARGET FORMATS OFFERED, by extension (23 October 2026). Their names come from
-    // the kit, so a format reads as every Homer app names it.
-    private static readonly string[] aOfferedTargets = { "csv", "db", "docx", "epub", "htm", "inix", "md", "pdf", "pptx", "tsv", "txt", "xlsx" };
+    // THE TARGET FORMATS OFFERED ARE ONLY THE VALID ONES (15 November 2026). The author's ruling of 12 November, "only
+    // offer valid conversions", put Conversion.targetsForPaths in the kit (1.220.0): what every one of the sources can
+    // become. BatCon still listed a fixed twelve through allTargets, so its check failed and push stopped. The list now
+    // comes from the files the source names, sorted by label, so a letter reaches its format, and it changes when the
+    // source does. A source with no file that converts, or files with no format in common, gives the one line
+    // sNoTarget, which says what to do.
+    private const string sNoTarget = "No format: name sources that convert, such as *.docx";
 
-    // offeredTargets: the extensions in the order shown, with their labels, sorted by label.
-    private static string[] offeredTargets(out string[] aLabels)
+    // targetsFor: the extensions every file in the source can become, with their labels, sorted by label.
+    private static string[] targetsFor(string sSourceText, out string[] aLabels)
     {
+        List<string> lsProblems = new List<string>();
+        List<string> lsFiles = Batch.discover(Batch.tokens(sSourceText ?? ""), lsProblems);
         string[] aKitLabels;
-        string[] aKitTargets = Conversion.allTargets(out aKitLabels);
+        string[] aKitTargets = Conversion.targetsForPaths(lsFiles.ToArray(), out aKitLabels);
         List<string[]> lsPairs = new List<string[]>();
-        foreach (string sType in aOfferedTargets)
-        {
-            int iKit = Array.IndexOf(aKitTargets, sType);
-            string sLabel = iKit >= 0 ? aKitLabels[iKit] : "";
-            if (sLabel == "")
-            {
-                // The kit's wording, "txt (plain text)", extension first, so the list sorted by label runs in
-                // extension order and t reaches txt (HomerDev 1.93.7).
-                sLabel = Conversion.targetLabel(sType, Conversion.typeName(sType));
-            }
-            lsPairs.Add(new string[] { sLabel, sType });
-        }
+        for (int i = 0; i < aKitTargets.Length; i++) lsPairs.Add(new string[] { aKitLabels[i], aKitTargets[i] });
         lsPairs.Sort(delegate(string[] a, string[] b) { return string.Compare(a[0], b[0], StringComparison.OrdinalIgnoreCase); });
         aLabels = new string[lsPairs.Count];
         string[] aTypes = new string[lsPairs.Count];
         for (int i = 0; i < lsPairs.Count; i++) { aLabels[i] = lsPairs[i][0]; aTypes[i] = lsPairs[i][1]; }
+        Log.info("Target formats for [" + sSourceText + "]: " + Batch.count(lsFiles.Count, "file") + ", " + Batch.count(aTypes.Length, "format")
+            + (aTypes.Length > 0 ? " (" + string.Join(", ", aTypes) + ")" : "") + (lsProblems.Count > 0 ? "; " + string.Join("; ", lsProblems.ToArray()) : ""));
         return aTypes;
+    }
+
+    // fillTargets: the Target format list for the current source, keeping the chosen format when it is still offered.
+    private static bool fillTargets(ListBox lbTarget, string[] aLabels, string[] aTargets, string sKeep)
+    {
+        lbTarget.BeginUpdate();
+        lbTarget.Items.Clear();
+        if (aLabels.Length == 0) lbTarget.Items.Add(sNoTarget);
+        else foreach (string sLabel in aLabels) lbTarget.Items.Add(sLabel);
+        int iKeep = Array.IndexOf(aTargets, sKeep);
+        lbTarget.SelectedIndex = iKeep >= 0 ? iKeep : 0;
+        lbTarget.EndUpdate();
+        return true;
     }
 
     private static int runFromDialog()
     {
-        string[] aLabels;
-        string[] aTargets = offeredTargets(out aLabels);
+        string[] aLabels, aTargets;
         while (true)
         {
             string sButton;
@@ -190,18 +199,20 @@ public static class Program
                 oLaunch.sourcePick = "folder";
                 TextBox tbSource = oLaunch.addSourceBand(sSource,
                     "One or more files, folders or wildcard patterns such as *.pdf, separated by spaces, each in quotes if it has a space. A folder means every file in it.",
-                    "Choose a folder of files to convert. It opens where Source paths points, else in Documents.");
+                    "");
 
                 // BatCon's own choice: what to convert to.
                 oLaunch.dialog.addBand();
+                aTargets = targetsFor(sSource, out aLabels);
                 int iTarget = Array.IndexOf(aTargets, sTarget);
-                ListBox lbTarget = oLaunch.dialog.addPickBox("&Target format:", aLabels, iTarget >= 0 ? aLabels[iTarget] : aLabels[0],
-                    "The format to convert to. A source that does not convert to it is skipped, and the Results box says why.");
+                List<string> lsShown = new List<string>(aLabels.Length > 0 ? aLabels : new string[] { sNoTarget });
+                ListBox lbTarget = oLaunch.dialog.addPickBox("&Target format:", lsShown, iTarget >= 0 ? aLabels[iTarget] : lsShown[0],
+                    "The formats every file in the source can become. It changes when the source does.");
                 oLaunch.dialog.endBand();
 
                 TextBox tbOutput = oLaunch.addOutputBand(sOutput,
                     "Where each converted file is written. Blank means beside its source.",
-                    "Choose the folder the converted files go to.");
+                    "");
 
                 // THE OUTPUT FOLLOWS THE SOURCE while it still mirrors it, whether the source is
                 // browsed or typed; a folder the user chose, or typed, stays put.
@@ -211,13 +222,21 @@ public static class Program
                     bool bMirrors = tbOutput.Text.Trim() == "" || string.Equals(tbOutput.Text.Trim(), sMirror, StringComparison.OrdinalIgnoreCase);
                     sMirror = Batch.deriveOutput(tbSource.Text);
                     if (bMirrors) tbOutput.Text = sMirror;
+                    // The formats follow the source too, keeping the one chosen when it is still offered.
+                    int iShown = lbTarget.SelectedIndex;
+                    string sKeep = (iShown >= 0 && iShown < aTargets.Length) ? aTargets[iShown] : sTarget;
+                    aTargets = targetsFor(tbSource.Text, out aLabels);
+                    fillTargets(lbTarget, aLabels, aTargets, sKeep);
                 };
                 oLaunch.sourceChosen = followSource;
                 tbSource.Leave += delegate(object oSender, EventArgs evArgs) { followSource(); };
 
+                // THE KIT'S SENTENCES (15 November 2026, the keyboard audit's BC01): Browse local source, Choose output
+                // directory, Use configuration and View output directory say the same in every launch app, so each takes
+                // the kit's tip, passed as "". Where the settings file lives is in help\BatCon.md.
                 oLaunch.addOperationBands(bForce, "",
-                    bUseConfig, "Load these settings next time, and save them when you press OK, in %LOCALAPPDATA%\\BatCon\\configs\\" + sSettingsFile + ".",
-                    bViewOutput, "Open the output directory in File Explorer when the run is done.");
+                    bUseConfig, "",
+                    bViewOutput, "");
 
                 sButton = oLaunch.run();
 
@@ -236,6 +255,12 @@ public static class Program
                 restoreDefaults();
                 try { if (File.Exists(settingsPath())) File.Delete(settingsPath()); } catch (Exception) { }
                 Log.info("Default settings restored");
+                continue;
+            }
+            if (aTargets.Length == 0)
+            {
+                MessageBox.Show("The source names no files with a format in common to convert to. Name files of one kind, such as *.docx, or a folder of them.",
+                    sAppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 continue;
             }
             if (!confirmOutput(sOutput)) continue;
@@ -309,8 +334,17 @@ public static class Program
         }
         if (bList)
         {
+            // The formats the named sources can become. A command says everything it needs, so with no source named it
+            // says how to name one, rather than reading the dialog's saved settings.
+            if (lsSources.Count == 0)
+            {
+                Console.WriteLine("Name the files to list formats for, such as: batcon \"C:\\Reports\\*.pdf\" /list");
+                return 1;
+            }
+            string sListed = string.Join(" ", lsSources.ConvertAll(delegate(string sPath) { return sPath.IndexOf(' ') >= 0 ? "\"" + sPath + "\"" : sPath; }).ToArray());
             string[] aLabels;
-            offeredTargets(out aLabels);
+            targetsFor(sListed, out aLabels);
+            if (aLabels.Length == 0) { Console.WriteLine(sNoTarget); return 1; }
             foreach (string sLabel in aLabels) Console.WriteLine(sLabel);
             return 0;
         }
@@ -433,7 +467,7 @@ public static class Program
         sbText.AppendLine("");
         sbText.AppendLine("  batcon                          the dialog");
         sbText.AppendLine("  batcon <paths> -t <format> [-o <folder>] [-f] [-u] [-v]");
-        sbText.AppendLine("  batcon /list                    the formats BatCon converts to");
+        sbText.AppendLine("  batcon files /list              the formats every one of the files can become");
         sbText.AppendLine("  batcon -d                       settings back to their defaults");
         sbText.AppendLine("  batcon -h");
         sbText.AppendLine("");

@@ -5,7 +5,7 @@
 Title=7 - Use the Command Line
 Intro=BatCon without its dialog, from a command prompt or a script.
 Setup=A command prompt is open.
-Homework=Convert a folder from the command line, then list the formats.
+Homework=Convert a folder from the command line, then list the formats its files can become.
 
 [step]
 Say=Everything the dialog does, the command line does too. That suits a script that runs every night, or a person who would rather type than tab.
@@ -27,10 +27,10 @@ Hear=1 file converted, 0 kept as they were, 0 skipped for want of a conversion, 
 Say=The same choices as the check boxes are switches: slash recursive includes subfolders, slash force replaces results already there, slash view opens the output folder, and slash log keeps the session log there.
 
 [step]
-Say=To see every format BatCon can make, type BatCon slash list. It prints each format by name, with its extension, and converts nothing.
-Note=BatCon /list
+Say=To see what files can become, type BatCon, the files, then slash list. It prints each format every one of them can become, by extension and name, and converts nothing.
+Note=BatCon "C:\Reports\*.pdf" /list
 Key=Enter
-Hear=Comma separated table (csv)
+Hear=docx (Word document)
 
 [step]
 Say=Slash help prints every switch with a line on what it does.
@@ -64,12 +64,12 @@ Hear=BatCon -- convert many files at once between formats.
 
 [step]
 Say=A script can name the program in full, so it runs whatever folder the command prompt is in: under Program Files, then BatCon, then exec.
-Note="C:\Program Files\BatCon\exec\BatCon.exe" /list
+Note="C:\Program Files\BatCon\exec\BatCon.exe" "C:\Reports\*.pdf" /list
 Key=Enter
-Hear=Comma separated table (csv)
+Hear=docx (Word document)
 
 [step]
 Say=A command line never opens the dialog, and the dialog's saved settings never change what a command does: each command says everything it needs.
 
 [step]
-Say=What this walk taught: slash to and slash output to convert, slash list to see every format, slash help for every switch, and the exit number for scripts.
+Say=What this walk taught: slash to and slash output to convert, slash list to see what files can become, slash help for every switch, and the exit number for scripts.

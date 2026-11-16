@@ -1082,6 +1082,44 @@ def checkKeys():
     return finding("keys", "pass", "0 reserved combinations, 0 access keys claimed twice")
 
 
+def checkLaunchWords():
+    """ONE NAME, ONE SENTENCE IN EVERY LAUNCH APP (1.221.0, the author's ruling of 12 November 2026: the same command has
+    the same name, description and binding in every launch app). Browse local source, Choose output directory, Use
+    configuration and View output directory do the same thing in 2htm, BatCon, extCheck, HomerScribe, urlCheck and
+    urlFido, so each takes the kit's sentence, passed as "" to LaunchDialog; an app that words its own fails. Source
+    paths and Output directory say what the app reads and writes, so their tips are its own."""
+    lsHits = []
+    for sPath in sourceFiles():
+        if not sPath.lower().endswith((".cs", ".py")): continue
+        if os.path.dirname(os.path.abspath(sPath)) != os.path.abspath(sRoot): continue
+        sText = readText(sPath)
+        for sCall, lsWhich in (("addSourceBand", [(2, "Browse local source")]), ("addOutputBand", [(2, "Choose output directory")]),
+                               ("addOperationBands", [(3, "Use configuration"), (5, "View output directory")])):
+            for oCall in re.finditer(r"\b" + sCall + r"\s*\(", sText):
+                lsArgs, sCur, iDepth, sQuote, k = [], "", 1, "", oCall.end()
+                while k < len(sText) and iDepth:
+                    ch = sText[k]
+                    if sQuote:
+                        if ch == "\\": sCur += sText[k:k + 2]; k += 2; continue
+                        if ch == sQuote: sQuote = ""
+                    elif ch in "\"'": sQuote = ch
+                    elif ch in "([{": iDepth += 1
+                    elif ch in ")]}":
+                        iDepth -= 1
+                        if not iDepth: break
+                    elif ch == "," and iDepth == 1: lsArgs.append(sCur.strip()); sCur = ""; k += 1; continue
+                    sCur += ch; k += 1
+                lsArgs.append(sCur.strip())
+                for iArg, sLabel in lsWhich:
+                    if iArg < len(lsArgs) and lsArgs[iArg] not in ('""', "''", "null", "None"):
+                        lsHits.append("%s: %s has its own tip, %s; pass \"\" for the kit's sentence" % (os.path.basename(sPath), sLabel, lsArgs[iArg][:60]))
+    if not lsHits:
+        return finding("launch words", "pass" if any(re.search(r"\baddOperationBands\s*\(", readText(p)) for p in sourceFiles() if p.lower().endswith((".cs", ".py"))) else "skip",
+                       "the standard launch controls use the kit's sentences" )
+    for sHit in lsHits: logLine("launch words: " + sHit)
+    return finding("launch words", "fail", "; ".join(lsHits))
+
+
 def checkConversions():
     """ONE COPY OF EVERY CONVERSION (1.74.0): an app converts files only through the kit's Conversion.
 
@@ -1108,7 +1146,10 @@ def checkConversions():
         oMatch = re.search(r"(?im)^\s*conversionsMoved\s*=\s*(.*)$", readText(sManifest))
         if oMatch: lsMoved = [s.strip().lower() for s in oMatch.group(1).split(",") if s.strip()]
     lsPatterns = [(r"pandoc\.exe", "its own Pandoc finder"), (r"2htm\.exe", "a 2htm call"),
-                  (r"\"(Word|Excel|PowerPoint)\.Application\"", "an Office COM object"), (r"pymupdf4llm", "its own PDF reader")]
+                  (r"\"(Word|Excel|PowerPoint)\.Application\"", "an Office COM object"), (r"pymupdf4llm", "its own PDF reader"),
+                  # ONLY VALID CONVERSIONS (1.220.0, the author's ruling of 12 November 2026): a picker of target formats
+                  # lists what the chosen sources can become -- Conversion.targetsForPaths -- never every format.
+                  (r"\ballTargets\s*\(", "a target list of every format; offer only what the sources can become, by Conversion.targetsForPaths")]
     lsHits = []
     for sPath in sourceFiles():
         if not sPath.lower().endswith(".cs"): continue
@@ -1858,54 +1899,21 @@ def checkSuiteCommands():
         sKeyFile = os.path.join(sRoot, "configs", "Hotkeys.inix")
     if not os.path.isfile(sKeyFile):
         return finding("suite commands", "skip", "no key file in configs")
-    # [keys <App>] in the catalog names a key an app keeps instead of the suite's, for a reason the catalog gives --
-    # HomerView's Elevate Version is Control+F11, since F11 is Microsoft Edge's full screen (10 November 2026).
-    dCommands, dWords, dKeyExceptions, sSection = {}, {}, {}, ""
-    for sLine in readText(sCatalog).splitlines():
-        sTrim = sLine.strip()
-        if not sTrim or sTrim.startswith(";"): continue
-        if sTrim.startswith("["): sSection = sTrim[1:-1]; continue
-        if "=" not in sTrim: continue
-        sKey, sValue = sTrim.split("=", 1)
-        if sSection.startswith("command "): dCommands.setdefault(sSection[8:], {})[sKey.strip()] = sValue.strip()
-        elif sSection.startswith("words "): dWords.setdefault(sSection[6:], {})[sKey.strip()] = sValue.strip()
-        elif sSection.startswith("keys "): dKeyExceptions.setdefault(sSection[5:], {})[sKey.strip()] = sValue.strip()
-    def normKey(sKey):
-        dRep = {"Ctrl": "Control", "Apostrophe": "'", "OemQuotes": "'", "Semicolon": ";", "Semi-colon": ";", "Backslash": "\\",
-                "Slash": "/", "Grave": "`", "Equals": "=", "Return": "Enter", "Comma": ",", "Period": ".", "SemiColon": ";"}
-        lParts = [dRep.get(s, s) for s in sKey.strip().split("+") if s]
-        lMods = [s for s in ("Control", "Alt", "Shift") if s in lParts]
-        lRest = [re.sub(r"^D(\d)$", r"\1", s) for s in lParts if s not in ("Control", "Alt", "Shift")]
-        return "+".join(lMods + lRest)
-    def render(sName):
-        sText = dCommands[sName].get("description", "")
-        dAll = dict(dWords.get(sApp, {})); dAll["app"] = sApp; dAll.update(dWords.get(sName + "|" + sApp, {}))
-        for sKey, sValue in dAll.items(): sText = sText.replace("{" + sKey + "}", sValue)
-        return sText
-    lBreaks, iShared = [], 0
-    for sLine in readText(sKeyFile).splitlines():
-        if "=" not in sLine or sLine.lstrip().startswith((";", "[")): continue
-        sName, sRest = sLine.split("=", 1)
-        sCanon = sName.strip().replace(sApp, "{app}")
-        if sCanon not in dCommands: continue
-        iShared += 1
-        lParts = sRest.split(",")
-        iAt = 1
-        while iAt < len(lParts) and re.match(r"^\s*(or|through)\b", lParts[iAt]): iAt += 1
-        lKeys = [normKey(s) for sPart in lParts[:iAt] for s in re.split(r"\s+or\s+|^\s*or\s+|^\s*through\s+", sPart.strip()) if s.strip() and s.strip().lower() != "none"]
-        sDescription = ",".join(lParts[iAt:]).strip()
-        sSuiteKey = normKey(dCommands[sCanon].get("key", "").replace("{app}", sApp))
-        sOwnKey = normKey(dKeyExceptions.get(sApp, {}).get(sCanon, ""))
-        if sOwnKey: sSuiteKey = sOwnKey
-        if sSuiteKey and sSuiteKey not in lKeys:
-            lBreaks.append("%s: the suite's key is %s, but %s binds %s" % (sName.strip(), sSuiteKey, sApp, " or ".join(lKeys) or "none"))
-        sWanted = render(sCanon)
-        if sDescription.rstrip(".") != sWanted.rstrip("."):   # a closing period is a matter of each app's style
-            lBreaks.append("%s: says \"%s\", where the suite says \"%s\"" % (sName.strip(), sDescription, sWanted))
+    # THE COMPARISON LIVES IN THE KIT (1.235.0): scripts\\suiteCatalog.py, which the kit's build proves with
+    # testSuiteGate. Besides each shared command's key and sentence, it now fails a command the catalog gives this app
+    # (apps=) that the key file leaves out, and a key file naming no shared command, which used to pass as "0 shared
+    # commands" (the keyboard audit of 15 November, A2). [keys <App>] in the catalog still names a key an app keeps.
+    sKitScripts = os.path.join(sKit, "scripts")
+    if sKitScripts not in sys.path: sys.path.insert(0, sKitScripts)
+    try:
+        import suiteCatalog
+    except Exception as exceptionError:
+        return finding("suite commands", "fail", "the kit's scripts\\suiteCatalog.py could not be loaded: %s" % exceptionError)
+    lBreaks, iShared = suiteCatalog.suiteBreaks(readText(sCatalog), readText(sKeyFile), sApp)
     for sBreak in lBreaks: logLine("SUITE: " + sBreak)
     if lBreaks:
         iDiffer = len(set(s.split(":", 1)[0] for s in lBreaks))   # commands, not breaks: one can differ in key and words
-        return finding("suite commands", "fail", "%d of %d shared commands differ from the suite's catalog; each is in the log" % (iDiffer, iShared))
+        return finding("suite commands", "fail", "%d shared command%s differ from the suite's catalog or are missing; each is in the log" % (iDiffer, "" if iDiffer == 1 else "s"))
     return finding("suite commands", "pass", "%d shared commands, each with the suite's key and sentence" % iShared)
 
 
@@ -2217,6 +2225,7 @@ def main():
         checkKeys()
         checkSuite()
         checkConversions()
+        checkLaunchWords()
         checkBuild(dArguments.build)
         checkSmoke(dArguments.build)
         checkAccessibility(not dArguments.noscan)

@@ -6,7 +6,7 @@ BatCon converts many files at once from one format to another: PDF to Markdown, 
 
 1. Press Alt+Control+B to open BatCon.
 2. In Source paths, which starts at your Documents folder, type a file, a folder or a pattern such as `*.pdf`, or press Alt+B to browse for a folder.
-3. In Target format, pick what to convert to, from twelve common formats. A source that does not convert to it is skipped, and BatCon says why.
+3. In Target format, pick what to convert to. It offers only the formats every one of your files can become.
 4. Output directory follows the source until you choose another folder. Blank means each result goes beside its source.
 5. Press Control+Enter for OK. BatCon tells you how far it has got, then its Results box shows what it converted, kept, skipped or failed. Press Enter to close it.
 

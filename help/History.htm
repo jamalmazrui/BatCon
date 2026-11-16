@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="pandoc 3.12.1" />
+  <meta name="generator" content="pandoc 3.14" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>History</title>
   <style>
@@ -35,27 +35,6 @@
       }
       h1 {
         font-size: 1.8em;
-      }
-    }
-    @media print {
-      html {
-        color-scheme: light only;
-      }
-      html, body, pre, code {
-        background-color: transparent;
-      }
-      body, a, a:visited, blockquote {
-        color: black;
-      }
-      pre, code {
-        padding: 0;
-      }
-      p, h2, h3 {
-        orphans: 3;
-        widows: 3;
-      }
-      h2, h3, h4 {
-        page-break-after: avoid;
       }
     }
     p {
@@ -163,6 +142,12 @@
       text-decoration: none;
     }
     span.smallcaps{font-variant: small-caps;}
+    em, em em em, em em em em em {
+      font-style: italic;
+    }
+    em em, em em em em {
+      font-style: normal;
+    }
     div.columns{display: flex; gap: 1.5em;}
     div.column{flex: auto;}
     @media screen {
@@ -179,13 +164,38 @@
       margin: 0 0.8em 0.2em -1.6em;
       vertical-align: middle;
     }
-  </style>
+    @media print {
+      html {
+        color-scheme: light only;
+      }
+      html, body, pre, code {
+        background-color: transparent;
+      }
+      body, a, a:visited, blockquote {
+        color: black;
+      }
+      pre, code {
+        padding: 0;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }  </style>
 </head>
 <body>
 <nav id="TOC" role="doc-toc" aria-label="Contents">
 <ul>
 <li><a href="#batcon-history" id="toc-batcon-history">BatCon History</a>
 <ul>
+<li><a
+href="#november-2026-only-formats-your-files-can-become-and-button-tips-from-the-kit"
+id="toc-november-2026-only-formats-your-files-can-become-and-button-tips-from-the-kit">15
+November 2026 – Only formats your files can become, and button tips from
+the kit</a></li>
 <li><a href="#october-2026-more-fixes-from-an-audit-by-another-ai"
 id="toc-october-2026-more-fixes-from-an-audit-by-another-ai">30 October
 2026 – more fixes from an audit by another AI</a></li>
@@ -209,6 +219,27 @@ October 2026, evening</a></li>
 </nav>
 <main>
 <h1 id="batcon-history">BatCon History</h1>
+<h2
+id="november-2026-only-formats-your-files-can-become-and-button-tips-from-the-kit">15
+November 2026 – Only formats your files can become, and button tips from
+the kit</h2>
+<ul>
+<li><strong>Target format offers only what your files can
+become.</strong> It used to list twelve formats whatever the source, so
+its check failed under HomerDev 1.220.0, which carries your ruling of 12
+November to offer only valid conversions, and push stopped. The list now
+comes from the files Source paths names, through the kit’s
+Conversion.targetsForPaths, and changes when the source does. When the
+files have no format in common, it says to name files of one kind, and
+OK says the same rather than starting.</li>
+<li><strong>/list names its files.</strong> batcon “C:*.pdf” /list
+prints what those files can become. With no files named, it says how to
+name them, since a command never reads the dialog’s saved settings. The
+guide, the ReadMe and Tutorials 1, 7 and 9 say so.</li>
+<li>Browse local source, Choose output directory, Use configuration and
+View output directory no longer pass tips of BatCon’s own, so they say
+what the same buttons say in every Homer app.</li>
+</ul>
 <h2 id="october-2026-more-fixes-from-an-audit-by-another-ai">30 October
 2026 – more fixes from an audit by another AI</h2>
 <ul>

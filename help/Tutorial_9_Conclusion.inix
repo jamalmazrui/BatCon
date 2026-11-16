@@ -14,7 +14,7 @@ Hear=BatCon dialog
 Hear=Source paths: edit
 
 [step]
-Say=Two: every format BatCon can make is listed, and a source that cannot become it is skipped, with the reason.
+Say=Two: only the formats your files can become are listed, so a file is skipped only when it cannot be read at all, and BatCon says why.
 Key=Alt+T
 Hear=Target format: list box
 Hear=Markdown document (md)

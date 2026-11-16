@@ -1,5 +1,11 @@
 ﻿# BatCon History
 
+## 15 November 2026 -- Only formats your files can become, and button tips from the kit
+
+- **Target format offers only what your files can become.** It used to list twelve formats whatever the source, so its check failed under HomerDev 1.220.0, which carries your ruling of 12 November to offer only valid conversions, and push stopped. The list now comes from the files Source paths names, through the kit's Conversion.targetsForPaths, and changes when the source does. When the files have no format in common, it says to name files of one kind, and OK says the same rather than starting.
+- **/list names its files.** batcon "C:\Reports\*.pdf" /list prints what those files can become. With no files named, it says how to name them, since a command never reads the dialog's saved settings. The guide, the ReadMe and Tutorials 1, 7 and 9 say so.
+- Browse local source, Choose output directory, Use configuration and View output directory no longer pass tips of BatCon's own, so they say what the same buttons say in every Homer app.
+
 ## 30 October 2026 -- more fixes from an audit by another AI
 
 - **An incomplete run is not reported as a success.** A path that could not be found, or a run stopped with Cancel, ended with exit code 0. Both now end with 3, as a failed conversion does; a type skipped for want of a conversion still does not.

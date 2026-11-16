@@ -97,7 +97,7 @@ Screen reader:
 
 ### Step 6
 
-Target format lists twelve formats, in alphabetical order by name, each with its extension in parentheses. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
+Target format lists only the formats every file in Source paths can become, in alphabetical order by extension, each followed by its name. It changes when the source does. Up and Down Arrow move through it, and a letter jumps to the first name starting with it.
 
 ### Step 7: Tab
 
@@ -750,13 +750,13 @@ The same choices as the check boxes are switches: slash recursive includes subfo
 
 ### Step 6: Enter
 
-To see every format BatCon can make, type BatCon slash list. It prints each format by name, with its extension, and converts nothing.
+To see what files can become, type BatCon, the files, then slash list. It prints each format every one of them can become, by extension and name, and converts nothing.
 
 Screen reader:
 
-- Comma separated table (csv)
+- docx (Word document)
 
-BatCon /list
+BatCon "C:\Reports\*.pdf" /list
 
 ### Step 7: Enter
 
@@ -810,9 +810,9 @@ A script can name the program in full, so it runs whatever folder the command pr
 
 Screen reader:
 
-- Comma separated table (csv)
+- docx (Word document)
 
-"C:\Program Files\BatCon\exec\BatCon.exe" /list
+"C:\Program Files\BatCon\exec\BatCon.exe" "C:\Reports\*.pdf" /list
 
 ### Step 15
 
@@ -820,9 +820,9 @@ A command line never opens the dialog, and the dialog's saved settings never cha
 
 ### Step 16
 
-What this walk taught: slash to and slash output to convert, slash list to see every format, slash help for every switch, and the exit number for scripts.
+What this walk taught: slash to and slash output to convert, slash list to see what files can become, slash help for every switch, and the exit number for scripts.
 
-**Something to try:** Convert a folder from the command line, then list the formats.
+**Something to try:** Convert a folder from the command line, then list the formats its files can become.
 
 ## 8 - Read the Results
 
@@ -943,7 +943,7 @@ Screen reader:
 
 ### Step 2: Alt+T
 
-Two: every format BatCon can make is listed, and a source that cannot become it is skipped, with the reason.
+Two: only the formats your files can become are listed, so a file is skipped only when it cannot be read at all, and BatCon says why.
 
 Screen reader:
 
