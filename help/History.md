@@ -1,5 +1,10 @@
 ﻿# BatCon History
 
+## 18 November 2026 -- Updates are called updates
+
+- **The installer calls an update an update.** It looked for the version already installed under its AppId with a doubled brace, which Inno writes with one, so it never found it and said "Installed" on the welcome page and in the Results box for every update. It now asks the kit's homerPriorVersion, which finds it.
+- **This needs HomerDev 1.261.0.**
+
 ## 18 November 2026 -- One set of dialog keys, names and words across Homer
 
 - **Shift+F1 and Control+Slash work in every message, as in every Homer dialog.** BatCon's messages were Windows message boxes, which answer neither: the question that offers to make an output directory, and its error. Each is now an Lbc dialog, through the kit's LbcMessage, so What This Does and Where Am I work there too, Yes is Alt+Y and No is Alt+N, and Control+Enter and Escape answer as everywhere.
