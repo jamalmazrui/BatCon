@@ -32,7 +32,7 @@
 // counted in the Results box -- which is what happens for db until the kit has a route
 // that makes one.
 //
-// USE CONFIGURATION, as in 2htm and extCheck: when it is checked at OK, every field
+// USE CONFIGURATION, as in 2htm and extCheck: when it is marked at OK, every field
 // is saved in %LOCALAPPDATA%\BatCon\configs\BatCon.inix and loaded the next time;
 // when it is not, the file is removed and BatCon starts from its defaults. Default
 // settings restores the defaults and removes the file. This replaces the template's
@@ -110,7 +110,7 @@ public static class Program
         return true;
     }
 
-    // loadConfiguration: the saved fields when Use configuration was checked last time,
+    // loadConfiguration: the saved fields when Use configuration was marked last time,
     // otherwise the defaults.
     private static bool loadConfiguration()
     {
@@ -127,7 +127,7 @@ public static class Program
         return true;
     }
 
-    // saveConfiguration: at OK, every field when Use configuration is checked; otherwise
+    // saveConfiguration: at OK, every field when Use configuration is marked; otherwise
     // the file is removed, so the next start is from the defaults.
     private static bool saveConfiguration()
     {
@@ -259,7 +259,7 @@ public static class Program
             }
             if (aTargets.Length == 0)
             {
-                MessageBox.Show("The source names no files with a format in common to convert to. Name files of one kind, such as *.docx, or a folder of them.",
+                LbcMessage.show("The source names no files with a format in common to convert to. Name files of one kind, such as *.docx, or a folder of them.",
                     sAppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 continue;
             }
@@ -276,20 +276,11 @@ public static class Program
         return iResult;
     }
 
-    // confirmOutput: offer to make an output directory that does not exist yet, Yes by default.
+    // confirmOutput: offer to make an output directory that does not exist yet, Yes by default -- the kit's
+    // question, the same in every launch app (kit 1.258.0, 18 November 2026).
     private static bool confirmOutput(string sFolder)
     {
-        string sCandidate = (sFolder ?? "").Trim().Trim('"');
-        if (sCandidate == "" || Directory.Exists(sCandidate)) return true;
-        if (MessageBox.Show("Create " + sCandidate + "?", sAppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question,
-            MessageBoxDefaultButton.Button1) != DialogResult.Yes) return false;
-        try { Directory.CreateDirectory(sCandidate); return true; }
-        catch (Exception oError)
-        {
-            MessageBox.Show("Could not create the folder:\r\n" + sCandidate + "\r\n\r\n" + oError.Message, sAppName,
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
-        }
+        return LaunchDialog.confirmOutput(sAppName, sFolder);
     }
 
     // ---- the command line ---------------------------------------------------
@@ -475,11 +466,12 @@ public static class Program
         sbText.AppendLine("  -s, --source-paths <path>       one more source, as often as wanted (/source too)");
         sbText.AppendLine("  -t, --target-format <format>    the format to convert to, such as md or docx");
         sbText.AppendLine("  -o, --output-directory <folder> where results go; without it, beside each source");
-        sbText.AppendLine("  -f, --force-replacements        replace results that are already there");
-        sbText.AppendLine("  -u, --use-configuration         start from the settings the dialog saved");
-        sbText.AppendLine("  -v, --view-output-directory     open the output directory when done");
-        sbText.AppendLine("  -d, --default-settings          forget the saved settings");
-        sbText.AppendLine("  -h, --help                      this list");
+        // THE KIT'S WORDS FOR THE STANDARD SWITCHES (18 November 2026), the same in every launch app.
+        sbText.AppendLine("  -f, --force-replacements        " + LaunchDialog.forceSwitch);
+        sbText.AppendLine("  -u, --use-configuration         " + LaunchDialog.useConfigSwitch);
+        sbText.AppendLine("  -v, --view-output-directory     " + LaunchDialog.viewOutputSwitch);
+        sbText.AppendLine("  -d, --default-settings          " + LaunchDialog.defaultSettingsSwitch);
+        sbText.AppendLine("  -h, --help                      " + LaunchDialog.helpSwitch);
         sbText.AppendLine("");
         sbText.AppendLine("A source that does not convert to the format is skipped and counted. Switches may be");
         sbText.AppendLine("written /switch, -switch or --switch, in any case. Exit code: 0 done, 1 nothing to do or");

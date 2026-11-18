@@ -43,7 +43,7 @@ Say=Once you choose an output folder, it stays put even if you change Source pat
 Say=Two sources with the same name never overwrite each other's result. The second becomes its name followed by underscore 2, the third underscore 3, and so on.
 
 [step]
-Say=To open the output folder when a batch ends, check View output directory: Alt plus V, Victor.
+Say=To open the output folder when a batch ends, mark View output directory: Alt plus V, Victor.
 Key=Alt+V
 Hear=View output directory, check box, checked
 

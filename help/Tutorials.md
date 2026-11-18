@@ -185,7 +185,7 @@ Screen reader:
 
 ### Step 4: Enter
 
-Keep pressing Enter through the questions. When the files are copied, the last page lists the extras BatCon can use, each as a check box, ticked when it is needed.
+Keep pressing Enter through the questions. When the files are copied, the last page lists the extras BatCon can use, each as a check box, marked when it is needed.
 
 Screen reader:
 
@@ -197,7 +197,7 @@ The extras are tools BatCon converts with. Pandoc and the PDF tools turn documen
 
 ### Step 6: Enter
 
-A box already ticked means the tool is missing or out of date. A box not ticked means it is already there and current. Enter installs whatever is ticked.
+A box already marked means the tool is missing or out of date. A box not marked means it is already there and current. Enter installs whatever is marked.
 
 Screen reader:
 
@@ -232,7 +232,7 @@ Screen reader:
 
 ### Step 11: Alt+U
 
-Choices are kept between runs only when Use configuration is checked as you press OK; otherwise BatCon starts fresh each time, from its defaults.
+Choices are kept between runs only when Use configuration is marked as you press OK; otherwise BatCon starts fresh each time, from its defaults.
 
 Screen reader:
 
@@ -540,7 +540,7 @@ Two sources with the same name never overwrite each other's result. The second b
 
 ### Step 9: Alt+V
 
-To open the output folder when a batch ends, check View output directory: Alt plus V, Victor.
+To open the output folder when a batch ends, mark View output directory: Alt plus V, Victor.
 
 Screen reader:
 
@@ -638,7 +638,7 @@ The reader says nothing as the window closes.
 
 ### Step 6: Alt+F
 
-To replace the results, open BatCon again, and check Force replacements: Alt plus F, Foxtrot.
+To replace the results, open BatCon again, and mark Force replacements: Alt plus F, Foxtrot.
 
 Screen reader:
 
@@ -663,7 +663,7 @@ A source is never overwritten either. If a conversion's name would match a sourc
 
 ### Step 10: Alt+F
 
-Force replacements stays checked only for this run, unless Use configuration is checked too, so you cannot replace results by surprise next time.
+Force replacements stays marked only for this run, unless Use configuration is marked too, so you cannot replace results by surprise next time.
 
 Screen reader:
 

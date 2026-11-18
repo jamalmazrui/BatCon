@@ -29,7 +29,7 @@ Key=Escape
 Note=The reader says nothing as the window closes.
 
 [step]
-Say=To replace the results, open BatCon again, and check Force replacements: Alt plus F, Foxtrot.
+Say=To replace the results, open BatCon again, and mark Force replacements: Alt plus F, Foxtrot.
 Key=Alt+F
 Hear=Force replacements, check box, checked
 
@@ -46,7 +46,7 @@ Say=Even with Force replacements, an earlier result is replaced only once its ne
 Say=A source is never overwritten either. If a conversion's name would match a source's, BatCon gives the result a new name instead.
 
 [step]
-Say=Force replacements stays checked only for this run, unless Use configuration is checked too, so you cannot replace results by surprise next time.
+Say=Force replacements stays marked only for this run, unless Use configuration is marked too, so you cannot replace results by surprise next time.
 Key=Alt+F
 Hear=Force replacements, check box, not checked
 

@@ -1,5 +1,13 @@
 ﻿# BatCon History
 
+## 18 November 2026 -- One set of dialog keys, names and words across Homer
+
+- **Shift+F1 and Control+Slash work in every message, as in every Homer dialog.** BatCon's messages were Windows message boxes, which answer neither: the question that offers to make an output directory, and its error. Each is now an Lbc dialog, through the kit's LbcMessage, so What This Does and Where Am I work there too, Yes is Alt+Y and No is Alt+N, and Control+Enter and Escape answer as everywhere.
+- **The Hotkeys page uses the suite's names and layout,** as DbDo, EdSharp and FileDir do: By Command Name, By Key, In Tab Order, Text Box Keys and Why These Keys. F11 is Elevate Version, Shift+F1 is What This Does, and Control+Slash, Where Am I, is listed for the first time.
+- **A checkbox is marked, not ticked or checked,** in the installer, the guides, the tutorials and every message, as across Homer.
+- **The standard switches say the kit's words:** -f, -u, -v, -d and -h have the same sentence in every launch app's help.
+- **This needs HomerDev 1.259.0,** since kit 1.258.0's Say.cs lost a quotation mark and no C# app could build with it.
+
 ## 15 November 2026 -- The kit being developed wins a tie
 
 - When the installed kit in Program Files has the same version as C:\HomerDev, the build now uses C:\HomerDev, the one being developed.

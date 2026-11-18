@@ -21,7 +21,7 @@ Key=Enter
 Hear=Select Destination Location
 
 [step]
-Say=Keep pressing Enter through the questions. When the files are copied, the last page lists the extras BatCon can use, each as a check box, ticked when it is needed.
+Say=Keep pressing Enter through the questions. When the files are copied, the last page lists the extras BatCon can use, each as a check box, marked when it is needed.
 Key=Enter
 Hear=Completing the BatCon Setup Wizard
 
@@ -29,7 +29,7 @@ Hear=Completing the BatCon Setup Wizard
 Say=The extras are tools BatCon converts with. Pandoc and the PDF tools turn documents into other documents. ffmpeg handles sound and video. Whisper writes down what is said in a recording, on your own computer.
 
 [step]
-Say=A box already ticked means the tool is missing or out of date. A box not ticked means it is already there and current. Enter installs whatever is ticked.
+Say=A box already marked means the tool is missing or out of date. A box not marked means it is already there and current. Enter installs whatever is marked.
 Key=Enter
 Hear=BatCon Setup
 
@@ -53,7 +53,7 @@ Key=Windows
 Hear=Search box
 
 [step]
-Say=Choices are kept between runs only when Use configuration is checked as you press OK; otherwise BatCon starts fresh each time, from its defaults.
+Say=Choices are kept between runs only when Use configuration is marked as you press OK; otherwise BatCon starts fresh each time, from its defaults.
 Key=Alt+U
 Hear=Use configuration, check box, not checked
 

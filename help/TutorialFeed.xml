@@ -5,7 +5,7 @@
     <link>Tutorials.htm</link>
     <description>Spoken walks through BatCon, which converts many files at once between formats. Ten walks, each a few minutes, in the order a new person meets them.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Nov 2026 03:09:57 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 18 Nov 2026 16:38:26 +0000</lastBuildDate>
     <itunes:author>Jamal Mazrui</itunes:author>
     <itunes:explicit>false</itunes:explicit>
     <itunes:category text="Technology"/>
@@ -33,7 +33,7 @@
       <description>A web browser is open, and your reader is running. Full transcript: Tutorials.htm#0b-2-install-and-launch</description>
       <link>Tutorials.htm#0b-2-install-and-launch</link>
       <guid isPermaLink="false">homer-tutorial_2_install_and_launch</guid>
-      <enclosure url="tutorials/2_Install_and_Launch.mp3" length="1254844" type="audio/mpeg"/>
+      <enclosure url="tutorials/2_Install_and_Launch.mp3" length="1258746" type="audio/mpeg"/>
       <itunes:duration>00:02:52</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
@@ -60,7 +60,7 @@
       <description>BatCon is open with some source files named. Full transcript: Tutorials.htm#0e-5-choose-where-results-go</description>
       <link>Tutorials.htm#0e-5-choose-where-results-go</link>
       <guid isPermaLink="false">homer-tutorial_5_choose_where_results_go</guid>
-      <enclosure url="tutorials/5_Choose_Where_Results_Go.mp3" length="1225107" type="audio/mpeg"/>
+      <enclosure url="tutorials/5_Choose_Where_Results_Go.mp3" length="1219652" type="audio/mpeg"/>
       <itunes:duration>00:02:51</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>
@@ -69,7 +69,7 @@
       <description>BatCon is open, and a batch has been converted once. Full transcript: Tutorials.htm#0f-6-convert-again</description>
       <link>Tutorials.htm#0f-6-convert-again</link>
       <guid isPermaLink="false">homer-tutorial_6_convert_again</guid>
-      <enclosure url="tutorials/6_Convert_Again.mp3" length="1216453" type="audio/mpeg"/>
+      <enclosure url="tutorials/6_Convert_Again.mp3" length="1216573" type="audio/mpeg"/>
       <itunes:duration>00:02:49</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
     </item>

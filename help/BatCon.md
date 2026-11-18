@@ -30,7 +30,7 @@ BatCon's dialog is the one every Homer launch app shows, with the same names and
 - **View output directory (Alt+V):** opens the output folder after you close the Results box.
 - **Default settings (Alt+D):** puts every field back to its default and forgets the saved configuration.
 - **Help (Alt+H or F1):** lists each field with its tip, the dialog's keys and where the logs are kept, and checks for a newer BatCon.
-- **OK and Cancel:** OK starts the batch, and offers to make an output folder that does not exist. Control+Enter presses OK and Escape presses Cancel, from anywhere in the dialog. F11 checks for a newer BatCon from anywhere, too.
+- **OK and Cancel:** OK starts the batch, and offers to make an output folder that does not exist. Control+Enter presses OK and Escape presses Cancel, from anywhere in the dialog. F11 checks for a newer BatCon from anywhere, too. **Shift+F1**, What This Does, says what the control with focus does, and **Control+Slash**, Where Am I, says where you are, what has focus and its keys; both work in every dialog and message, and pressed twice, each shows what it said in a window.
 
 ## While it works
 
@@ -60,5 +60,5 @@ A switch may be written with a slash, a dash or two dashes, in any case. The old
 ## Where things are
 
 - **The program:** C:\Program Files\BatCon.
-- **Your settings, when Use configuration is checked:** %LOCALAPPDATA%\BatCon\configs\BatCon.inix.
+- **Your settings, when Use configuration is marked:** %LOCALAPPDATA%\BatCon\configs\BatCon.inix.
 - **The logs:** %LOCALAPPDATA%\BatCon\logs, one for each run, named BatCon-yyyyMMdd-HHmmss.log for the date and time it started. Logging is automatic; there is nothing to switch on.
