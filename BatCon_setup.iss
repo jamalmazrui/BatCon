@@ -250,6 +250,13 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\exec\{#AppExeName}"; WorkingD
 ; its alphabetical place in each group.
 
 ; ---- 1. Install, marked --------------------------------------------------------
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isInstallFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
 FileName: "{app}\scripts\installScreenReaderSupport.cmd"; \
   Parameters: "noPause jaws"; \
   WorkingDir: "{app}\scripts"; \
@@ -278,13 +285,6 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   Check: homerFinishRuns and isInstallPdfTools; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
-FileName: "{app}\scripts\installFfmpeg.cmd"; \
-  Parameters: "noPause"; \
-  WorkingDir: "{app}\scripts"; \
-  Description: "{code:labelFfmpeg}"; \
-  Check: homerFinishRuns and isInstallFfmpeg; \
-  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
-
 FileName: "{app}\scripts\installWhisper.cmd"; \
   Parameters: "noPause"; \
   WorkingDir: "{app}\scripts"; \
@@ -293,6 +293,13 @@ FileName: "{app}\scripts\installWhisper.cmd"; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
 ; ---- 2. Update, marked ---------------------------------------------------------
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isUpdateFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
+
 FileName: "{app}\scripts\installScreenReaderSupport.cmd"; \
   Parameters: "noPause jaws"; \
   WorkingDir: "{app}\scripts"; \
@@ -321,13 +328,6 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   Check: homerFinishRuns and isUpdatePdfTools; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
-FileName: "{app}\scripts\installFfmpeg.cmd"; \
-  Parameters: "noPause"; \
-  WorkingDir: "{app}\scripts"; \
-  Description: "{code:labelFfmpeg}"; \
-  Check: homerFinishRuns and isUpdateFfmpeg; \
-  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
-
 FileName: "{app}\scripts\installWhisper.cmd"; \
   Parameters: "noPause"; \
   WorkingDir: "{app}\scripts"; \
@@ -336,6 +336,13 @@ FileName: "{app}\scripts\installWhisper.cmd"; \
   Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist
 
 ; ---- 3. Reinstall, unmarked ----------------------------------------------------
+FileName: "{app}\scripts\installFfmpeg.cmd"; \
+  Parameters: "noPause"; \
+  WorkingDir: "{app}\scripts"; \
+  Description: "{code:labelFfmpeg}"; \
+  Check: homerFinishRuns and isReinstallFfmpeg; \
+  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist unchecked
+
 FileName: "{app}\scripts\installScreenReaderSupport.cmd"; \
   Parameters: "noPause jaws"; \
   WorkingDir: "{app}\scripts"; \
@@ -363,13 +370,6 @@ FileName: "{app}\scripts\installPdfTools.cmd"; \
   Description: "{code:labelPdfTools}"; \
   Check: homerFinishRuns and isReinstallPdfTools; \
   Flags: postinstall runascurrentuser waituntilterminated unchecked skipifdoesntexist
-
-FileName: "{app}\scripts\installFfmpeg.cmd"; \
-  Parameters: "noPause"; \
-  WorkingDir: "{app}\scripts"; \
-  Description: "{code:labelFfmpeg}"; \
-  Check: homerFinishRuns and isReinstallFfmpeg; \
-  Flags: postinstall runascurrentuser waituntilterminated skipifdoesntexist unchecked
 
 FileName: "{app}\scripts\installWhisper.cmd"; \
   Parameters: "noPause"; \
@@ -457,7 +457,9 @@ begin
     '', 'reads PDF files as text, through Python', '');
   iFfmpeg := homerAdd('ffmpeg', 'Gyan.FFmpeg', 'ffmpeg',
     '', 'converts audio and video, with ffprobe', '');
-  iWhisper := homerAdd('Whisper', '', '"{pf}\Whisper\whisper-cli.exe"',
+  // github:ggml-org/whisper.cpp, as HomerDev has it (22 November 2026): with no id there was no newest version to
+  // compare, so Whisper could never be offered as an Update.
+  iWhisper := homerAdd('Whisper', 'github:ggml-org/whisper.cpp', '"{pf}\Whisper\whisper-cli.exe"',
     '{pf}\Whisper\whisper-cli.exe', 'transcribes speech', '');
   //  THE PREVIOUS INSTALL IS READ ONCE, HERE, before anything is installed
   //  (1.43.0). It used to be read lazily, and a fresh install has no version
@@ -587,9 +589,9 @@ begin
   //  AI NOTE FOR CUSTOMIZING: one addAction per component and per model, in
   //  the same alphabetical order as the [Run] section.
   addAction(homerScreenReaderOutcome());
+  addAction(homerOutcomeLine(iFfmpeg));
   addAction(homerOutcomeLine(iPandoc));
   addAction(homerOutcomeLine(iPdfTools));
-  addAction(homerOutcomeLine(iFfmpeg));
   addAction(homerOutcomeLine(iWhisper));
   sBody := '{#AppName} {#AppVersion} is installed.';
   if sActions <> '' then sBody := sBody + #13#10 + #13#10 + sActions;
@@ -616,6 +618,13 @@ end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
+  if CurStep = ssPostInstall then
+  begin
+    //  EVERY VERB BEFORE THE CHECKBOXES (22 November 2026): the kit's homerProbeAll asks the screen readers and every component now, in
+    //  alphabetical order, with the progress bar still showing, so the finish page's Install, Update and Reinstall are
+    //  known before it appears and nothing is checked after it. Needs HomerDev 1.270.0 or later.
+    homerProbeAll(True);
+  end;
   if CurStep = ssDone then
   begin
     keepSetupLog();
